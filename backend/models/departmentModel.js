@@ -4,6 +4,7 @@ const DepartmentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Vui long nhap ten don vi'],
+        unique: true,
     },
     abbr: {
         type: String,

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getUsers, createUser, getUserById, updateUser, deleteUser } = require("../controllers/userController");
+const { getUsers, getUserById, updateUser, deleteUser } = require("../controllers/userController");
 
 /**
  * @swagger
@@ -97,7 +97,6 @@ const { getUsers, createUser, getUserById, updateUser, deleteUser } = require(".
  */
 
 router.get("/", getUsers);
-router.post("/", createUser);
 router.get("/:id", getUserById);
 router.post("/:id", updateUser);
 router.delete("/:id", deleteUser);

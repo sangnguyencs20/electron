@@ -286,54 +286,54 @@ router.get("/users/:userId", getDocumentOfUser);
 
 router.post("/approval/:id", updateDocumentApproval);
 
-/**
- * @swagger
- * /documents/{id}:
- *   post:
- *     summary: Update a document
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the document
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The updated title of the document
- *               receiver:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: The updated IDs of the users who are the receivers of the document
- *               secretState:
- *                 type: string
- *                 enum: ['Low', 'Neutral', 'High']
- *                 description: The updated secret state of the document
- *               urgencyState:
- *                 type: string
- *                 enum: ['Low', 'Neutral', 'High']
- *                 description: The updated urgency state of the document
- *               field:
- *                 type: string
- *                 description: The updated field of the document
- *     responses:
- *       200:
- *         description: Successfully updated document
- *       404:
- *         description: Document not found
- *       500:
- *         description: Internal server error
- */
+// /**
+//  * @swagger
+//  * /documents/{id}:
+//  *   post:
+//  *     summary: Update a document
+//  *     tags: [Document]
+//  *     parameters:
+//  *       - in: path
+//  *         name: id
+//  *         required: true
+//  *         schema:
+//  *           type: string
+//  *         description: The ID of the document
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             properties:
+//  *               title:
+//  *                 type: string
+//  *                 description: The updated title of the document
+//  *               receiver:
+//  *                 type: array
+//  *                 items:
+//  *                   type: string
+//  *                 description: The updated IDs of the users who are the receivers of the document
+//  *               secretState:
+//  *                 type: string
+//  *                 enum: ['Low', 'Neutral', 'High']
+//  *                 description: The updated secret state of the document
+//  *               urgencyState:
+//  *                 type: string
+//  *                 enum: ['Low', 'Neutral', 'High']
+//  *                 description: The updated urgency state of the document
+//  *               field:
+//  *                 type: string
+//  *                 description: The updated field of the document
+//  *     responses:
+//  *       200:
+//  *         description: Successfully updated document
+//  *       404:
+//  *         description: Document not found
+//  *       500:
+//  *         description: Internal server error
+//  */
 
-router.post("/:id", updateDocument);
+// router.post("/:id", updateDocument);
 
 module.exports = router;
