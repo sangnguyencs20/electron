@@ -1,9 +1,10 @@
-const Opinion = require('../models/opinionModel');
+const { getOpinionsByDocumentId, createANewOpinion } = require('../services/opinions');
+
 
 const getOpinionsOfADocument = async (req, res) => {
     const { documentId } = req.params;
     try {
-        const opinions = await Opinion.find({ documentID: documentId });
+        const opinions = await getOpinionsByDocumentId(documentId);
         res.status(200).json(opinions);
     }
     catch {
@@ -13,8 +14,8 @@ const getOpinionsOfADocument = async (req, res) => {
 
 const createOpinion = async (req, res) => {
     const opinion = req.body;
-    const newOpinion = new Opinion(opinion);
     try {
+        const newOpinion = await createANewOpinion(opinion);
         await newOpinion.save();
         res.status(201).json(newOpinion);
     } catch (error) {
@@ -23,4 +24,4 @@ const createOpinion = async (req, res) => {
 }
 
 
-module.exports = {getOpinionsOfADocument, createOpinion}
+module.exports = { getOpinionsOfADocument, createOpinion }

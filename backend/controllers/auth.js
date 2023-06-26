@@ -1,20 +1,18 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/userModel');
 const { updateRefreshToken, generateTokens } = require('../utils/tokens');
+const { isUserExist, createOneUser, getUserByName, isPasswordMatched, getOneUserById } = require('../services/user');
+const { hashPassword } = require('../utils/helperAuth');
 
 const login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
-
-        if (!user) {
+        if (!await isUserExist(username)) {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
-        const isValid = await bcrypt.compare(password, user.password);
+        const user = await getUserByName(username);
 
-        if (!isValid) {
+        if (!isPasswordMatched(password, user.password)) {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
@@ -32,10 +30,11 @@ const login = async (req, res) => {
 
 
 const logout = async (req, res) => {
-    const userId = req.user.id;
+    const { id } = req.body;
+    console.log(id);
 
     try {
-        const user = await User.findById(userId);
+        const user = await getOneUserById(id);
 
         if (!user) {
             return res.sendStatus(404);
@@ -54,45 +53,19 @@ const logout = async (req, res) => {
 
 
 const signup = async (req, res) => {
-    const {
-        username,
-        password,
-        fullName,
-        dateOfBirth,
-        address,
-        phoneNumber,
-        email,
-        position,
-        ssn,
-        departmentId
-    } = req.body;
-
+    const user = req.body;
     try {
-        const existingUser = await User.findOne({ username });
-
-        if (existingUser) {
-            return res.status(409).json({ message: 'Username already exists' });
+        if (await isUserExist(user.username)) {
+            return res.status(401).json({ message: 'This username is not available' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = hashPassword(user.password);
+        user.password = hashedPassword;
 
-        const newUser = new User({
-            username,
-            password: hashedPassword,
-            fullName,
-            dateOfBirth,
-            address,
-            phoneNumber,
-            email,
-            position,
-            ssn,
-            department: departmentId
-        });
 
-        await newUser.save();
-
+        const newUser = await createOneUser(user);
         const tokens = generateTokens(newUser);
-        await updateRefreshToken(username, tokens.refreshToken);
+        await updateRefreshToken(newUser.username, tokens.refreshToken);
 
         return res.status(201).json({ ...tokens, newUser });
     } catch (error) {

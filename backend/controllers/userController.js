@@ -1,23 +1,12 @@
 const User = require('../models/userModel');
-const express = require("express");
+const {getAllUsers, createOneUser, getOneUserById, updateOneUser, deleteOneUser} = require('../services/user');
 
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await getAllUsers();
         res.status(200).json(users);
     } catch (error) {
         res.status(404).json({ message: error.message });
-    }
-}
-
-const createUser = async (req, res) => {
-    const user = req.body;
-    const newUser = new User(user);
-    try {
-        await newUser.save();
-        res.status(201).json(newUser);
-    } catch (error) {
-        res.status(409).json({ message: error.message });
     }
 }
 
@@ -66,4 +55,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, createUser, getUserById, updateUser, deleteUser };
+module.exports = { getUsers, getUserById, updateUser, deleteUser };

@@ -1,23 +1,27 @@
-const Department = require('../models/departmentModel');
+const { getAllDepartments, createOneDepartment } = require('../services/departments');
 
 const getDepartments = async (req, res) => {
     try {
-        const departments = await Department.find();
+        const departments = await getAllDepartments(req, res);
         res.status(200).json(departments);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 const createDepartment = async (req, res) => {
-    const department = req.body;
-    const newDepartment = new Department(department);
     try {
-        await newDepartment.save();
-        res.status(201).json(newDepartment);
+        const departments = await getAllDepartments(req, res);
+
+        if (departments.length > 0) {
+            return res.status(400).json({ message: "Department already exists" });
+        }
+
+        await createOneDepartment(req, res);
+        res.status(201).json({ message: "Department created successfully" });
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 module.exports = { getDepartments, createDepartment };
