@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
-const {updateRefreshToken, generateTokens} = require('../utils/tokens');
+const { updateRefreshToken, generateTokens } = require('../utils/tokens');
 
 const login = async (req, res) => {
     const { username, password } = req.body;
@@ -54,7 +54,18 @@ const logout = async (req, res) => {
 
 
 const signup = async (req, res) => {
-    const { username, password, fullName } = req.body;
+    const {
+        username,
+        password,
+        fullName,
+        dateOfBirth,
+        address,
+        phoneNumber,
+        email,
+        position,
+        ssn,
+        departmentId
+    } = req.body;
 
     try {
         const existingUser = await User.findOne({ username });
@@ -68,7 +79,14 @@ const signup = async (req, res) => {
         const newUser = new User({
             username,
             password: hashedPassword,
-            fullName
+            fullName,
+            dateOfBirth,
+            address,
+            phoneNumber,
+            email,
+            position,
+            ssn,
+            department: departmentId
         });
 
         await newUser.save();
