@@ -20,7 +20,7 @@ const {
 
 /**
  * @swagger
- * /documents:
+ * /api/documents:
  *   get:
  *     summary: Get all documents
  *     tags: [Document]
@@ -68,7 +68,7 @@ router.get("/", getDocuments);
 
 /**
  * @swagger
- * /documents:
+ * /api/documents:
  *   post:
  *     summary: Create a new document
  *     tags: [Document]
@@ -145,7 +145,7 @@ router.post("/", createDocument);
 
 /**
  * @swagger
- * /documents/{id}:
+ * /api/documents/{id}:
  *   get:
  *     summary: Get a document by ID
  *     tags: [Document]
@@ -198,7 +198,7 @@ router.get("/:id", getDocumentById);
 
 /**
  * @swagger
- * /documents/users/{userId}:
+ * /api/documents/users/{userId}:
  *   get:
  *     summary: Get documents of a user
  *     tags: [Document]
@@ -253,7 +253,7 @@ router.get("/users/:userId", getDocumentOfUser);
 
 /**
  * @swagger
- * /documents/approval/{id}:
+ * /api/documents/approval/{id}:
  *   post:
  *     summary: Update document approval status
  *     tags: [Document]
@@ -288,7 +288,7 @@ router.post("/approval/:id", updateDocumentApproval);
 
 // /**
 //  * @swagger
-//  * /documents/{id}:
+//  * /api/documents/{id}:
 //  *   post:
 //  *     summary: Update a document
 //  *     tags: [Document]

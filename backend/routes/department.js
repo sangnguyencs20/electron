@@ -16,7 +16,7 @@ const {
 
 /**
  * @swagger
- * /departments:
+ * /api/departments:
  *   get:
  *     summary: Get all departments
  *     tags: [Department]
@@ -49,7 +49,7 @@ router.get("/", getDepartments);
 
 /**
  * @swagger
- * /departments:
+ * /api/departments:
  *   post:
  *     summary: Create a new department
  *     tags: [Department]
