@@ -5,7 +5,7 @@ const { getUsers, getUserById, updateUser, deleteUser } = require("../controller
 
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   get:
  *     summary: Get all users
  *     tags: [User]
@@ -34,7 +34,7 @@ const { getUsers, getUserById, updateUser, deleteUser } = require("../controller
  *       500:
  *         description: Internal server error
  *
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags: [User]

@@ -5,7 +5,7 @@ const { getOpinionsOfADocument, createOpinion } = require("../controllers/opinio
 
 /**
  * @swagger
- * /opinions/{documentId}:
+ * /api/opinions/{documentId}:
  *   get:
  *     summary: Get opinions of a document
  *     tags: [Opinion]
@@ -45,7 +45,7 @@ router.get("/:documentId", getOpinionsOfADocument);
 
 /**
  * @swagger
- * /opinions:
+ * /api/opinions:
  *   post:
  *     summary: Create a new opinion
  *     tags: [Opinion]

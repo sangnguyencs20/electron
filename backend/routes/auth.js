@@ -12,7 +12,7 @@ const verifyToken = require('../middleware/auth');
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: User login
  *     tags: [Authentication]
@@ -40,7 +40,7 @@ router.post("/login", login);
 
 /**
  * @swagger
- * /auth/signup:
+ * /api/auth/signup:
  *   post:
  *     summary: User signup
  *     tags: [Authentication]
@@ -87,7 +87,7 @@ router.post("/signup", signup);
 
 /**
  * @swagger
- * /auth/logout:
+ * /api/auth/logout:
  *   post:
  *     summary: User logout
  *     tags: [Authentication]
