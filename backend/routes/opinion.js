@@ -91,6 +91,3 @@ router.get("/:documentId", getOpinionsOfADocument);
 router.post("/", createOpinion);
 
 module.exports = router;
-
-
-module.exports = router;
