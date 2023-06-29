@@ -57,11 +57,28 @@ router.post("/login", login);
  *                 type: string
  *               fullName:
  *                 type: string
+ *               dateOfBirth:
+ *                 type: string
+ *                 format: date
+ *               address:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               position:
+ *                 type: string
+ *               ssn:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *                 description: Department ID
  *     responses:
  *       201:
  *         description: Successfully signed up
  *       409:
- *         description: Username already exists
+ *         description: Username or SSN already exists
  *       500:
  *         description: Internal server error
  */
