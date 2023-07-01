@@ -1,4 +1,32 @@
-const DropFile = () => {
+import useDrivePicker from "react-google-drive-picker";
+import UploadToGoogleDrive from "./UploadToGoogleDrive";
+
+const DropFile = ({ setFile }) => {
+  const [openPicker, authResponse] = useDrivePicker();
+  const handleOpenPicker = () => {
+    openPicker({
+      clientId:
+        "426348910591-4a0b0riiavqo0f637nbktu0ffqfanm30.apps.googleusercontent.com",
+      developerKey: "AIzaSyCpsIDvxtjA6ksXyIbFlWnGObysq9u5YaI",
+      viewId: "DOCS",
+      token:
+        "ya29.a0AbVbY6N__nKMXTOOLdydq2mlJ3cNa4sb4WMEeTjUgonouuz2GRHz3BBIvfhxkJdHcKTiPYJn0Do3T39Cp9tWYMAHKd0RPsBJWwJRtoty5ZG7drT1sNQ2RLyDkUi-lL4jRQzDCTO1arJIGv4frS9H1QUc3-eKaCgYKAYQSARISFQFWKvPl9TmWwY-53A4XkIZiarfWuA0163", // pass oauth token in case you already have one
+      showUploadView: true,
+      showUploadFolders: true,
+      supportDrives: true,
+      multiselect: true,
+      callbackFunction: (data) => {
+        if (data.action === "cancel") {
+          console.log("User clicked cancel/close button");
+        }
+        if (data.action === "picked") {
+          setFile(data.docs[0].url);
+          console.log("User clicked cancel/close button");
+        }
+        console.log(data);
+      },
+    });
+  };
   return (
     <div className="flex-1 w-full flex flex-col">
       <span className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
@@ -33,7 +61,12 @@ const DropFile = () => {
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>
           </div>
-          <input id="dropzone-file" type="file" className="hidden" />
+          <input
+            id="dropzone-file"
+            type="file"
+            className="hidden"
+            onClick={handleOpenPicker}
+          />
         </label>
       </div>
     </div>

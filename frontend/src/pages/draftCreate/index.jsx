@@ -12,6 +12,7 @@ import DropFile from "../../components/DropFile";
 const DraftCreate = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState("");
   // const { createCampaign } = useStateContext();
   const [form, setForm] = useState({
     name: "",
@@ -117,7 +118,7 @@ const DraftCreate = () => {
           value={form.image}
           handleChange={(e) => handleFormFieldChange("image", e)}
         />
-        <DropFile />
+        <DropFile setFile={setFile} />
         <div className="flex justify-center items-center mt-[40px]">
           <Button
             className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl"
