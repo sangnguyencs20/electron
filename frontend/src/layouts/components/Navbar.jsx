@@ -3,14 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 
 // import { useStateContext } from "../context";
 // import { CustomButton } from "./";
-import { logo, menu, search, profile } from "../../assets";
+import { logo, menu, search, profile, logout } from "../../assets";
 import { navlinks } from "../../constants";
+import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { clearInfo } from "../../state/user/userSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
   const [toggleDrawer, setToggleDrawer] = useState(false);
-  //   const { connect, address } = useStateContext();
+  const dispatch = useDispatch();
+  const handleLogOut = () => {
+    dispatch(clearInfo());
+    navigate("/login");
+  };
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
@@ -50,6 +57,18 @@ const Navbar = () => {
             />
           </div>
         </Link>
+        <Button
+          className="w-[52px] h-[52px] rounded-lg bg-slate-100 flex justify-center items-center cursor-pointer shadow-md"
+          onClick={() => {
+            handleLogOut();
+          }}
+        >
+          <img
+            src={logout}
+            alt="user"
+            className="w-[60%] h-[60%] object-contain"
+          />
+        </Button>
       </div>
 
       {/* Small screen navigation */}

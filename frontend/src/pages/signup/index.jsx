@@ -4,7 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../../components/Loader";
 import { axiosSignUp } from "../../api";
-
+//mui
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -39,6 +43,7 @@ const SignUp = () => {
     setLoading(true);
     await axiosSignUp(values)
       .then((res) => {
+        console.log(res);
         navigate("/login");
       })
       .catch((error) => {
@@ -120,14 +125,21 @@ const SignUp = () => {
                   >
                     Department
                   </label>
-                  <input
-                    required
-                    placeholder="VBC"
-                    name="department"
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    {...formik.getFieldProps("address")}
-                  ></input>
+                  <FormControl variant="standard" className="w-full">
+                    <Select
+                      labelId="demo-simple-select-filled-label"
+                      id="demo-simple-select-filled"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      {...formik.getFieldProps("department")}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={"649958aedb17c980ea563b7a"}>
+                        VBC
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
               {/* birthday && phoneNumber */}
@@ -143,7 +155,7 @@ const SignUp = () => {
                     required
                     placeholder="11/11/1911"
                     name="dateOfBirth"
-                    type="dateOfBirth"
+                    type="date"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...formik.getFieldProps("dateOfBirth")}
                   ></input>

@@ -1,14 +1,14 @@
-//utils
-import { Route, Routes } from "react-router-dom";
-//route
+import { Route, Routes, Navigate } from "react-router-dom";
 import GeneralRoutes from "./list/GeneralRoutes";
 import UserRoutes from "./list/UserRoutes";
-//page
 import NotFound from "../pages/notFound";
-//layout
 import { DefaultLayout, GeneralLayout } from "../layouts";
+import store from "../state";
+import { Home } from "../pages";
+import PrivateRoute from "./PrivateRoute";
 
 const RouterList = () => {
+  // Check if user is logged in
   return (
     <Routes>
       {GeneralRoutes.map((item, idx) => (
@@ -27,21 +27,13 @@ const RouterList = () => {
           key={idx}
           path={item.path}
           element={
-            <DefaultLayout>
+            <PrivateRoute>
               <item.element />
-            </DefaultLayout>
+            </PrivateRoute>
           }
         />
       ))}
       <Route path="/404" element={<NotFound />} />
-
-      {/* Use if we have many role in system */}
-      {/* <Route path="/user" element={<PrivateRoute roles={[ROLE.User]} />}>
-        {UserRoutes.map((item, idx) => (
-          <Route key={idx} path={item.path} element={<item.element />} />
-        ))}
-      </Route> */}
-      {/* <Route path="*" element={<Login />} /> */}
     </Routes>
   );
 };

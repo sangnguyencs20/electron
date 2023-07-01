@@ -3,42 +3,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosLogin } from "../../api";
 
 const initialState = {
-  status: "idle",
-  data: {
-    accessToken: "",
-    id: "",
-  },
+  accessToken: "",
+  refreshToken: "",
 };
-
-export const login = createAsyncThunk("user/login", async (data) => {
-  console.log("start call api,", import.meta.env.VITE_REACT_API_CORE_ENDPOINT);
-  const res = await axiosLogin(data.username, data.password)
-    .then((e) => {
-      console.log(e);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
     saveInfo: (state, action) => {
-      state = action.payload;
+      const { accessToken, refreshToken } = action.payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
     },
     clearInfo: (state, action) => {
       state = initialState;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(login.pending, (state, action) => {
-      state.status = "pending";
-    });
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.status = "idle";
-    });
   },
 });
 
