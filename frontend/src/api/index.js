@@ -1,12 +1,12 @@
 import axios from "axios";
 import queryString from "query-string";
 import { toast } from "react-toastify";
-// import store from "../state";
+import store from "../state";
 
 const getToken = async () => {
-  // let storeData = store.getState();
-  let accessToken = localStorage.getItem("accessToken");
-  if (storeData) {
+  let storeData = store.getState();
+  // let accessToken = localStorage.getItem("accessToken");
+  if (storeData?.userState?.token) {
     // let currentTime = moment(new Date()).valueOf();
     // if (
     //   currentTime - moment(storeData.userState.expiresIn).valueOf() <
@@ -17,7 +17,7 @@ const getToken = async () => {
     //   store.dispatch(logOut());
     //   return;
     // }
-    return accessToken;
+    return storeData.userState.accessToken;
   } else {
     return "";
   }
@@ -31,15 +31,13 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  console.log("Token");
-  let token = "";
+  let token = await getToken();
   if (token) {
     config.headers = {
       Authorization: token,
     };
   }
   config.timeout = 15000;
-  console.log("Done config");
   return config;
 });
 
@@ -57,7 +55,7 @@ axiosClient.interceptors.response.use(
       if (error.response.data.message) {
         toast.error(error.response.data.message);
       } else {
-        toast.error(error.message);
+        toast.error(error.data);
       }
     } else if (error.request) {
       window.location.replace("/404");
@@ -69,7 +67,6 @@ axiosClient.interceptors.response.use(
 );
 export default axiosClient;
 
-export const axiosLogin = (username, password) =>
-  axiosClient.post("/api/auth/login", { username, password });
+export const axiosLogin = (data) => axiosClient.post("/api/auth/login", data);
 
 export const axiosSignUp = (data) => axiosClient.post("/api/auth/signup", data);

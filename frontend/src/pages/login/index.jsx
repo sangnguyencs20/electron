@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 //formik
 import { useFormik } from "formik";
 
@@ -7,11 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 //mui
 import { Input } from "@mui/material";
-//thunk
-import { login } from "../../state/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { axiosLogin } from "../../api";
+import Loader from "../../components/Loader";
+import { saveInfo } from "../../state/user/userSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -21,25 +24,43 @@ const Login = () => {
   }, [user]);
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
-      showPass: false,
     },
     validationSchema: Yup.object({
       password: Yup.string().min(5, "atLeast").required("require"),
-      email: Yup.string().required("require"),
+      username: Yup.string().required("require"),
     }),
     onSubmit: async (values) => {
       handleSignIn(values);
     },
   });
 
-  const handleSignIn = (values) => {
-    dispatch(login({ username: values.email, password: values.password }));
+  const handleSignIn = async (values) => {
+    setLoading(true);
+
+    try {
+      const res = await axiosLogin(values);
+      console.log(res);
+      toast.success("Đăng nhập thành công");
+
+      await dispatch(
+        saveInfo({
+          accessToken: res.data.accessToken,
+          refreshToken: res.data.refreshToken,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      navigate("/home");
+    }
   };
 
   return (
     <div className="relative  max-h-fit mt-20 flex gap-20">
+      {loading && <Loader msg={"Đang đăng nhập. Vui lòng chờ 1 chút"} />}
       <div className="w-full h-fit bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 max-h-fit border">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -60,9 +81,11 @@ const Login = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@"
                 error={
-                  formik.touched.email && formik.errors.email ? true : false
+                  formik.touched.username && formik.errors.username
+                    ? true
+                    : false
                 }
-                {...formik.getFieldProps("email")}
+                {...formik.getFieldProps("username")}
               />
             </div>
             <div>
