@@ -6,7 +6,7 @@ import store from "../state";
 const getToken = async () => {
   let storeData = store.getState();
   // let accessToken = localStorage.getItem("accessToken");
-  if (storeData?.userState?.token) {
+  if (storeData?.userState?.accessToken) {
     // let currentTime = moment(new Date()).valueOf();
     // if (
     //   currentTime - moment(storeData.userState.expiresIn).valueOf() <
@@ -17,6 +17,7 @@ const getToken = async () => {
     //   store.dispatch(logOut());
     //   return;
     // }
+    console.log(storeData.userState.accessToken);
     return storeData.userState.accessToken;
   } else {
     return "";
@@ -32,9 +33,10 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   let token = await getToken();
+  console.log(`Bearer ${token}`);
   if (token) {
     config.headers = {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     };
   }
   config.timeout = 15000;
@@ -70,3 +72,8 @@ export default axiosClient;
 export const axiosLogin = (data) => axiosClient.post("/api/auth/login", data);
 
 export const axiosSignUp = (data) => axiosClient.post("/api/auth/signup", data);
+
+export const axiosAllUser = () => axiosClient.get("/api/users");
+
+export const axiosCreateDoc = (data) =>
+  axiosClient.post("/api/documents", data);

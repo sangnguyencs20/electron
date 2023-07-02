@@ -1,16 +1,38 @@
 import useDrivePicker from "react-google-drive-picker";
 import UploadToGoogleDrive from "./UploadToGoogleDrive";
+import CircularIntegration from "./CircularIntegration";
+import { useState, useRef, useEffect } from "react";
 
-const DropFile = ({ setFile }) => {
+const DropFile = ({ file, setFile }) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const timer = useRef();
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = window.setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+      }, 2000);
+    }
+  };
+
   const [openPicker, authResponse] = useDrivePicker();
-  const handleOpenPicker = () => {
+  const handleOpenPicker = (e) => {
+    e.preventDefault();
     openPicker({
       clientId:
         "426348910591-4a0b0riiavqo0f637nbktu0ffqfanm30.apps.googleusercontent.com",
       developerKey: "AIzaSyCpsIDvxtjA6ksXyIbFlWnGObysq9u5YaI",
       viewId: "DOCS",
-      token:
-        "ya29.a0AbVbY6N__nKMXTOOLdydq2mlJ3cNa4sb4WMEeTjUgonouuz2GRHz3BBIvfhxkJdHcKTiPYJn0Do3T39Cp9tWYMAHKd0RPsBJWwJRtoty5ZG7drT1sNQ2RLyDkUi-lL4jRQzDCTO1arJIGv4frS9H1QUc3-eKaCgYKAYQSARISFQFWKvPl9TmWwY-53A4XkIZiarfWuA0163", // pass oauth token in case you already have one
+      token: import.meta.env.VITE_REACT_GOOGLE_DRIVE_TOKEN, // pass oauth token in case you already have one
       showUploadView: true,
       showUploadFolders: true,
       supportDrives: true,
@@ -21,6 +43,7 @@ const DropFile = ({ setFile }) => {
         }
         if (data.action === "picked") {
           setFile(data.docs[0].url);
+          handleButtonClick();
           console.log("User clicked cancel/close button");
         }
         console.log(data);
@@ -69,6 +92,18 @@ const DropFile = ({ setFile }) => {
           />
         </label>
       </div>
+      {file !== "" && (
+        <div className="text-black w-1/3 h-32 py-2 pl-3 pr-2 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-gray-50 mt-10 flex justify-center items-center">
+          <p className="w-4/5 text-[10px] text-slate-500 overflow-clip text-sty">
+            {file}
+          </p>
+          <CircularIntegration
+            loading={loading}
+            success={success}
+            handleButtonClick={handleButtonClick}
+          />
+        </div>
+      )}
     </div>
   );
 };

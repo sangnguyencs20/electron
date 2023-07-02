@@ -11,6 +11,7 @@ const RouterList = () => {
   // Check if user is logged in
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       {GeneralRoutes.map((item, idx) => (
         <Route
           key={idx}

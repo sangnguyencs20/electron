@@ -1,3 +1,4 @@
+import CustomSugar from "../components/CustomSugar";
 import { Sidebar, Navbar, Footer } from "./components";
 
 const DefaultLayout = ({ children }) => {
@@ -10,7 +11,6 @@ const DefaultLayout = ({ children }) => {
 
         <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
           <Navbar />
-
           {children}
         </div>
       </div>

@@ -8,47 +8,79 @@ import Loader from "../../components/Loader";
 import { checkIfImage } from "../../utils";
 import { Button } from "@mui/material";
 import DropFile from "../../components/DropFile";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useSelector } from "react-redux";
+import AssignDropDown from "../../components/AssignDropDown";
+import { axiosCreateDoc } from "../../api";
+import ListBox from "../../components/ListBox";
+import CustomSugar from "../../components/CustomSugar";
+import { Sugar } from "react-preloaders";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import { toast } from "react-toastify";
 
 const DraftCreate = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [secret, setSecret] = useState({ name: "Low" });
+  const [urgency, setUrgency] = useState({ name: "Low" });
   const [file, setFile] = useState("");
-  // const { createCampaign } = useStateContext();
-  const [form, setForm] = useState({
-    name: "",
-    title: "",
-    description: "",
-    target: "",
-    deadline: "",
-    image: "",
+  const [selected, setSelected] = useState([]);
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      createdBy: useSelector((state) => state.userState.id),
+      receiver: [],
+      field: "",
+    },
+    // validationSchema: Yup.object({
+    //   title: Yup.string().min(5, "atLeast").required("require"),
+    //   urgencyState: Yup.string().required("require"),
+    // }),
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      handleSubmit(values);
+    },
   });
+  console.log(isLoading);
+  const handleSubmit = async (values) => {
+    const receiver = selected.map((item) => {
+      return item.id;
+    });
+    const secretState = secret.name;
+    const urgencyState = urgency.name;
 
-  const handleFormFieldChange = (fieldName, e) => {
-    setForm({ ...form, [fieldName]: e.target.value });
-  };
+    // setIsLoading((pre) => !pre);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // checkIfImage(form.image, async (exists) => {
-    //   if (exists) {
-    //     setIsLoading(true);
-    //     await createCampaign({
-    //       ...form,
-    //       target: ethers.utils.parseUnits(form.target, 18),
-    //     });
-    //     setIsLoading(false);
-    //     navigate("/");
-    //   } else {
-    //     alert("Provide valid image URL");
-    //     setForm({ ...form, image: "" });
-    //   }
-    // });
+    await axiosCreateDoc({
+      ...values,
+      secretState: secretState,
+      urgencyState: urgencyState,
+      receiver: receiver,
+      fileLink: file,
+    })
+      .then((res) => {
+        console.log(res);
+        setTimeout(() => {
+          setIsLoading((pre) => !pre);
+        }, 3000);
+        toast.success(`Create: ${res.data._id}`);
+        formik.resetForm();
+        setFile("");
+        setSelected([]);
+        setSecret({ name: "Low" });
+        setUrgency({ name: "Low" });
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   };
 
   return (
     <div className="bg-[white] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 shadow-md">
-      {isLoading && <Loader />}
+      {<CustomSugar customLoading={false} />}
+      {isLoading && <CustomRotatingSquare />}
       <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-blue-300 rounded-[10px] shadow-md">
         <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white">
           Create Draft
@@ -56,7 +88,7 @@ const DraftCreate = () => {
       </div>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={formik.handleSubmit}
         className="w-full mt-[65px] flex flex-col gap-[30px]"
       >
         <div className="flex flex-wrap gap-[40px]">
@@ -64,65 +96,39 @@ const DraftCreate = () => {
             labelName="Your Title *"
             placeholder="John Doe"
             inputType="text"
-            value={form.name}
-            handleChange={(e) => handleFormFieldChange("name", e)}
+            onChange={formik.handleChange}
+            value={formik.values.title}
+            name="title"
+            {...formik.getFieldProps("title")}
           />
-          <FormField
-            labelName="Draft Title *"
-            placeholder="Write a title"
-            inputType="text"
-            value={form.title}
-            handleChange={(e) => handleFormFieldChange("title", e)}
+        </div>
+        <div className="flex flex-wrap gap-[40px]">
+          <ListBox
+            title={"Secret State *"}
+            selected={secret}
+            setSelected={setSecret}
+          />
+          <ListBox
+            title={"Urgency State *"}
+            selected={urgency}
+            setSelected={setUrgency}
           />
         </div>
         <FormField
           labelName="Description *"
           placeholder="Write detail about draft"
           isTextArea
-          value={form.description}
-          handleChange={(e) => handleFormFieldChange("description", e)}
+          {...formik.getFieldProps("field")}
         />
-
-        {/* <div className="w-full flex justify-start items-center p-4 bg-[#8c6dfd] h-[120px] rounded-[10px]">
-          <img
-            src={money}
-            alt="money"
-            className="w-[40px] h-[40px] object-contain"
-          />
-          <h4 className="font-epilogue font-bold text-[25px] text-black ml-[20px]">
-            You will get 100% of the raised amount
-          </h4>
-        </div> */}
-
-        <div className="flex flex-wrap gap-[40px]">
-          <FormField
-            labelName="Goal *"
-            placeholder="ETH 0.50"
-            inputType="text"
-            value={form.target}
-            handleChange={(e) => handleFormFieldChange("target", e)}
-          />
-          <FormField
-            labelName="End Date *"
-            placeholder="End Date"
-            inputType="date"
-            value={form.deadline}
-            handleChange={(e) => handleFormFieldChange("deadline", e)}
-          />
+        <div className="w-full ">
+          <AssignDropDown selected={selected} setSelected={setSelected} />
         </div>
-
-        <FormField
-          labelName="Draft image *"
-          placeholder="Place image URL of your draft"
-          inputType="url"
-          value={form.image}
-          handleChange={(e) => handleFormFieldChange("image", e)}
-        />
-        <DropFile setFile={setFile} />
+        <DropFile file={file} setFile={setFile} />
         <div className="flex justify-center items-center mt-[40px]">
           <Button
             className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl"
             variant="contained"
+            type="submit"
           >
             Submit
           </Button>

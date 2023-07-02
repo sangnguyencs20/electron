@@ -5,6 +5,7 @@ import { axiosLogin } from "../../api";
 const initialState = {
   accessToken: "",
   refreshToken: "",
+  id: "",
 };
 
 const userSlice = createSlice({
@@ -12,9 +13,10 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     saveInfo: (state, action) => {
-      const { accessToken, refreshToken } = action.payload;
+      const { accessToken, refreshToken, id } = action.payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
+      state.id = id;
     },
     clearInfo: (state, action) => {
       state = initialState;

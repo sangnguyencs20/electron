@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import CustomSugar from "../../components/CustomSugar";
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -55,7 +56,8 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col justify-center items-center py-8 px-6 mx-auto md:h-screen">
-      {loading && <Loader msg={"Đang đăng kí. Vui lòng chờ 1 chút"} />}
+      <CustomSugar customLoading={false} />
+      {loading && <CircularIntegration />}
       <div className="flex flex-col min-h-screen dark:bg-gray-900 pt-5">
         <div className="justify-center items-center w-full bg-blue-100 rounded-lg shadow lg:flex md:mt-0 lg:max-w-screen-md xl:p-0 dark:bg-gray-800 border">
           <div className="p-6 w-full sm:p-8 lg:p-10">

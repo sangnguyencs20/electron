@@ -9,9 +9,10 @@ import * as Yup from "yup";
 import { Input } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosLogin } from "../../api";
-import Loader from "../../components/Loader";
 import { saveInfo } from "../../state/user/userSlice";
 import { toast } from "react-toastify";
+import CustomSugar from "../../components/CustomSugar";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -22,45 +23,50 @@ const Login = () => {
   useEffect(() => {
     if (user) navigate("/home");
   }, [user]);
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
+  const formik = useFormik(
+    {
+      initialValues: {
+        username: "",
+        password: "",
+      },
+      validationSchema: Yup.object({
+        password: Yup.string().min(5, "atLeast").required("require"),
+        username: Yup.string().required("require"),
+      }),
+      onSubmit: async (values) => {
+        handleSignIn(values);
+      },
     },
-    validationSchema: Yup.object({
-      password: Yup.string().min(5, "atLeast").required("require"),
-      username: Yup.string().required("require"),
-    }),
-    onSubmit: async (values) => {
-      handleSignIn(values);
-    },
-  });
+    [user]
+  );
 
   const handleSignIn = async (values) => {
     setLoading(true);
 
-    try {
-      const res = await axiosLogin(values);
-      console.log(res);
-      toast.success("Đăng nhập thành công");
-
-      await dispatch(
-        saveInfo({
-          accessToken: res.data.accessToken,
-          refreshToken: res.data.refreshToken,
-        })
-      );
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-      navigate("/home");
-    }
+    await axiosLogin(values)
+      .then((res) => {
+        dispatch(
+          saveInfo({
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+            id: res.data.user._id,
+          })
+        );
+        setLoading(false);
+        setTimeout(() => {
+          navigate("/home");
+        });
+      }, 2000)
+      .catch((error) => {
+        console.log(error);
+      });
+    toast.success("Đăng nhập thành công");
   };
 
   return (
-    <div className="relative  max-h-fit mt-20 flex gap-20">
-      {loading && <Loader msg={"Đang đăng nhập. Vui lòng chờ 1 chút"} />}
+    <div className="relative max-h-fit mt-20 flex gap-20">
+      {<CustomSugar customLoading={false} />}
+      {loading && <CustomRotatingSquare />}
       <div className="w-full h-fit bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 max-h-fit border">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
