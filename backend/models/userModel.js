@@ -43,6 +43,11 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: [true, 'Please enter your department'],
         ref: 'Department'
+    },
+    role: {
+        type: String,
+        enum: ['User', 'Citizen'],
+        required: [true, 'Please enter your role'],
     }
 },
     {
