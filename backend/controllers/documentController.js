@@ -1,4 +1,4 @@
-const { getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus } = require('../services/documents');
+const { getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
 
 const getDocuments = async (req, res) => {
     try {
@@ -52,5 +52,15 @@ const updateDocumentApproval = async (req, res) => {
     }
 }
 
+const getAllDocumentsOfReceiver = async (req, res) => {
+    const { receiverId } = req.params;
+    console.log(receiverId)
+    try {
+        const documents = await handleGetAllDocumentsOfReceiver(receiverId);
+        res.status(200).json(documents);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 
-module.exports = { getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval };
+module.exports = { getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver };

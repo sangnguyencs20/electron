@@ -7,7 +7,8 @@ const {
     getDocumentById,
     getDocumentOfUser,
     updateDocumentApproval,
-    updateDocument
+    updateDocument,
+    getAllDocumentsOfReceiver
 }
     = require("../controllers/documentController");
 
@@ -354,4 +355,34 @@ router.post("/approval/:id", updateDocumentApproval);
 
 // router.post("/:id", updateDocument);
 
+
+
+/**
+ * @swagger
+ * /api/documents/receiver/{receiverId}:
+ *   get:
+ *     summary: Get all documents of a specific receiver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: receiverId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the receiver
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved documents
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Document'
+ *       404:
+ *         description: Receiver not found or no documents found for the receiver
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
 module.exports = router;

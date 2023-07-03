@@ -27,5 +27,8 @@ const updateDocumentApprovalStatus = async (id, approval) => {
     return document;
 }
 
+const handleGetAllDocumentsOfReceiver = async (id) => {
+    return await Document.find({ receiver: id });
+}
 
-module.exports = { updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser,  createOneDocument, getOneDocumentById };
+module.exports = { updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser,  createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
