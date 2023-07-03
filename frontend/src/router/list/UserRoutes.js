@@ -12,11 +12,6 @@ const UserRoutes = [
     title: "Draft",
   },
   {
-    path: "draft/:id",
-    element: DraftDetail,
-    title: "DraftDetail",
-  },
-  {
     path: "create",
     element: DraftCreate,
     title: "DraftDetail",

@@ -52,15 +52,17 @@ const Login = () => {
             id: res.data.user._id,
           })
         );
+        toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {
           navigate("/home");
         });
       }, 2000)
       .catch((error) => {
+        // toast.error("Đăng nhập thất bại");
+        setLoading(false);
         console.log(error);
       });
-    toast.success("Đăng nhập thành công");
   };
 
   return (
