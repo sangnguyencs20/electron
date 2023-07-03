@@ -55,11 +55,12 @@ export default function AssignDropDown({ selected, setSelected }) {
           <div className="relative mt-1">
             <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
               <Combobox.Input
+                placeholder="Search here"
                 className="text-left relative w-full cursor-default  py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-black text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
                 displayValue={(people) =>
                   people[people.length - 1]?.name
                     ? people[people.length - 1]?.name
-                    : "Search here ..."
+                    : ""
                 }
                 onChange={(event) => setQuery(event.target.value)}
               />
