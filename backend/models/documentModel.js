@@ -12,9 +12,15 @@ const DocumentSchema = new mongoose.Schema({
         required: [true, 'Vui long nhap Nguoi tao'],
     },
     receiver: {
+        required: [true, 'Vui long nhap Nguoi nhan'],
+        validate: {
+            validator: function (array) {
+                return array.length > 0;
+            },
+            message: 'Vui long nhap Nguoi nhan',
+        },
         type: [mongoose.Types.ObjectId],
         ref: 'User',
-        required: [true, 'Vui long nhap Nguoi nhan'],
     },
     secretState: {
         type: String,
@@ -31,7 +37,7 @@ const DocumentSchema = new mongoose.Schema({
         required: [true, 'Vui long nhap Linh vuc'],
     },
     fileLink: {
-        type: String, 
+        type: String,
         required: [true, 'Vui long nhap Link file'],
     }
 },
