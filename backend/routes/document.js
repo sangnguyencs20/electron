@@ -58,6 +58,9 @@ const {
  *                   field:
  *                     type: string
  *                     description: The field of the document
+ *                   fileLink:
+ *                     type: string
+ *                     description: The link to the file of the document
  *       404:
  *         description: Documents not found
  *       500:
@@ -103,6 +106,9 @@ router.get("/", getDocuments);
  *               field:
  *                 type: string
  *                 description: The field of the document
+ *               fileLink:
+ *                 type: string
+ *                 description: The link to the file of the document
  *     responses:
  *       201:
  *         description: Successfully created document
@@ -135,6 +141,9 @@ router.get("/", getDocuments);
  *                 field:
  *                   type: string
  *                   description: The field of the document
+ *                 fileLink:
+ *                   type: string
+ *                   description: The link to the file of the document
  *       409:
  *         description: Document creation conflict
  *       500:
@@ -188,6 +197,9 @@ router.post("/", createDocument);
  *                 field:
  *                   type: string
  *                   description: The field of the document
+ *                 fileLink:
+ *                   type: string
+ *                   description: The link to the file of the document
  *       404:
  *         description: Document not found
  *       500:
@@ -243,6 +255,9 @@ router.get("/:id", getDocumentById);
  *                   field:
  *                     type: string
  *                     description: The field of the document
+ *                   fileLink:
+ *                     type: string
+ *                     description: The link to the file of the document
  *       404:
  *         description: User's documents not found
  *       500:
@@ -325,6 +340,9 @@ router.post("/approval/:id", updateDocumentApproval);
 //  *               field:
 //  *                 type: string
 //  *                 description: The updated field of the document
+//  *               fileLink:
+//  *                 type: string
+//  *                 description: The updated link to the file of the document
 //  *     responses:
 //  *       200:
 //  *         description: Successfully updated document

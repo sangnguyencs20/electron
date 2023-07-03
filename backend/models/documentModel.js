@@ -29,8 +29,11 @@ const DocumentSchema = new mongoose.Schema({
     field: {
         type: String,
         required: [true, 'Vui long nhap Linh vuc'],
+    },
+    fileLink: {
+        type: String, 
+        required: [true, 'Vui long nhap Link file'],
     }
-    /// store pdf
 },
     { timestamp: true, }
 )
