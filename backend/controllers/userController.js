@@ -3,6 +3,9 @@ const {getAllUsers, createOneUser, getOneUserById, updateOneUser, deleteOneUser}
 
 const getUsers = async (req, res) => {
     try {
+        if (req.role == 'Citizen') {
+            return res.status(403).json({ message: "You are not authorized to view this content." });
+        }
         const users = await getAllUsers();
         res.status(200).json(users);
     } catch (error) {
@@ -12,6 +15,9 @@ const getUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
     const { id } = req.params;
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     try {
         const user = await User.findById(id);
         res.status(200).json(user);
@@ -22,6 +28,9 @@ const getUserById = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     const { id } = req.params;
     const { username, password, fullName, role } = req.body;
     try {
@@ -46,6 +55,9 @@ const updateUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     const { id } = req.params;
     try {
         await User.findByIdAndDelete(id);

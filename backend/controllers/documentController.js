@@ -1,5 +1,7 @@
 const { getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
 
+const { createANewLog } = require('../services/log');
+
 const getDocuments = async (req, res) => {
     try {
         const documents = await getAllDocuments();
@@ -10,9 +12,25 @@ const getDocuments = async (req, res) => {
 }
 
 const createDocument = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     const document = req.body;
     try {
         const newDocument = await createOneDocument(document);
+
+
+        //implement something related to blockchain transaction
+        const log = {
+            "documentId": newDocument._id,
+            "user": newDocument.createdBy,
+            "action": "CREATE",
+            "transactionId": "something hashed" // this is transaction hased we will modify later
+        }
+
+
+        
+        await createANewLog(log);
         res.status(201).json(newDocument);
     } catch (error) {
         res.status(409).json({ message: error.message });
@@ -42,6 +60,9 @@ const getDocumentOfUser = async (req, res) => {
 }
 
 const updateDocumentApproval = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     const { id } = req.params;
     const { approval } = req.body;
     try {
@@ -53,6 +74,9 @@ const updateDocumentApproval = async (req, res) => {
 }
 
 const getAllDocumentsOfReceiver = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
     const { receiverId } = req.params;
     console.log(receiverId)
     try {
