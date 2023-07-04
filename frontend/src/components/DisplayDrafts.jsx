@@ -82,11 +82,11 @@ const DisplayDrafts = () => {
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
+                  "w-full rounded-lg py-2.5 text-sm font-bold leading-5  ",
                   "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none",
                   selected
-                    ? "bg-white shadow"
-                    : "text-slate-700 hover:bg-white/[0.12] hover:text-slate-400"
+                    ? "bg-white shadow text-blue-700 "
+                    : "text-slate-700 hover:bg-white/[0.12] hover:text-slate-400 text-white"
                 )
               }
             >
@@ -111,7 +111,7 @@ const DisplayDrafts = () => {
               </div>
             </Tab.Panel>
           ))}
-          <div className="flex w-full justify-end mt-52">
+          <div className="flex w-full justify-end mt-36">
             <Pagination total={5} initialPage={1} />
           </div>
         </Tab.Panels>

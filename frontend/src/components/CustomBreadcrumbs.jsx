@@ -10,7 +10,7 @@ export default function CustomBreadcrumbs() {
   const arrayLocal = local.pathname.split("/").filter((item) => item !== "");
   const len = arrayLocal.length;
   return (
-    <Breadcrumbs className="mb-10">
+    <Breadcrumbs className="mb-10 bg-white">
       <Link to="/home" className="opacity-60">
         <svg
           xmlns="http://www.w3.org/2000/svg"

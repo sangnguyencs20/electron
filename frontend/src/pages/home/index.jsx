@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import DisplayDrafts from "../../components/DisplayDrafts";
+import CustomSugar from "../../components/CustomSugar";
 
 // import { useStateContext } from '../context'
 
@@ -20,7 +21,12 @@ const Home = () => {
   //     if(contract) fetchCampaigns();
   //   }, [address, contract]);
 
-  return <DisplayDrafts />;
+  return (
+    <div>
+      {<CustomSugar customLoading={false} />}
+      <DisplayDrafts />
+    </div>
+  );
 };
 
 export default Home;

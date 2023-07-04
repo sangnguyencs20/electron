@@ -77,3 +77,9 @@ export const axiosAllUser = () => axiosClient.get("/api/users");
 
 export const axiosCreateDoc = (data) =>
   axiosClient.post("/api/documents", data);
+
+export const axiosGetDoc = () => axiosClient.get("/api/documents");
+export const axiosGetMyDoc = (id) =>
+  axiosClient.get(`/api/documents/users/${id}`);
+export const axiosSubmitMyDoc = (docId, userId) =>
+  axiosClient.post(`/api/documents/submit/${id}`, { userId });

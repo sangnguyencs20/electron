@@ -14,8 +14,13 @@ import { DeleteIcon } from "../../components/DeleteIcon";
 
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { FileCell } from "../approve";
+import { DescriptionCell, FileCell, StateCell } from "../approve";
 import DefaultSpeedDial from "../../components/DefaultSpeedDial";
+import { useEffect, useState } from "react";
+import { axiosGetDoc, axiosGetMyDoc } from "../../api";
+import { useSelect } from "@material-tailwind/react";
+import { useSelector } from "react-redux";
+import CustomSugar from "../../components/CustomSugar";
 
 const StyledBadge = styled("span", {
   display: "inline-block",
@@ -33,71 +38,60 @@ const StyledBadge = styled("span", {
   color: "$white",
   variants: {
     type: {
-      active: {
+      Success: {
         bg: "$successLight",
         color: "$successLightContrast",
       },
-      paused: {
+      Pending: {
         bg: "$errorLight",
         color: "$errorLightContrast",
       },
-      vacation: {
+      Draft: {
         bg: "$warningLight",
         color: "$warningLightContrast",
       },
     },
   },
   defaultVariants: {
-    type: "active",
+    type: "Draft",
   },
 });
 
 const Draft = () => {
   const navigate = useNavigate();
+  const [myDocuments, setMyDocuments] = useState([]);
+  const [isReady, setISReady] = useState(false);
+  const id = useSelector((state) => state.userState.id);
+  useEffect(() => {
+    axiosGetMyDoc(id)
+      .then((res) => {
+        console.log(res);
+        setTimeout(() => {
+          setMyDocuments(
+            res.data.map((item, idx) => {
+              return { id: idx, ...item };
+            })
+          );
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const columns = [
     { name: "TITLE", uid: "title" },
     { name: "STATUS", uid: "status" },
+    { name: "FIELD", uid: "field" },
+    { name: "STATE", uid: "state" },
+    { name: "DESCRIPTION", uid: "description" },
     { name: "FILE", uid: "files" },
+
     { name: "ACTIONS", uid: "actions" },
   ];
-  const myDocument = [
-    {
-      id: 1,
-      title: "string",
-      createdBy: "string",
-      receiver: ["string"],
-      secretState: "Neutral",
-      urgencyState: "Neutral",
-      field: "string",
-      fileLink: "string",
-      status: "submited",
-    },
-    {
-      id: 2,
-      title: "string",
-      createdBy: "string",
-      receiver: ["string"],
-      secretState: "Neutral",
-      urgencyState: "Neutral",
-      field: "string",
-      file: "string",
-      status: "submited",
-    },
-    {
-      id: 3,
-      title: "string",
-      createdBy: "string",
-      receiver: ["string"],
-      secretState: "Neutral",
-      urgencyState: "Neutral",
-      field: "string",
-      fileLink: "string",
-      status: "submited",
-    },
-  ];
-  const renderCell = (user, columnKey) => {
-    const cellValue = user[columnKey];
+
+  const renderCell = (doc, columnKey) => {
+    const cellValue = doc[columnKey];
     switch (columnKey) {
       case "title":
         return (
@@ -105,11 +99,22 @@ const Draft = () => {
             {cellValue}
           </Text>
         );
-      case "status":
+      case "field":
         return (
           <Text b size={14} css={{ tt: "capitalize", width: "200px" }}>
             {cellValue}
           </Text>
+        );
+      case "description":
+        return <DescriptionCell description={"Lorem"} />;
+      case "status":
+        return <StyledBadge type="Draft">{cellValue}</StyledBadge>;
+      case "state":
+        return (
+          <StateCell
+            secretState={doc.secretState}
+            urgencyState={doc.urgencyState}
+          />
         );
       case "files":
         return <FileCell link={cellValue} />;
@@ -118,14 +123,19 @@ const Draft = () => {
           <Row justify="flex-end" align="center" fluid css={{ width: "100%" }}>
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
-                <IconButton onClick={() => console.log("View user", user.id)}>
+                <IconButton onClick={() => console.log("View user", doc.id)}>
                   <EyeIcon size={20} fill="#979797" />
                 </IconButton>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex" }}>
               <Tooltip content="Submit">
-                <IconButton onClick={() => console.log("Edit user", user.id)}>
+                <IconButton
+                  onClick={() => {
+                    console.log("Edit user", doc.id);
+                    handleSubmit(doc._id);
+                  }}
+                >
                   <EditIcon size={20} fill="#979797" />
                 </IconButton>
               </Tooltip>
@@ -134,7 +144,7 @@ const Draft = () => {
               <Tooltip
                 content="Delete Draft"
                 color="error"
-                onClick={() => console.log("Delete Draft", user.id)}
+                onClick={() => console.log("Delete Draft", doc.id)}
               >
                 <IconButton>
                   <DeleteIcon size={20} fill="#FF0080" />
@@ -147,8 +157,13 @@ const Draft = () => {
         return cellValue;
     }
   };
+
+  const handleSubmit = (docId) => {
+    console.log(id, docId);
+  };
   return (
     <div className="w-full">
+      {<CustomSugar customLoading={isReady} />}
       <Table
         aria-label="Example table with custom cells"
         sticked
@@ -157,24 +172,26 @@ const Draft = () => {
           height: "auto",
           minWidth: "100%",
         }}
+        className="bg-white"
       >
         <Table.Header columns={columns}>
           {(column) => (
             <Table.Column
               key={column.uid}
-              // hideHeader={column.uid === "actions"}
-              align={column.uid === "actions" ? "center" : "start"}
-              className={"rounded-none "}
+              align={column.uid === "state" ? "center" : "start"}
+              className={"rounded-none"}
             >
               {column.name}
             </Table.Column>
           )}
         </Table.Header>
-        <Table.Body items={myDocument}>
+        <Table.Body items={myDocuments}>
           {(item) => (
             <Table.Row>
               {(columnKey) => (
-                <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
+                <Table.Cell className={"max-w-[100px]"}>
+                  {renderCell(item, columnKey)}
+                </Table.Cell>
               )}
             </Table.Row>
           )}

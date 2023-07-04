@@ -31,9 +31,9 @@ const DetailCell = ({ id, title, createdBy, time }) => {
   );
 };
 
-const StateCell = ({ secretState, urgencyState }) => {
+export const StateCell = ({ secretState, urgencyState }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-5 bg-blue-50 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
+    <div className="grid md:grid-cols-2 grid-flow-row gap- bg-blue-50 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
       <div className="col-span-1 flex flex-col items-center">
         <p className="font-bold text-sm text-slate-700">{secretState}</p>
         <p className="text-slate-400 text-xs">Secret State</p>
@@ -63,7 +63,7 @@ const StatusCell = ({ receiver }) => {
     </div>
   );
 };
-const DescriptionCell = ({ description }) => {
+export const DescriptionCell = ({ description }) => {
   return (
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
@@ -79,16 +79,18 @@ const DescriptionCell = ({ description }) => {
 };
 export const FileCell = ({ link }) => {
   return (
-    <Button
-      bordered
-      color="primary"
-      auto
-      onClick={() => {
-        window.open(link, "_blank");
-      }}
-    >
-      Click me
-    </Button>
+    <div className="flex justify-start w-full">
+      <Button
+        bordered
+        color="primary"
+        auto
+        onClick={() => {
+          window.open(link, "_blank");
+        }}
+      >
+        Click me
+      </Button>
+    </div>
   );
 };
 export default function Approve() {
@@ -344,6 +346,13 @@ export default function Approve() {
             urgencyState={doc.urgencyState}
           />
         );
+      case "state":
+        return (
+          <StateCell
+            secretState={doc.secretState}
+            urgencyState={doc.urgencyState}
+          />
+        );
       case "description":
         return <DescriptionCell description={doc.field} />;
       case "file":
@@ -380,7 +389,7 @@ export default function Approve() {
     }
   };
   return (
-    <div className="mt-20">
+    <div>
       <Table
         aria-label="Example table with custom cells"
         sticked
@@ -391,15 +400,15 @@ export default function Approve() {
           height: "auto",
           minWidth: "100%",
         }}
-        className="p-0 m-0 rounded-none"
+        className=" bg-white"
       >
-        <Table.Header columns={columns} className="p-48 m-0 rounded-none">
+        <Table.Header columns={columns} className="p-48 m-0 ">
           {(column) => (
             <Table.Column
               key={column.uid}
               // hideHeader={column.uid === "id"}
               align={column.uid === "state" ? "center" : "start"}
-              className={" p-4 bg-blue-gray-50"}
+              className={" bg-blue-gray-50"}
             >
               {column.name}
             </Table.Column>
