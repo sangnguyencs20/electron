@@ -35,5 +35,8 @@ const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
     return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { receiverId: receiverId } } });
 }
 
-
-module.exports = { handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
+const handleGetAllAcceptedDocument = async () => {
+    console.log("function")
+    return await Document.find({ status: 'Accepted' }).exec();
+};
+module.exports = { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };

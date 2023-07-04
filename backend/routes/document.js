@@ -11,6 +11,7 @@ const {
     getAllDocumentsOfReceiver,
     submitFeedback,
     deleteDocument,
+    getAllAcceptedDocuments
 }
     = require("../controllers/documentController");
 
@@ -152,6 +153,32 @@ router.get("/", getDocuments);
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * paths:
+ *   /api/documents/accepted:
+ *     get:
+ *       summary: Get all accepted documents
+ *       description: Retrieve all documents with a status of "Accepted"
+ *       responses:
+ *         200:
+ *           description: Successful operation
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Document'
+ *         403:
+ *           description: Unauthorized - User is not authorized to view this content
+ *         500:
+ *           description: Internal Server Error - An error occurred while processing the request
+ *       security:
+ *         - bearerAuth: []
+ */
+router.get("/accepted", getAllAcceptedDocuments);
+
 
 router.post("/", createDocument);
 
@@ -452,5 +479,7 @@ router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
  *         description: Server error
  */
 router.delete("/:documentId", deleteDocument);
+
+
 
 module.exports = router;
