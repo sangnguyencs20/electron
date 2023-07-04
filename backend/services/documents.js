@@ -28,8 +28,12 @@ const updateDocumentApprovalStatus = async (id, approval) => {
 }
 
 const handleGetAllDocumentsOfReceiver = async (id) => {
-    return await Document.find({ receiver: { $elemMatch: { receiverId: id } } });
-}
+    return await Document.find({
+        receiver: {
+            $elemMatch: { receiverId: id, status: { $ne: 'Draft' } }
+        }
+    });
+};
 
 const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
     return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { receiverId: receiverId } } });
@@ -37,6 +41,6 @@ const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
 
 const handleGetAllAcceptedDocument = async () => {
     console.log("function")
-    return await Document.find({ status: 'Accepted' }).exec();
+    return await Document.find({ status: 'Approved' }).exec();
 };
 module.exports = { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };

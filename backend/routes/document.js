@@ -11,7 +11,8 @@ const {
     getAllDocumentsOfReceiver,
     submitFeedback,
     deleteDocument,
-    getAllAcceptedDocuments
+    getAllAcceptedDocuments,
+    submitDocument
 }
     = require("../controllers/documentController");
 
@@ -177,11 +178,10 @@ router.get("/", getDocuments);
  *       security:
  *         - bearerAuth: []
  */
-router.get("/accepted", getAllAcceptedDocuments);
-
-
 router.post("/", createDocument);
 
+
+router.get("/accepted", getAllAcceptedDocuments);
 /**
  * @swagger
  * /api/documents/{id}:
@@ -414,6 +414,45 @@ router.post("/approval/:id", updateDocumentApproval);
  *         description: Internal server error
  */
 router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
+
+
+/**
+ * @swagger
+ * /submit/{documentId}:
+ *   post:
+ *     summary: Submit a document
+ *     description: Submit a document by its ID
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         required: true
+ *         description: ID of the document to submit
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         description: User ID and additional data
+ *         schema:
+ *           type: object
+ *           properties:
+ *             userId:
+ *               type: string
+ *               format: objectId
+ *               required: true
+ *           example:
+ *             userId: 64a1768f0c096167bfb31bf9
+ *     responses:
+ *       200:
+ *         description: Document submitted successfully
+ *       401:
+ *         description: Unauthorized - User not authorized to submit the document
+ *       404:
+ *         description: Document not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/submit/:documentId", submitDocument);
 
 /**
  * @swagger

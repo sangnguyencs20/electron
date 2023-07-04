@@ -1,4 +1,5 @@
 const { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
+const { ObjectId } = require('mongoose').Types;
 
 const { createANewLog } = require('../services/log');
 
@@ -86,6 +87,9 @@ const getAllDocumentsOfReceiver = async (req, res) => {
     if (req.role == 'Citizen') {
         return res.status(403).json({ message: "You are not authorized to view this content." });
     }
+
+
+
     const { receiverId } = req.params;
     try {
         const documents = await handleGetAllDocumentsOfReceiver(receiverId);
@@ -96,7 +100,26 @@ const getAllDocumentsOfReceiver = async (req, res) => {
 }
 
 
+const submitDocument = async (req, res) => {
+    const { documentId } = req.params;
+    const document = await getOneDocumentById(documentId);
+    if (!document) {
+        return res.status(404).json({ message: 'Document not found' });
+    }
 
+    if (document.createdBy._id.toString() !== req.userId) {
+        console.log(typeof document.createdBy._id, typeof req.userId);
+        return res.status(401).json({ message: 'You are not authorized to submit this document' });
+    }
+    if (document.status !== 'Draft') {
+        return res.status(401).json({ message: 'You can only submit draft document' });
+    }
+
+    document.status = 'Submitted';
+    console.log(document)
+    await document.save();
+    return res.status(200).json({ message: 'Document submitted successfully' });
+}
 
 
 const submitFeedback = async (req, res) => {
@@ -152,4 +175,4 @@ const deleteDocument = async (req, res) => {
     }
 }
 
-module.exports = { getAllAcceptedDocuments, getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver, submitFeedback, deleteDocument };
+module.exports = { submitDocument, getAllAcceptedDocuments, getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver, submitFeedback, deleteDocument };
