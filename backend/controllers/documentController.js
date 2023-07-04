@@ -1,4 +1,4 @@
-const { handleGetASpecificDocumentOfReceiver, getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
+const { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
 
 const { createANewLog } = require('../services/log');
 
@@ -7,6 +7,15 @@ const getDocuments = async (req, res) => {
         const documents = await getAllDocuments();
         res.status(200).json(documents);
     } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+const getAllAcceptedDocuments = async (req, res) => {
+    try {
+        const documents = await handleGetAllAcceptedDocument();
+        res.status(200).json(documents);
+    }
+    catch (error) {
         res.status(404).json({ message: error.message });
     }
 }
@@ -86,6 +95,10 @@ const getAllDocumentsOfReceiver = async (req, res) => {
     }
 }
 
+
+
+
+
 const submitFeedback = async (req, res) => {
     const { documentId, receiverId } = req.params;
     const { comment, status } = req.body;
@@ -139,4 +152,4 @@ const deleteDocument = async (req, res) => {
     }
 }
 
-module.exports = { getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver, submitFeedback, deleteDocument };
+module.exports = { getAllAcceptedDocuments, getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver, submitFeedback, deleteDocument };

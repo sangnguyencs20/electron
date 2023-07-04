@@ -11,6 +11,10 @@ const DocumentSchema = new mongoose.Schema({
         ref: 'User',
         required: [true, 'Vui long nhap Nguoi tao'],
     },
+    description: {
+        type: String,
+        required: [true, 'Vui long nhap Noi dung'],
+    },
     receiver: {
         required: [true, 'Vui long nhap Nguoi nhan'],
         validate: {

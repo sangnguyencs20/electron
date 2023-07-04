@@ -11,6 +11,7 @@ const {
     getAllDocumentsOfReceiver,
     submitFeedback,
     deleteDocument,
+    getAllAcceptedDocuments
 }
     = require("../controllers/documentController");
 
@@ -152,6 +153,8 @@ router.get("/", getDocuments);
  *       500:
  *         description: Internal server error
  */
+router.get("/accepted", getAllAcceptedDocuments);
+
 
 router.post("/", createDocument);
 
@@ -452,5 +455,7 @@ router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
  *         description: Server error
  */
 router.delete("/:documentId", deleteDocument);
+
+
 
 module.exports = router;
