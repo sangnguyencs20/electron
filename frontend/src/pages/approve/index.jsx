@@ -10,7 +10,7 @@ import RejectModal from "../../components/RejectModal";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-2 max-w-[200px]">
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-2 bg-blue-50 rounded-xl">
       <div className="col-span-1">
         <p className="font-bold text-sm text-slate-700">{id}</p>
         <p className="text-slate-400 text-xs">Id</p>
@@ -33,7 +33,7 @@ const DetailCell = ({ id, title, createdBy, time }) => {
 
 const StateCell = ({ secretState, urgencyState }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-0">
+    <div className="grid grid-cols-2 grid-flow-row gap-5 bg-blue-50 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
       <div className="col-span-1 flex flex-col items-center">
         <p className="font-bold text-sm text-slate-700">{secretState}</p>
         <p className="text-slate-400 text-xs">Secret State</p>
@@ -48,11 +48,11 @@ const StateCell = ({ secretState, urgencyState }) => {
 
 const StatusCell = ({ receiver }) => {
   return (
-    <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center gap-5 min-w-[150px]">
-      <span className="text-red-400 bg-rose-50 rounded-md max-w-fit px-3 py-1 font-semibold text-center">
+    <div className="grid grid-cols-1 grid-flow-row w-full justify-center items-center gap-5 px-5 mx-2">
+      <span className="text-red-400 bg-red-100 rounded-md  px-3 py-1 font-semibold text-center ">
         {receiver[0].status}
       </span>
-      <div className="flex flex-col justify-center w-full">
+      <div className="flex flex-col justify-center w-full text-center">
         <span className="font-bold text-sm text-slate-700">
           {receiver[0].name}
         </span>
@@ -65,7 +65,7 @@ const StatusCell = ({ receiver }) => {
 };
 const DescriptionCell = ({ description }) => {
   return (
-    <div className="grid grid-cols-1 grid-flow-row max-w-[250px] justify-center items-center gap-5 min-w-[150px]">
+    <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <div className="col-span-2">
           <p className="font-bold text-sm text-slate-700 line-clamp-4 max-h-[5.5rem] overflow-hidden">
@@ -393,13 +393,13 @@ export default function Approve() {
         }}
         className="p-0 m-0 rounded-none"
       >
-        <Table.Header columns={columns} className="p-48 m-0">
+        <Table.Header columns={columns} className="p-48 m-0 rounded-none">
           {(column) => (
             <Table.Column
               key={column.uid}
               // hideHeader={column.uid === "id"}
               align={column.uid === "state" ? "center" : "start"}
-              className={"rounded-none p-4"}
+              className={" p-4 bg-blue-gray-50"}
             >
               {column.name}
             </Table.Column>
@@ -409,7 +409,9 @@ export default function Approve() {
           {(item) => (
             <Table.Row>
               {(columnKey) => (
-                <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
+                <Table.Cell css={{ maxWidth: "700px" }}>
+                  {renderCell(item, columnKey)}
+                </Table.Cell>
               )}
             </Table.Row>
           )}

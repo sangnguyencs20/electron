@@ -5,6 +5,7 @@ import { ButtonBase } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { clearInfo } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function CustomNavbar() {
   const dispatch = useDispatch();
@@ -18,12 +19,14 @@ export default function CustomNavbar() {
   return (
     <Layout>
       <Navbar shouldHideOnScroll isBordered={isDark} variant="sticky">
-        <Navbar.Brand>
-          <AcmeLogo />
-          <Text b color="inherit" hideIn="xs">
-            Electron
-          </Text>
-        </Navbar.Brand>
+        <RouterLink to="/home" className="text-blue-400">
+          <Navbar.Brand>
+            <AcmeLogo />
+            <Text b color="inherit" hideIn="xs">
+              Electron
+            </Text>
+          </Navbar.Brand>
+        </RouterLink>
         <Navbar.Content>
           <Navbar.Link color="inherit" href="#">
             Profile

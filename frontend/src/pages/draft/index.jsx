@@ -15,6 +15,7 @@ import { DeleteIcon } from "../../components/DeleteIcon";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { FileCell } from "../approve";
+import DefaultSpeedDial from "../../components/DefaultSpeedDial";
 
 const StyledBadge = styled("span", {
   display: "inline-block",
@@ -148,17 +149,6 @@ const Draft = () => {
   };
   return (
     <div className="w-full">
-      <div className="w-full min-h-max flex justify-end pb-10 shadow-white">
-        <Button
-          className="bg-[#0ea5e9] flex justify-center items-center cursor-pointer"
-          variant="contained"
-          onClick={() => {
-            navigate("/create");
-          }}
-        >
-          Create new Draft
-        </Button>
-      </div>
       <Table
         aria-label="Example table with custom cells"
         sticked

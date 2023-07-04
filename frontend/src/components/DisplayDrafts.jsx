@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "./Card";
 import { Tab } from "@headlessui/react";
+import { Pagination } from "@nextui-org/react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -73,7 +74,7 @@ const DisplayDrafts = () => {
   });
 
   return (
-    <div className="w-full px-2 py-16 sm:px-0">
+    <div className="w-full px-2 sm:px-0">
       <Tab.Group vertical>
         <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
           {Object.keys(drafts).map((category) => (
@@ -102,7 +103,7 @@ const DisplayDrafts = () => {
                 "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
               )}
             >
-              <div className="flex flex-wrap mt-[20px] gap-[50px] w-full items-start justify-start">
+              <div className="flex flex-wrap mt-[20px] gap-[80px] w-full items-start justify-center">
                 {posts.map((item, idx) => {
                   return <Card />;
                 })}
@@ -110,6 +111,9 @@ const DisplayDrafts = () => {
               </div>
             </Tab.Panel>
           ))}
+          <div className="flex w-full justify-end mt-52">
+            <Pagination total={5} initialPage={1} />
+          </div>
         </Tab.Panels>
       </Tab.Group>
     </div>
