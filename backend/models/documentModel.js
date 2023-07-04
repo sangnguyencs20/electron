@@ -63,10 +63,6 @@ const DocumentSchema = new mongoose.Schema({
         enum: ['Low', 'Neutral', 'High'],
         default: 'Neutral',
     },
-    field: {
-        type: String,
-        required: [true, 'Vui long nhap Linh vuc'],
-    },
     fileLink: {
         type: String,
         required: [true, 'Vui long nhap Link file'],

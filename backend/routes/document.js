@@ -60,9 +60,6 @@ const {
  *                     enum: ['Low', 'Neutral', 'High']
  *                     default: 'Neutral'
  *                     description: The urgency state of the document
- *                   field:
- *                     type: string
- *                     description: The field of the document
  *                   fileLink:
  *                     type: string
  *                     description: The link to the file of the document
@@ -108,9 +105,6 @@ router.get("/", getDocuments);
  *                 enum: ['Low', 'Neutral', 'High']
  *                 default: 'Neutral'
  *                 description: The urgency state of the document
- *               field:
- *                 type: string
- *                 description: The field of the document
  *               fileLink:
  *                 type: string
  *                 description: The link to the file of the document
@@ -143,9 +137,6 @@ router.get("/", getDocuments);
  *                   enum: ['Low', 'Neutral', 'High']
  *                   default: 'Neutral'
  *                   description: The urgency state of the document
- *                 field:
- *                   type: string
- *                   description: The field of the document
  *                 fileLink:
  *                   type: string
  *                   description: The link to the file of the document
@@ -224,9 +215,6 @@ router.get("/accepted", getAllAcceptedDocuments);
  *                   enum: ['Low', 'Neutral', 'High']
  *                   default: 'Neutral'
  *                   description: The urgency state of the document
- *                 field:
- *                   type: string
- *                   description: The field of the document
  *                 fileLink:
  *                   type: string
  *                   description: The link to the file of the document
@@ -282,9 +270,6 @@ router.get("/:id", getDocumentById);
  *                     enum: ['Low', 'Neutral', 'High']
  *                     default: 'Neutral'
  *                     description: The urgency state of the document
- *                   field:
- *                     type: string
- *                     description: The field of the document
  *                   fileLink:
  *                     type: string
  *                     description: The link to the file of the document
@@ -367,9 +352,6 @@ router.post("/approval/:id", updateDocumentApproval);
 //  *                 type: string
 //  *                 enum: ['Low', 'Neutral', 'High']
 //  *                 description: The updated urgency state of the document
-//  *               field:
-//  *                 type: string
-//  *                 description: The updated field of the document
 //  *               fileLink:
 //  *                 type: string
 //  *                 description: The updated link to the file of the document
