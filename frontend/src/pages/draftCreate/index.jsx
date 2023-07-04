@@ -44,9 +44,7 @@ const DraftCreate = () => {
   });
   console.log(isLoading);
   const handleSubmit = async (values) => {
-    const receiver = selected.map((item) => {
-      return item.id;
-    });
+    const receiver = selected;
     const secretState = secret.name;
     const urgencyState = urgency.name;
 

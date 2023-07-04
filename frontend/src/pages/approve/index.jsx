@@ -10,13 +10,15 @@ import RejectModal from "../../components/RejectModal";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-4 py-2 bg-blue-50 rounded-xl">
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 bg-blue-50 rounded-xl">
       <div className="col-span-1 justify-end">
         <p className="font-bold text-sm text-gray-800">{id}</p>
         <p className="text-gray-400 text-xs">Id</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-gray-800">{createdBy}</p>
+        <p className="font-bold text-sm text-gray-800 whitespace-pre-line break-all">
+          {createdBy}
+        </p>
         <p className="text-gray-400 text-xs">Created By</p>
       </div>
       <div className="col-span-1">
@@ -67,8 +69,8 @@ export const DescriptionCell = ({ description }) => {
   return (
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
-        <div className="col-span-2">
-          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] overflow-hidden">
+        <div className="col-span-2 mr-2">
+          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] whitespace-pre-line text-clip">
             {description}
           </p>
           <p className="text-gray-400 text-xs">Description</p>

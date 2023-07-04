@@ -21,6 +21,7 @@ import { axiosGetDoc, axiosGetMyDoc, axiosSubmitMyDoc } from "../../api";
 import { useSelect } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import CustomSugar from "../../components/CustomSugar";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 
 const StyledBadge = styled("span", {
   display: "inline-block",
@@ -38,11 +39,11 @@ const StyledBadge = styled("span", {
   color: "$white",
   variants: {
     type: {
-      Success: {
+      Accepted: {
         bg: "$successLight",
         color: "$successLightContrast",
       },
-      Pending: {
+      Submitted: {
         bg: "$errorLight",
         color: "$errorLightContrast",
       },
@@ -61,6 +62,8 @@ const Draft = () => {
   const navigate = useNavigate();
   const [myDocuments, setMyDocuments] = useState([]);
   const [isReady, setISReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [needRefresh, setNeedRefresh] = useState(0);
   const id = useSelector((state) => state.userState.id);
   useEffect(() => {
     axiosGetMyDoc(id)
@@ -77,12 +80,11 @@ const Draft = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [needRefresh]);
 
   const columns = [
     { name: "TITLE", uid: "title" },
     { name: "STATUS", uid: "status" },
-    { name: "FIELD", uid: "field" },
     { name: "STATE", uid: "state" },
     { name: "DESCRIPTION", uid: "description" },
     { name: "FILE", uid: "files" },
@@ -99,16 +101,10 @@ const Draft = () => {
             {cellValue}
           </Text>
         );
-      case "field":
-        return (
-          <Text b size={14} css={{ tt: "capitalize", width: "200px" }}>
-            {cellValue}
-          </Text>
-        );
       case "description":
-        return <DescriptionCell description={"Lorem"} />;
+        return <DescriptionCell description={doc.description} />;
       case "status":
-        return <StyledBadge type="Draft">{cellValue}</StyledBadge>;
+        return <StyledBadge type={doc.status}>{cellValue}</StyledBadge>;
       case "state":
         return (
           <StateCell
@@ -160,9 +156,14 @@ const Draft = () => {
 
   const handleSubmit = (docId) => {
     console.log(id, docId);
+    setIsLoading(true);
     axiosSubmitMyDoc(docId, id)
       .then((res) => {
         console.log(res);
+        setNeedRefresh((pre) => pre + 1);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 3000);
       })
       .catch((err) => {
         console.error(err);
@@ -170,6 +171,7 @@ const Draft = () => {
   };
   return (
     <div className="w-full">
+      {isLoading && <CustomRotatingSquare />}
       {<CustomSugar customLoading={isReady} />}
       <Table
         aria-label="Example table with custom cells"
