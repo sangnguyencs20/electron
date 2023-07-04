@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { DescriptionCell, FileCell, StateCell } from "../approve";
 import DefaultSpeedDial from "../../components/DefaultSpeedDial";
 import { useEffect, useState } from "react";
-import { axiosGetDoc, axiosGetMyDoc } from "../../api";
+import { axiosGetDoc, axiosGetMyDoc, axiosSubmitMyDoc } from "../../api";
 import { useSelect } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import CustomSugar from "../../components/CustomSugar";
@@ -160,6 +160,13 @@ const Draft = () => {
 
   const handleSubmit = (docId) => {
     console.log(id, docId);
+    axiosSubmitMyDoc(docId, id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
   return (
     <div className="w-full">

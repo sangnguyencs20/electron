@@ -10,8 +10,8 @@ import RejectModal from "../../components/RejectModal";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-2 bg-blue-50 rounded-xl">
-      <div className="col-span-1">
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 bg-blue-50 rounded-xl">
+      <div className="col-span-1 justify-end">
         <p className="font-bold text-sm text-slate-700">{id}</p>
         <p className="text-slate-400 text-xs">Id</p>
       </div>
@@ -33,14 +33,14 @@ const DetailCell = ({ id, title, createdBy, time }) => {
 
 export const StateCell = ({ secretState, urgencyState }) => {
   return (
-    <div className="grid md:grid-cols-2 grid-flow-row gap- bg-blue-50 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
-      <div className="col-span-1 flex flex-col items-center">
-        <p className="font-bold text-sm text-slate-700">{secretState}</p>
-        <p className="text-slate-400 text-xs">Secret State</p>
+    <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
+      <div className="col-span-1 flex flex-col items-center bg-blue-gray-50 p-2 rounded-xl">
+        <p className="font-bold text-sm text-gray-700">{secretState}</p>
+        <p className="text-gray-500 text-xs">Secret State</p>
       </div>
-      <div className="col-span-1 flex flex-col items-center">
-        <p className="font-bold text-sm text-slate-700">{urgencyState}</p>
-        <p className="text-slate-400 text-xs">Urgency State</p>
+      <div className="col-span-1 flex flex-col items-center bg-orange-50 p-2 rounded-xl">
+        <p className="font-bold text-sm text-gray-700">{urgencyState}</p>
+        <p className="text-gray-500 text-xs">Urgency State</p>
       </div>
     </div>
   );
