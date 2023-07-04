@@ -12,7 +12,7 @@ const { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpini
 
 /**
  * @swagger
- * /logs:
+ * /api/logs:
  *   get:
  *     summary: Get all logs
  *     tags: [Logs]
@@ -40,7 +40,7 @@ router.post("/", createLog);
 
 /**
  * @swagger
- * /logs/document/{documentId}:
+ * /api/logs/document/{documentId}:
  *   get:
  *     summary: Get all logs by document ID
  *     tags: [Logs]
@@ -62,7 +62,7 @@ router.get("/document/:documentId", getLogsByDocumentId);
 
 /**
  * @swagger
- * /logs/user/{userId}:
+ * /api/logs/user/{userId}:
  *   get:
  *     summary: Get all logs by user ID
  *     tags: [Logs]
@@ -84,7 +84,7 @@ router.get("/user/:userId", getLogsByUserId);
 
 /**
  * @swagger
- * /logs/opinion/{opinionId}:
+ * /api/logs/opinion/{opinionId}:
  *   get:
  *     summary: Get all logs by opinion ID
  *     tags: [Logs]
@@ -106,7 +106,7 @@ router.get("/opinion/:opinionId", getLogsByOpinionId);
 
 /**
  * @swagger
- * /logs/transaction/{transactionId}:
+ * /api/logs/transaction/{transactionId}:
  *   get:
  *     summary: Get all logs by transaction ID
  *     tags: [Logs]
