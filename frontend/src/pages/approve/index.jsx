@@ -12,20 +12,20 @@ const DetailCell = ({ id, title, createdBy, time }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 bg-blue-50 rounded-xl">
       <div className="col-span-1 justify-end">
-        <p className="font-bold text-sm text-slate-700">{id}</p>
-        <p className="text-slate-400 text-xs">Id</p>
+        <p className="font-bold text-sm text-gray-800">{id}</p>
+        <p className="text-gray-400 text-xs">Id</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-slate-700">{createdBy}</p>
-        <p className="text-slate-400 text-xs">Created By</p>
+        <p className="font-bold text-sm text-gray-800">{createdBy}</p>
+        <p className="text-gray-400 text-xs">Created By</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-slate-700">{title}</p>
-        <p className="text-slate-400 text-xs">Title</p>
+        <p className="font-bold text-sm text-gray-800">{title}</p>
+        <p className="text-gray-400 text-xs">Title</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-slate-700">{time}</p>
-        <p className="text-slate-400 text-xs">Time</p>
+        <p className="font-bold text-sm text-gray-800">{time}</p>
+        <p className="text-gray-400 text-xs">Time</p>
       </div>
     </div>
   );
@@ -35,11 +35,11 @@ export const StateCell = ({ secretState, urgencyState }) => {
   return (
     <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
       <div className="col-span-1 flex flex-col items-center bg-blue-gray-50 p-2 rounded-xl">
-        <p className="font-bold text-sm text-gray-700">{secretState}</p>
+        <p className="font-bold text-sm text-gray-800">{secretState}</p>
         <p className="text-gray-500 text-xs">Secret State</p>
       </div>
       <div className="col-span-1 flex flex-col items-center bg-orange-50 p-2 rounded-xl">
-        <p className="font-bold text-sm text-gray-700">{urgencyState}</p>
+        <p className="font-bold text-sm text-gray-800">{urgencyState}</p>
         <p className="text-gray-500 text-xs">Urgency State</p>
       </div>
     </div>
@@ -53,10 +53,10 @@ const StatusCell = ({ receiver }) => {
         {receiver[0].status}
       </span>
       <div className="flex flex-col justify-center w-full text-center">
-        <span className="font-bold text-sm text-slate-700">
+        <span className="font-bold text-sm text-gray-800">
           {receiver[0].name}
         </span>
-        <span className="text-slate-400 text-xs font-medium">
+        <span className="text-gray-400 text-xs font-medium">
           {receiver[0].time}
         </span>
       </div>
@@ -68,10 +68,10 @@ export const DescriptionCell = ({ description }) => {
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <div className="col-span-2">
-          <p className="font-bold text-sm text-slate-700 line-clamp-4 max-h-[5.5rem] overflow-hidden">
+          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] overflow-hidden">
             {description}
           </p>
-          <p className="text-slate-400 text-xs">Description</p>
+          <p className="text-gray-400 text-xs">Description</p>
         </div>
       </div>
     </div>
@@ -360,8 +360,8 @@ export default function Approve() {
 
       case "actions":
         return (
-          <Row justify="center" align="center">
-            <Col css={{ d: "flex" }}>
+          <Row justify="center" align="center" className="w-[100px] ml-10">
+            <Col css={{ d: "flex", width: "100%" }}>
               <Tooltip content="Time Line">
                 <MyModal receiver={doc.receiver} />
               </Tooltip>
@@ -407,7 +407,7 @@ export default function Approve() {
             <Table.Column
               key={column.uid}
               // hideHeader={column.uid === "id"}
-              align={column.uid === "state" ? "center" : "start"}
+              align={column.uid === "state" || "status" ? "center" : "start"}
               className={" bg-blue-gray-50"}
             >
               {column.name}
