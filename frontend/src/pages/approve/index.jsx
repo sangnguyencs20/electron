@@ -77,7 +77,7 @@ const DescriptionCell = ({ description }) => {
     </div>
   );
 };
-const FileCell = ({ link }) => {
+export const FileCell = ({ link }) => {
   return (
     <Button
       bordered

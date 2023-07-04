@@ -51,7 +51,7 @@ export default function RejectModal() {
             </Text>
           </Text>
         </Modal.Header>
-        <Modal.Body css={{ pt: "10px" }}>
+        <Modal.Body>
           {/* <Input
             clearable
             bordered
@@ -61,14 +61,14 @@ export default function RejectModal() {
             placeholder="Reason"
             contentLeft={<Mail fill="currentColor" />}
           /> */}
-          <Grid.Container gap={2.5} css={{ mt: "4px", width: "100%" }}>
-            <Grid>
+          <Grid.Container gap={1} css={{ mt: "4px", width: "100%" }}>
+            <Grid css={{ width: "100%" }}>
               <Textarea
                 bordered
                 color="secondary"
                 labelPlaceholder="Reason"
                 {...bindings}
-                css={{ mt: "4px", width: "300px" }}
+                css={{ mt: "4px", width: "100%" }}
               />
             </Grid>
           </Grid.Container>
@@ -76,12 +76,12 @@ export default function RejectModal() {
           <Grid.Container gap={0.5}>
             <Grid>
               <Button auto flat size="sm" onPress={() => reset()}>
-                Reset value
+                Reset reason
               </Button>
             </Grid>
           </Grid.Container>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer css={{ paddingTop: "0px" }}>
           <Button auto flat color="error" onPress={closeHandler}>
             Close
           </Button>
