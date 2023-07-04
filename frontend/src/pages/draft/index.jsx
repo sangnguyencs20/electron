@@ -123,7 +123,7 @@ const Draft = () => {
           <Row justify="flex-end" align="center" fluid css={{ width: "100%" }}>
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
-                <IconButton onClick={() => console.log("View user", doc.id)}>
+                <IconButton onClick={() => console.log("View user", doc)}>
                   <EyeIcon size={20} fill="#979797" />
                 </IconButton>
               </Tooltip>
