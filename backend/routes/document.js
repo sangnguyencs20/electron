@@ -8,7 +8,9 @@ const {
     getDocumentOfUser,
     updateDocumentApproval,
     updateDocument,
-    getAllDocumentsOfReceiver
+    getAllDocumentsOfReceiver,
+    submitFeedback,
+    deleteDocument,
 }
     = require("../controllers/documentController");
 
@@ -385,4 +387,70 @@ router.post("/approval/:id", updateDocumentApproval);
  *         description: Internal server error
  */
 router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
+
+/**
+ * @swagger
+ * /documents/{documentId}/receiver/{receiverId}/feedback:
+ *   post:
+ *     summary: Submit feedback for a document by a receiver
+ *     parameters:
+ *       - name: documentId
+ *         in: path
+ *         description: ID of the document
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: receiverId
+ *         in: path
+ *         description: ID of the receiver
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [Not Submitted, Submitted, Approved, Rejected]
+ *     responses:
+ *       '200':
+ *         description: Feedback submitted successfully
+ *       '400':
+ *         description: Invalid request payload
+ *       '404':
+ *         description: Document or receiver not found
+ *       '500':
+ *         description: Server error
+ */
+router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
+
+
+/**
+ * @swagger
+ * /documents/{documentId}:
+ *   delete:
+ *     summary: Delete a document
+ *     parameters:
+ *       - name: documentId
+ *         in: path
+ *         description: ID of the document to delete
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Document deleted successfully
+ *       '404':
+ *         description: Document not found
+ *       '500':
+ *         description: Server error
+ */
+router.delete("/:documentId", deleteDocument);
+
 module.exports = router;

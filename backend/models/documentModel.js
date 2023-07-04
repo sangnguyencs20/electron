@@ -19,8 +19,35 @@ const DocumentSchema = new mongoose.Schema({
             },
             message: 'Vui long nhap Nguoi nhan',
         },
-        type: [mongoose.Types.ObjectId],
-        ref: 'User',
+        type: [
+            {
+                receiverId: {
+                    type: mongoose.Types.ObjectId,
+                    ref: 'User',
+                },
+                status: {
+                    type: String,
+                    enum: ['Pending', 'Approved', 'Rejected'],
+                    default: 'Pending',
+                },
+                time: {
+                    type: Date,
+                    default: Date.now,
+                },
+                comment: {
+                    type: String,
+                    required: function () {
+                        return this.status === 'Rejected';
+                    },
+                },
+            },
+        ],
+        default: [],
+    },
+    status: {
+        type: String,
+        enum: ['Draft', 'Submitted', 'Approved', 'Rejected'],
+        default: 'Draft',
     },
     secretState: {
         type: String,

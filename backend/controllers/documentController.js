@@ -1,4 +1,4 @@
-const { getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
+const { handleGetASpecificDocumentOfReceiver, getAllDocuments, createOneDocument, getOneDocumentById, getAllDocumentsOfUser, updateDocumentApprovalStatus, handleGetAllDocumentsOfReceiver } = require('../services/documents');
 
 const { createANewLog } = require('../services/log');
 
@@ -29,7 +29,7 @@ const createDocument = async (req, res) => {
         }
 
 
-        
+
         await createANewLog(log);
         res.status(201).json(newDocument);
     } catch (error) {
@@ -78,7 +78,6 @@ const getAllDocumentsOfReceiver = async (req, res) => {
         return res.status(403).json({ message: "You are not authorized to view this content." });
     }
     const { receiverId } = req.params;
-    console.log(receiverId)
     try {
         const documents = await handleGetAllDocumentsOfReceiver(receiverId);
         res.status(200).json(documents);
@@ -87,4 +86,57 @@ const getAllDocumentsOfReceiver = async (req, res) => {
     }
 }
 
-module.exports = { getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver };
+const submitFeedback = async (req, res) => {
+    const { documentId, receiverId } = req.params;
+    const { comment, status } = req.body;
+
+    try {
+        // Find the document by documentId and receiverId
+        const document = await handleGetASpecificDocumentOfReceiver(documentId, receiverId);
+
+        if (!document) {
+            return res.status(404).json({ message: 'Document not found for the receiver' });
+        }
+
+        // Find the receiver within the document's receiver array
+        const receiver = document.receiver.find((receiver) => receiver.receiverId.toString() === receiverId);
+
+        if (!receiver) {
+            return res.status(404).json({ message: 'Receiver not found in the document' });
+        }
+
+        // Update the comment and time for the receiver
+        receiver.status = status;
+        receiver.comment = comment;
+        receiver.time = new Date();
+
+        await document.save();
+
+        res.status(200).json({ message: 'Feedback submitted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const deleteDocument = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const document = await getDocumentById(id);
+        if (!document) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+        if (document.createdBy !== req.userId) {
+            return res.status(401).json({ error: 'You are not authorized to delete this document' });
+        }
+        if (document.status !== 'Draft') {
+            return res.status(401).json({ error: 'You can only delete draft document' });
+        }
+        await document.remove();
+        res.json({ message: 'Document deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+module.exports = { getDocuments, createDocument, getDocumentById, getDocumentOfUser, updateDocumentApproval, getAllDocumentsOfReceiver, submitFeedback, deleteDocument };
