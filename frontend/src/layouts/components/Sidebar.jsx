@@ -30,12 +30,8 @@ const Sidebar = () => {
   const [isActive, setIsActive] = useState("dashboard");
 
   return (
-    <div className="flex justify-between items-center flex-col sticky top-5 h-[93vh]">
-      <Link to="/">
-        <Icon styles="w-[52px] h-[52px] bg-slate-100" imgUrl={logo} />
-      </Link>
-
-      <div className="bg-slate-50 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-slate-300 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 mt-12">
+    <div className="flex justify-between items-center flex-col sticky h-[85vh]">
+      <div className="bg-slate-50 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-slate-300 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4">
         <div className="flex flex-col justify-center items-center gap-3">
           {navlinks.map((link) => (
             <Icon

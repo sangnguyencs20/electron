@@ -1,4 +1,4 @@
-import Table from "../../components/Table";
+import Table from "../../components/CustomTable";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 const Draft = () => {
