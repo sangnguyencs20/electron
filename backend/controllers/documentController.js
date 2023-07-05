@@ -116,10 +116,10 @@ const submitDocument = async (req, res) => {
     }
 
     document.status = 'Submitted';
-    console.log(document)
+    document.timeSubmit = new Date();
     await document.save();
     return res.status(200).json({ message: 'Document submitted successfully' });
-}
+}w
 
 
 const submitFeedback = async (req, res) => {
