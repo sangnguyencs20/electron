@@ -8,44 +8,8 @@ export const classNames = (...classes) => {
 };
 
 const DisplayDrafts = () => {
-  let [drafts] = useState({
-    Recent: [
-      {
-        id: 1,
-        title: "Does drinking coffee make you smarter?",
-        date: "5h ago",
-        commentCount: 5,
-        shareCount: 2,
-      },
-      {
-        id: 1,
-        title: "Does drinking coffee make you smarter?",
-        date: "5h ago",
-        commentCount: 5,
-        shareCount: 2,
-      },
-      {
-        id: 1,
-        title: "Does drinking coffee make you smarter?",
-        date: "5h ago",
-        commentCount: 5,
-        shareCount: 2,
-      },
-      {
-        id: 1,
-        title: "Does drinking coffee make you smarter?",
-        date: "5h ago",
-        commentCount: 5,
-        shareCount: 2,
-      },
-      {
-        id: 2,
-        title: "So you've bought coffee... now what?",
-        date: "2h ago",
-        commentCount: 3,
-        shareCount: 2,
-      },
-    ],
+  const [drafts] = useState({
+    Recent: [],
     Popular: [
       {
         id: 2,
@@ -72,7 +36,7 @@ const DisplayDrafts = () => {
       },
     ],
   });
-
+  console.log(drafts);
   return (
     <div className="w-full px-2 sm:px-0">
       <Tab.Group vertical>

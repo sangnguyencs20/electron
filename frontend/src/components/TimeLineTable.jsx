@@ -1,16 +1,57 @@
-import { Table, Row, Col, Tooltip, User, Text } from "@nextui-org/react";
-import { StyledBadge } from "./StyledBadge";
+import {
+  Table,
+  Row,
+  Col,
+  Tooltip,
+  User,
+  Text,
+  styled,
+} from "@nextui-org/react";
 import { IconButton } from "./IconButton";
 import { EyeIcon } from "./EyeIcon";
 import { EditIcon } from "./EditIcon";
 import { DeleteIcon } from "./DeleteIcon";
 
+const StyledBadge = styled("span", {
+  display: "inline-block",
+  textTransform: "uppercase",
+  padding: "$2 $3",
+  margin: "0 2px",
+  fontSize: "10px",
+  fontWeight: "$bold",
+  borderRadius: "14px",
+  letterSpacing: "0.6px",
+  lineHeight: 1,
+  boxShadow: "1px 2px 5px 0px rgb(0 0 0 / 5%)",
+  alignItems: "center",
+  alignSelf: "center",
+  color: "$white",
+  variants: {
+    type: {
+      Approved: {
+        bg: "$successLight",
+        color: "$successLightContrast",
+      },
+      Rejected: {
+        bg: "$errorLight",
+        color: "$errorLightContrast",
+      },
+      Pending: {
+        bg: "$warningLight",
+        color: "$warningLightContrast",
+      },
+    },
+  },
+  defaultVariants: {
+    type: "Pending",
+  },
+});
+
 export default function TimeLineTable({ receiver }) {
   const columns = [
-    { name: "_ID", uid: "_id" },
-    { name: "ROLE", uid: "role" },
-    { name: "TIME", uid: "time" },
+    { name: "RECEIVERID", uid: "_id" },
     { name: "STATUS", uid: "status" },
+    { name: "TIME", uid: "time" },
   ];
   const renderCell = (user, columnKey) => {
     const cellValue = user[columnKey];
@@ -18,7 +59,7 @@ export default function TimeLineTable({ receiver }) {
       case "_id":
         return (
           <Text size={12} color={"#687076"}>
-            {user.id}
+            {user._id}
           </Text>
         );
       case "role":
@@ -40,8 +81,6 @@ export default function TimeLineTable({ receiver }) {
         return <StyledBadge type={user.status}>{cellValue}</StyledBadge>;
       case "time":
         return <StyledBadge type={user.status}>{cellValue}</StyledBadge>;
-
-        return cellValue;
     }
   };
   return (

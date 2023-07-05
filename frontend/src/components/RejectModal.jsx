@@ -15,8 +15,11 @@ import { Mail } from "./Mail";
 import { Password } from "./Password";
 import { DeleteIcon } from "./DeleteIcon";
 import { IconButton } from "./IconButton";
+import BlockIcon from "@mui/icons-material/Block";
+import axios from "axios";
+import { axiosSubmitFeedback } from "../api";
 
-export default function RejectModal() {
+export default function RejectModal({ docId, receId, setIsLoading }) {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
 
@@ -31,11 +34,25 @@ export default function RejectModal() {
     setVisible(false);
     console.log("closed");
   };
+  const handleSubmit = () => {
+    setIsLoading(true);
+    console.log(receId, docId, bindings.value);
+    axiosSubmitFeedback(receId, docId, {
+      comment: bindings.value,
+      status: "Rejected",
+    })
+      .then((res) => {
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <div>
       <IconButton>
-        <DeleteIcon size={20} fill="#FF0080" onClick={handler} />
+        <BlockIcon onClick={handler} className="text-red-400" />
       </IconButton>
       <Modal
         closeButton
@@ -52,15 +69,6 @@ export default function RejectModal() {
           </Text>
         </Modal.Header>
         <Modal.Body>
-          {/* <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Reason"
-            contentLeft={<Mail fill="currentColor" />}
-          /> */}
           <Grid.Container gap={1} css={{ mt: "4px", width: "100%" }}>
             <Grid css={{ width: "100%" }}>
               <Textarea
@@ -85,7 +93,14 @@ export default function RejectModal() {
           <Button auto flat color="error" onPress={closeHandler}>
             Close
           </Button>
-          <Button auto flat onPress={closeHandler}>
+          <Button
+            auto
+            flat
+            onPress={() => {
+              handleSubmit();
+              closeHandler();
+            }}
+          >
             Submit
           </Button>
         </Modal.Footer>

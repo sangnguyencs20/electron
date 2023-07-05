@@ -87,3 +87,9 @@ export const axiosSubmitMyDoc = (docId, userId) =>
 
 export const axiosGetReceiveDoc = (receiId) =>
   axiosClient.get(`/api/documents/receiver/${receiId}`);
+export const axiosSubmitFeedback = (receiId, docId, data) =>
+  axiosClient.post(
+    `/api/documents/${docId}/receiver/${receiId}/feedback`,
+    data
+  );
+export const axiosGetAllDocument = () => axiosClient.get(`/api/documents`);
