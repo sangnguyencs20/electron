@@ -145,7 +145,7 @@ const submitFeedback = async (req, res) => {
 
     // Find the receiver within the document's receiver array
     const receiver = document.receiver.find(
-      (receiver) => receiver.receiverId.toString() === receiverId
+      (receiver) => receiver._id.toString() === receiverId
     );
 
     if (!receiver) {
