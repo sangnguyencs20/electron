@@ -7,7 +7,7 @@ import { navlinks } from "../../constants";
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
     className={`w-[48px] h-[48px] rounded-[10px] ${
-      isActive && isActive === name && "bg-slate-100"
+      isActive && isActive === name && "bg-white"
     } flex justify-center items-center ${
       !disabled && "cursor-pointer"
     } ${styles} hover:w-[70px] hover:justify-start ease-in duration-100`}
@@ -19,7 +19,7 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
       <img
         src={imgUrl}
         alt="fund_logo"
-        className={`w-1/2 h-1/2 ${isActive !== name && "grayscale"}`}
+        className={`w-1/2 h-1/2 ${isActive !== name && "text-white"}`}
       />
     )}
   </div>
@@ -30,12 +30,8 @@ const Sidebar = () => {
   const [isActive, setIsActive] = useState("dashboard");
 
   return (
-    <div className="flex justify-between items-center flex-col sticky top-5 h-[93vh]">
-      <Link to="/">
-        <Icon styles="w-[52px] h-[52px] bg-slate-100" imgUrl={logo} />
-      </Link>
-
-      <div className="bg-slate-50 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-slate-300 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 mt-12">
+    <div className="flex justify-between items-center flex-col sticky h-[85vh]">
+      <div className="bg-blue-100 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-blue-50 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 shadow-xl">
         <div className="flex flex-col justify-center items-center gap-3">
           {navlinks.map((link) => (
             <Icon
@@ -52,7 +48,7 @@ const Sidebar = () => {
           ))}
         </div>
 
-        <Icon styles="bg-slate-100 shadow-secondary" imgUrl={sun} />
+        <Icon styles="bg-white shadow-secondary" imgUrl={sun} />
       </div>
     </div>
   );

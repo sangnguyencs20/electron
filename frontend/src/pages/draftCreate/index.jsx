@@ -31,7 +31,7 @@ const DraftCreate = () => {
       title: "",
       createdBy: useSelector((state) => state.userState.id),
       receiver: [],
-      field: "",
+      description: "",
     },
     // validationSchema: Yup.object({
     //   title: Yup.string().min(5, "atLeast").required("require"),
@@ -44,9 +44,7 @@ const DraftCreate = () => {
   });
   console.log(isLoading);
   const handleSubmit = async (values) => {
-    const receiver = selected.map((item) => {
-      return item.id;
-    });
+    const receiver = selected;
     const secretState = secret.name;
     const urgencyState = urgency.name;
 
@@ -118,7 +116,7 @@ const DraftCreate = () => {
           labelName="Description *"
           placeholder="Write detail about draft"
           isTextArea
-          {...formik.getFieldProps("field")}
+          {...formik.getFieldProps("description")}
         />
         <div className="w-full ">
           <AssignDropDown selected={selected} setSelected={setSelected} />

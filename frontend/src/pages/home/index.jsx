@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
 import DisplayDrafts from "../../components/DisplayDrafts";
-
-// import { useStateContext } from '../context'
+import CustomSugar from "../../components/CustomSugar";
+import { axiosGetAllDocument } from "../../api";
 
 const Home = () => {
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [drafts, seDrafts] = useState([]);
-
-  //   const { address, contract, getCampaigns } = useStateContext();
-
-  //   const fetchCampaigns = async () => {
-  //     setIsLoading(true);
-  //     const data = await getCampaigns();
-  //     setCampaigns(data);
-  //     setIsLoading(false);
-  //   }
-
-  //   useEffect(() => {
-  //     if(contract) fetchCampaigns();
-  //   }, [address, contract]);
-
-  return <DisplayDrafts />;
+  const [documents, setDocuments] = useState([]);
+  useEffect(() => {
+    axiosGetAllDocument()
+      .then((res) => {
+        console.log(res.data);
+        setDocuments(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  return (
+    <div>
+      {<CustomSugar customLoading={false} />}
+      <DisplayDrafts documents={documents} />
+    </div>
+  );
 };
 
 export default Home;

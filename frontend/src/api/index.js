@@ -45,6 +45,7 @@ axiosClient.interceptors.request.use(async (config) => {
 
 axiosClient.interceptors.response.use(
   (response) => {
+    toast.success(response.data.message);
     if (response && response.data) {
       return response;
     }
@@ -77,3 +78,18 @@ export const axiosAllUser = () => axiosClient.get("/api/users");
 
 export const axiosCreateDoc = (data) =>
   axiosClient.post("/api/documents", data);
+
+export const axiosGetDoc = () => axiosClient.get("/api/documents");
+export const axiosGetMyDoc = (id) =>
+  axiosClient.get(`/api/documents/users/${id}`);
+export const axiosSubmitMyDoc = (docId, userId) =>
+  axiosClient.post(`/api/documents/submit/${docId}`, { userId });
+
+export const axiosGetReceiveDoc = (receiId) =>
+  axiosClient.get(`/api/documents/receiver/${receiId}`);
+export const axiosSubmitFeedback = (receiId, docId, data) =>
+  axiosClient.post(
+    `/api/documents/${docId}/receiver/${receiId}/feedback`,
+    data
+  );
+export const axiosGetAllDocument = () => axiosClient.get(`/api/documents`);

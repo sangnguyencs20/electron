@@ -1,4 +1,4 @@
-import { Login, Home, Draft, DraftDetail, DraftCreate } from "../../pages";
+import { Home, Draft, DraftDetail, DraftCreate, Approve } from "../../pages";
 
 const UserRoutes = [
   {
@@ -15,6 +15,11 @@ const UserRoutes = [
     path: "create",
     element: DraftCreate,
     title: "DraftDetail",
+  },
+  {
+    path: "approve",
+    element: Approve,
+    title: "Approve",
   },
 ];
 
