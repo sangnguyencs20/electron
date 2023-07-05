@@ -11,7 +11,7 @@ const createOneDocument = async (document) => {
 }
 
 const getOneDocumentById = async (id) => {
-    const document = await Document.findById(id).populate('createdBy').populate('receiver.receiverId');
+    const document = await Document.findById(id).populate('createdBy').populate('receiver._id');
     return document;
 }
 
