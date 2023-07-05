@@ -15,7 +15,7 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl">
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
       <div className="col-span-1 justify-end">
         <p className="font-bold text-sm text-gray-800">{id}</p>
         <p className="text-gray-400 text-xs">Id</p>
@@ -27,8 +27,10 @@ const DetailCell = ({ id, title, createdBy, time }) => {
         <p className="text-gray-400 text-xs">Created By</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-gray-800">{title}</p>
-        <p className="text-gray-400 text-xs">Title</p>
+        <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
+          {title}
+        </p>
+        <p className="text-gray-400 text-xs ">Title</p>
       </div>
       <div className="col-span-1">
         <p className="font-bold text-sm text-gray-800">{time}</p>
@@ -92,7 +94,7 @@ export const DescriptionCell = ({ description }) => {
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <div className="col-span-2 mr-2">
-          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] whitespace-pre-line text-clip">
+          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] whitespace-pre-line ">
             {description}
           </p>
           <p className="text-gray-400 text-xs">Description</p>
@@ -158,7 +160,7 @@ export default function Approve() {
     { name: "DOC DETAIL", uid: "detail" },
     { name: "CURRENT STATUS", uid: "status" },
     { name: "STATE", uid: "state" },
-    { name: "FIELD", uid: "field" },
+    { name: "DESCRIPTION", uid: "description" },
     { name: "FILE", uid: "file" },
     { name: "ACTIONS", uid: "actions" },
   ];
@@ -183,8 +185,8 @@ export default function Approve() {
             urgencyState={doc.urgencyState}
           />
         );
-      case "field":
-        return <FieldCell description={doc.field} />;
+      case "description":
+        return <DescriptionCell description={doc.description} />;
       case "file":
         return <FileCell link={doc.fileLink} />;
 
