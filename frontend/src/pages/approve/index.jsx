@@ -53,33 +53,35 @@ export const StateCell = ({ secretState, urgencyState }) => {
   );
 };
 
-const StatusCell = ({ receiver }) => {
+const StatusCell = ({ receiver, userId }) => {
   return (
     <div className="grid grid-cols-1 grid-flow-row w-full justify-center items-center gap-5 px-5 mx-2">
       <span
         className={`${
-          receiver[0].status === "Pending"
+          receiver.filter((item) => item._id === userId)[0].status === "Pending"
             ? "text-orange-500"
-            : receiver[0].status === "Approved"
+            : receiver.filter((item) => item._id === userId)[0].status ===
+              "Approved"
             ? "text-green-500"
             : "text-red-500"
         }
         ${
-          receiver[0].status === "Pending"
+          receiver.filter((item) => item._id === userId)[0].status === "Pending"
             ? "bg-orange-100"
-            : receiver[0].status === "Approved"
+            : receiver.filter((item) => item._id === userId)[0].status ===
+              "Approved"
             ? "bg-green-100"
             : "bg-red-100"
         }  rounded-md  px-3 py-1 font-semibold text-center `}
       >
-        {receiver[0].status}
+        {receiver.filter((item) => item._id === userId)[0].status}
       </span>
       <div className="flex flex-col justify-center w-full text-center">
         <span className="font-bold text-sm text-gray-800">
-          {receiver[0].name}
+          {receiver.filter((item) => item._id === userId)[0].name}
         </span>
         <span className="text-gray-400 text-xs font-medium">
-          {receiver[0].time}
+          {receiver.filter((item) => item._id === userId)[0].time}
         </span>
       </div>
     </div>
@@ -134,6 +136,7 @@ export default function Approve() {
   const [isReady, setISReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
+  const [needRefresh, setNeedRefresh] = useState(0);
   useEffect(() => {
     axiosGetReceiveDoc(id)
       .then((res) => {
@@ -149,7 +152,8 @@ export default function Approve() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [needRefresh]);
+  console.log(needRefresh);
   const columns = [
     { name: "DOC DETAIL", uid: "detail" },
     { name: "CURRENT STATUS", uid: "status" },
@@ -171,7 +175,7 @@ export default function Approve() {
           />
         );
       case "status":
-        return <StatusCell receiver={doc.receiver} />;
+        return <StatusCell receiver={doc.receiver} userId={id} />;
       case "state":
         return (
           <StateCell
@@ -218,6 +222,7 @@ export default function Approve() {
                   docId={doc._id}
                   receId={id}
                   setIsLoading={setIsLoading}
+                  setNeedRefresh={setNeedRefresh}
                 />
               </Tooltip>
             </Col>
@@ -236,6 +241,7 @@ export default function Approve() {
       .then((res) => {
         console.log(res);
         setIsLoading(false);
+        setNeedRefresh((pre) => pre + 1);
       })
       .catch((err) => {
         setIsLoading(false);

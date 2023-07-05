@@ -19,7 +19,12 @@ import BlockIcon from "@mui/icons-material/Block";
 import axios from "axios";
 import { axiosSubmitFeedback } from "../api";
 
-export default function RejectModal({ docId, receId, setIsLoading }) {
+export default function RejectModal({
+  docId,
+  receId,
+  setIsLoading,
+  setNeedRefresh,
+}) {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
 
@@ -43,8 +48,10 @@ export default function RejectModal({ docId, receId, setIsLoading }) {
     })
       .then((res) => {
         setIsLoading(false);
+        setNeedRefresh((pre) => pre + 1);
       })
       .catch((err) => {
+        setNeedRefresh((pre) => pre + 1);
         setIsLoading(false);
       });
   };
