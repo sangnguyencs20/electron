@@ -88,8 +88,6 @@ const getAllDocumentsOfReceiver = async (req, res) => {
         return res.status(403).json({ message: "You are not authorized to view this content." });
     }
 
-
-
     const { receiverId } = req.params;
     try {
         const documents = await handleGetAllDocumentsOfReceiver(receiverId);

@@ -28,11 +28,12 @@ const updateDocumentApprovalStatus = async (id, approval) => {
 }
 
 const handleGetAllDocumentsOfReceiver = async (id) => {
-    return await Document.find({
-        receiver: {
-            $elemMatch: { receiverId: id, status: { $ne: 'Draft' } }
-        }
+    const documents = await Document.find({
+        // "receiver.receiverId": id
+        receiver: { $elemMatch: { _id: id } },
+        status: { $ne: "Draft" }
     });
+    return documents;
 };
 
 const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
