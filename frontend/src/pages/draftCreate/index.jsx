@@ -47,7 +47,7 @@ const DraftCreate = () => {
     const receiver = selected;
     const secretState = secret.name;
     const urgencyState = urgency.name;
-
+    console.log(receiver);
     // setIsLoading((pre) => !pre);
 
     await axiosCreateDoc({

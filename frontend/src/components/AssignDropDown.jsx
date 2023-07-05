@@ -17,7 +17,7 @@ export default function AssignDropDown({ selected, setSelected }) {
         console.log(res);
         setPeople(
           res.data.map((data) => ({
-            id: data._id,
+            _id: data._id,
             name: data.fullName,
             role: data.role,
           }))
