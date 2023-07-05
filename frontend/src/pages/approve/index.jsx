@@ -10,7 +10,7 @@ import RejectModal from "../../components/RejectModal";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 bg-blue-50 rounded-xl">
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl">
       <div className="col-span-1 justify-end">
         <p className="font-bold text-sm text-gray-800">{id}</p>
         <p className="text-gray-400 text-xs">Id</p>

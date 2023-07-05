@@ -3,9 +3,9 @@ import Card from "./Card";
 import { Tab } from "@headlessui/react";
 import { Pagination } from "@nextui-org/react";
 
-function classNames(...classes) {
+export const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
-}
+};
 
 const DisplayDrafts = () => {
   let [drafts] = useState({
