@@ -31,7 +31,6 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     const { id } = req.body;
-    console.log(id);
 
     try {
         const user = await getOneUserById(id);

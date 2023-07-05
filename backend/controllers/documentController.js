@@ -91,45 +91,40 @@ const updateDocumentApproval = async (req, res) => {
 };
 
 const getAllDocumentsOfReceiver = async (req, res) => {
-  if (req.role == "Citizen") {
-    return res
-      .status(403)
-      .json({ message: "You are not authorized to view this content." });
-  }
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
 
-  const { receiverId } = req.params;
-  try {
-    const documents = await handleGetAllDocumentsOfReceiver(receiverId);
-    res.status(200).json(documents);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
+    const { receiverId } = req.params;
+    try {
+        const documents = await handleGetAllDocumentsOfReceiver(receiverId);
+        res.status(200).json(documents);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 
 const submitDocument = async (req, res) => {
-  const { documentId } = req.params;
-  const document = await getOneDocumentById(documentId);
-  if (!document) {
-    return res.status(404).json({ message: "Document not found" });
-  }
+    const { documentId } = req.params;
+    const document = await getOneDocumentById(documentId);
+    if (!document) {
+        return res.status(404).json({ message: 'Document not found' });
+    }
 
-  if (document.createdBy._id.toString() !== req.userId) {
-    console.log(typeof document.createdBy._id, typeof req.userId);
-    return res
-      .status(401)
-      .json({ message: "You are not authorized to submit this document" });
-  }
-  if (document.status !== "Draft") {
-    return res
-      .status(401)
-      .json({ message: "You can only submit draft document" });
-  }
+    if (document.createdBy._id.toString() !== req.userId) {
+        return res.status(401).json({ message: 'You are not authorized to submit this document' });
+    }
+    if (document.status !== 'Draft') {
+        return res.status(401).json({ message: 'You can only submit draft document' });
+    }
 
-  document.status = "Submitted";
-  document.timeSubmit = new Date();
-  await document.save();
-  return res.status(200).json({ message: "Document submitted successfully" });
-};
+    document.status = 'Submitted';
+    document.timeSubmit = new Date();
+    await document.save();
+    return res.status(200).json({ message: 'Document submitted successfully' });
+}
+
 
 const submitFeedback = async (req, res) => {
   const { documentId, receiverId } = req.params;
