@@ -123,7 +123,7 @@ const Draft = () => {
           />
         );
       case "files":
-        return <FileCell link={cellValue} />;
+        return <FileCell link={doc.fileLink} />;
       case "actions":
         return (
           <Row justify="flex-end" align="center" fluid className="md:w-[100px]">
@@ -234,11 +234,6 @@ const Draft = () => {
                 "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
               )}
             >
-              {/* <div className="flex flex-wrap mt-[20px] gap-[80px] w-full items-start justify-center">
-            {posts.map((item, idx) => {
-              return <Card />;
-            })}
-          </div> */}
               <Table
                 aria-label="Example table with custom cells"
                 sticked
