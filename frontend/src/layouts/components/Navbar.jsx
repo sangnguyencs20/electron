@@ -7,6 +7,7 @@ import { clearInfo } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import Alert from "../../components/Alert";
+import Ring from "./Ring";
 
 export default function CustomNavbar() {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export default function CustomNavbar() {
         </RouterLink>
         <Navbar.Content>
           <Navbar.Item>
-            <Alert />
+            <Ring />
           </Navbar.Item>
           <Navbar.Link color="inherit" href="#">
             Profile

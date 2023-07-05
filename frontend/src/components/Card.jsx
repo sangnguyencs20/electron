@@ -2,7 +2,7 @@ import { Card, Text, Button, Row, Collapse } from "@nextui-org/react";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
 import { useEffect, useState } from "react";
-export default function App() {
+export default function App({ title, createdBy, description }) {
   const [isShow, setIsShow] = useState(true);
   const [isExpand, setIsExpand] = useState(false);
   useEffect(() => {
@@ -10,6 +10,7 @@ export default function App() {
       setIsShow(false);
     }, 60000);
   }, []);
+
   return (
     <div className={"relative"}>
       <Card
@@ -18,8 +19,8 @@ export default function App() {
         css={{ mw: "330px" }}
         onMouseOver={() => setIsShow(false)}
       >
-        <Card.Header className="flex justify-between">
-          <Text b>Draft Title</Text>
+        <Card.Header className="flex justify-between gap-2 text-center">
+          <Text b>{title}</Text>
           {!isExpand ? (
             <MarkEmailUnreadOutlinedIcon className="text-blue-600" />
           ) : (
@@ -35,27 +36,28 @@ export default function App() {
                 setIsExpand((pre) => !pre);
               }}
             >
-              <Text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Text>
-              <p className="text-slate-400 text-xs">Description</p>
+              <Text>{description}</Text>
+              <p className="text-gray-400 text-xs">Description</p>
               <div className="mt-10 flex justify-between pl-5">
                 <div
                   className={
                     "py-2 px-4 bg-blue-gray-50 flex justify-center items-center flex-col gap-2 rounded-lg min-w-[100px]"
                   }
                 >
-                  <p className="font-bold text-sm text-slate-700">createdBy</p>
-                  <p className="text-slate-400 text-xs">Created By</p>
+                  <p className="font-bold text-sm text-gray-700">
+                    {createdBy.fullName}
+                  </p>
+                  <p className="text-gray-400 text-xs">Created By</p>
                 </div>
                 <div
                   className={
-                    "py-2 px-4 bg-blue-gray-50 flex justify-center items-center flex-col gap-2 rounded-lg min-w-[100px]"
+                    "py-2 px-4 bg-blue-gray-50 flex justify-center items-center flex-col gap-3 rounded-lg min-w-[100px]"
                   }
                 >
-                  <p className="font-bold text-sm text-slate-700">time</p>
-                  <p className="text-slate-400 text-xs">To Date</p>
+                  <p className="font-bold text-sm text-gray-700 max-w-[105px] pr-1 whitespace-pre-line text-clip mr-1">
+                    {createdBy.updatedAt}
+                  </p>
+                  <p className="text-gray-400 text-xs">To Date</p>
                 </div>
               </div>
             </Collapse>

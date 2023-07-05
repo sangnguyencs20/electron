@@ -7,36 +7,13 @@ export const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
 };
 
-const DisplayDrafts = () => {
-  const [drafts] = useState({
-    Recent: [],
-    Popular: [
-      {
-        id: 2,
-        title: "The most innovative things happening in coffee",
-        date: "Mar 19",
-        commentCount: 24,
-        shareCount: 12,
-      },
-    ],
-    Trending: [
-      {
-        id: 1,
-        title: "Ask Me Anything: 10 answers to your questions about coffee",
-        date: "2d ago",
-        commentCount: 9,
-        shareCount: 5,
-      },
-      {
-        id: 2,
-        title: "The worst advice we've ever heard about coffee",
-        date: "4d ago",
-        commentCount: 1,
-        shareCount: 2,
-      },
-    ],
-  });
-  console.log(drafts);
+const DisplayDrafts = ({ documents }) => {
+  const drafts = {
+    Recent: documents,
+    Popular: documents.filter((item) => item.secretState != "High"),
+    Trending: documents.filter((item) => item.urgencyState != "Low"),
+  };
+  console.log(drafts, documents);
   return (
     <div className="w-full px-2 sm:px-0">
       <Tab.Group vertical>
@@ -69,9 +46,14 @@ const DisplayDrafts = () => {
             >
               <div className="flex flex-wrap mt-[20px] gap-[80px] w-full items-start justify-center">
                 {posts.map((item, idx) => {
-                  return <Card />;
+                  return (
+                    <Card
+                      title={item.title}
+                      createdBy={item.createdBy}
+                      description={item.description}
+                    />
+                  );
                 })}
-                <Card />
               </div>
             </Tab.Panel>
           ))}

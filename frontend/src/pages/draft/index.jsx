@@ -107,7 +107,12 @@ const Draft = () => {
     switch (columnKey) {
       case "title":
         return (
-          <Text b size={14} css={{ tt: "capitalize" }}>
+          <Text
+            b
+            size={14}
+            css={{ tt: "capitalize" }}
+            className="flex md:max-w-[300px] whitespace-pre-line"
+          >
             {cellValue}
           </Text>
         );
