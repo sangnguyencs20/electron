@@ -15,6 +15,10 @@ const DocumentSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Vui long nhap Noi dung'],
     },
+    timeSubmit: {
+        type: Date,
+        default: null,
+    },
     receiver: {
         required: [true, 'Vui long nhap Nguoi nhan'],
         validate: {
