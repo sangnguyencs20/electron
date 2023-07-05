@@ -37,7 +37,7 @@ const handleGetAllDocumentsOfReceiver = async (id) => {
 };
 
 const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
-    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { receiverId: receiverId } } });
+    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { _id: receiverId } } });
 }
 
 const handleGetAllAcceptedDocument = async () => {
