@@ -40,7 +40,6 @@ const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
 }
 
 const handleGetAllAcceptedDocument = async () => {
-    console.log("function")
     return await Document.find({ status: 'Approved' }).exec();
 };
 module.exports = { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };

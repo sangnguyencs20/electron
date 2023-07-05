@@ -108,7 +108,6 @@ const submitDocument = async (req, res) => {
     }
 
     if (document.createdBy._id.toString() !== req.userId) {
-        console.log(typeof document.createdBy._id, typeof req.userId);
         return res.status(401).json({ message: 'You are not authorized to submit this document' });
     }
     if (document.status !== 'Draft') {
