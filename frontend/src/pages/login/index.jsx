@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 //formik
 import { useFormik } from "formik";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
 //mui
@@ -16,6 +16,8 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  let location = useLocation();
+  console.log(location);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -55,7 +57,7 @@ const Login = () => {
         toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {
-          navigate("/home");
+          navigate(location.state.from.pathname);
         });
       }, 2000)
       .catch((error) => {

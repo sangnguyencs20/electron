@@ -1574,6 +1574,11 @@ ajv@^6.10.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+animejs@^3.2.x:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/animejs/-/animejs-3.2.1.tgz#de9fe2e792f44a777a7fdf6ae160e26604b0cdda"
+  integrity sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==
+
 ansi-regex@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz"
@@ -3334,6 +3339,13 @@ queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+
+react-anime@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-anime/-/react-anime-4.1.1.tgz#83542d1ce108a33cd9579cfcb2d77a845c1840c5"
+  integrity sha512-w6oe/6PZ3Swm2Z0EKvawJzvK8iN2gC0NbevjSIEguxY8KuDg/HaDROksLHVrPO5tFpRSEQg2jzy48gcfquDREQ==
+  dependencies:
+    animejs "^3.2.x"
 
 react-dom@^18.2.0:
   version "18.2.0"
