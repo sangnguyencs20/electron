@@ -79,7 +79,7 @@ export default function App({ title, createdBy, description }) {
         </Card.Footer>
       </Card>
       <span
-        class={`animate-ping ${
+        className={`animate-ping ${
           !isShow && "hidden"
         } absolute inline-flex h-[8px] w-[8px] rounded-full bg-blue-300 opacity-100   z-[500px] top-0 right-0`}
       ></span>

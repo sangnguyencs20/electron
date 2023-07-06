@@ -22,6 +22,7 @@
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "formik": "^2.4.2",
+    "framer-motion": "^10.12.18",
     "fs": "^0.0.1-security",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
