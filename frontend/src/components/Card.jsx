@@ -1,18 +1,27 @@
 import { Card, Text, Button, Row, Collapse } from "@nextui-org/react";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
+
 export default function App({ title, createdBy, description }) {
   const [isShow, setIsShow] = useState(true);
   const [isExpand, setIsExpand] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref);
   useEffect(() => {
     setTimeout(() => {
       setIsShow(false);
     }, 60000);
   }, []);
-
+  console.log(isInView);
   return (
-    <div className={"relative"}>
+    <div
+      ref={ref}
+      className={`relative ease-in duration-1000 ${
+        isInView ? "opacity-100" : "opacity-5"
+      }`}
+    >
       <Card
         isHoverable
         isPressable
