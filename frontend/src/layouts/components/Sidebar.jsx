@@ -10,7 +10,7 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
       isActive && isActive === name && "bg-white"
     } flex justify-center items-center ${
       !disabled && "cursor-pointer"
-    } ${styles} hover:w-[70px] hover:justify-start ease-in duration-100`}
+    } ${styles} ${"hover:scale-125"}  ease-in duration-100 transform-gpu origin-center`}
     onClick={handleClick}
   >
     {!isActive ? (
