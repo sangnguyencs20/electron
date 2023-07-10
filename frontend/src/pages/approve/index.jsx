@@ -43,11 +43,11 @@ const DetailCell = ({ id, title, createdBy, time }) => {
 export const StateCell = ({ secretState, urgencyState }) => {
   return (
     <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl mr-10 justify-center w-full">
-      <div className="col-span-1 flex flex-col items-center bg-blue-gray-50 p-2 rounded-xl">
+      <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
         <p className="font-bold text-sm text-gray-800">{secretState}</p>
         <p className="text-gray-500 text-xs">Secret State</p>
       </div>
-      <div className="col-span-1 flex flex-col items-center bg-orange-50 p-2 rounded-xl">
+      <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
         <p className="font-bold text-sm text-gray-800">{urgencyState}</p>
         <p className="text-gray-500 text-xs">Urgency State</p>
       </div>

@@ -134,7 +134,7 @@ const Draft = () => {
           <Row justify="flex-end" align="center" fluid className="md:w-[100px]">
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
-                <IconButton onClick={() => console.log("View user", doc)}>
+                <IconButton onClick={() => {}}>
                   <EyeIcon size={20} fill="#2196f3" />
                 </IconButton>
               </Tooltip>
@@ -146,7 +146,6 @@ const Draft = () => {
                     doc.status !== "Draft" && "cursor-not-allowed"
                   }`}
                   onClick={() => {
-                    console.log("Edit user", doc.id);
                     handleSubmit(doc._id);
                   }}
                 >
@@ -192,11 +191,9 @@ const Draft = () => {
   };
 
   const handleSubmit = (docId) => {
-    console.log(id, docId);
     setIsLoading(true);
     axiosSubmitMyDoc(docId, id)
       .then((res) => {
-        console.log(res);
         setNeedRefresh((pre) => pre + 1);
         setTimeout(() => {
           setIsLoading(false);
