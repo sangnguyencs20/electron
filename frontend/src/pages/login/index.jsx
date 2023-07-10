@@ -57,7 +57,7 @@ const Login = () => {
         toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {
-          navigate(location.state.from.pathname);
+          navigate(location.state?.from?.pathname || "/home");
         });
       }, 2000)
       .catch((error) => {

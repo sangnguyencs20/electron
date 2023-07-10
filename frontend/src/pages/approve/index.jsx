@@ -241,7 +241,6 @@ export default function Approve() {
       status: "Approved",
     })
       .then((res) => {
-        console.log(res);
         setIsLoading(false);
         setNeedRefresh((pre) => pre + 1);
       })

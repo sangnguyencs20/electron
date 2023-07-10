@@ -9,17 +9,17 @@ import {
 
 export const navlinks = [
   {
-    name: "dashboard",
+    name: "/home",
     imgUrl: dashboard,
     link: "/home",
   },
   {
-    name: "campaign",
+    name: "/draft",
     imgUrl: createCampaign,
     link: "/draft",
   },
   {
-    name: "payment",
+    name: "/approve",
     imgUrl: payment,
     link: "/approve",
   },

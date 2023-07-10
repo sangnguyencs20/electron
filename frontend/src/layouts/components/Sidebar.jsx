@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { logo, sun } from "../../assets";
 import { navlinks } from "../../constants";
@@ -27,8 +27,9 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const [isActive, setIsActive] = useState("dashboard");
-
+  let local = useLocation();
+  const [isActive, setIsActive] = useState(local);
+  console.log(isActive);
   return (
     <div className="flex justify-between items-center flex-col sticky h-[85vh]">
       <div className="bg-blue-100 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-blue-50 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 shadow-xl">
