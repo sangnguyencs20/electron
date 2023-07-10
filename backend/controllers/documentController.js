@@ -99,6 +99,7 @@ const getAllDocumentsOfReceiver = async (req, res) => {
 
   const { receiverId } = req.params;
   try {
+
     const documents = await handleGetAllDocumentsOfReceiver(receiverId);
     res.status(200).json(documents);
   } catch (error) {
