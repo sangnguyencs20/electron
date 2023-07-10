@@ -11,7 +11,7 @@ const createOneDocument = async (document) => {
 }
 
 const getOneDocumentById = async (id) => {
-    const document = await Document.findById(id).populate('createdBy').populate('receiver._id');
+    const document = await Document.findById(id).populate('createdBy').populate('receiver.receiverId').populate('createdBy.department');
     return document;
 }
 
@@ -29,15 +29,14 @@ const updateDocumentApprovalStatus = async (id, approval) => {
 
 const handleGetAllDocumentsOfReceiver = async (id) => {
     const documents = await Document.find({
-        // "receiver.receiverId": id
         receiver: { $elemMatch: { _id: id } },
         status: { $ne: "Draft" }
-    });
+    }).populate('receiver.receiverId');
     return documents;
 };
-
 const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
-    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { _id: receiverId } } });
+    console.log(documentId, receiverId)
+    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { receiverId: receiverId } } }).populate('createdBy').populate('createdBy.department');
 }
 
 const handleGetAllAcceptedDocument = async () => {
