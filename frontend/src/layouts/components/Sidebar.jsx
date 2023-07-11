@@ -14,7 +14,11 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
     onClick={handleClick}
   >
     {!isActive ? (
-      <img src={imgUrl} alt="fund_logo" className="w-1/2 h-1/2" />
+      <img
+        src={imgUrl}
+        alt="fund_logo"
+        className="w-1/2 h-1/2 hover:rotate-6"
+      />
     ) : (
       <img
         src={imgUrl}

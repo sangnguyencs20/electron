@@ -44,12 +44,9 @@ const SignUp = () => {
     setLoading(true);
     await axiosSignUp(values)
       .then((res) => {
-        console.log(res);
         navigate("/login");
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
     setLoading(false);
   };
   const [loading, setLoading] = useState(false);

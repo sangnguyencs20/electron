@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import { Download } from "../../assets";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -120,16 +121,15 @@ export const FieldCell = ({ description }) => {
 export const FileCell = ({ link }) => {
   return (
     <div className="flex justify-start w-full">
-      <Button
-        bordered
-        color="primary"
-        auto
-        onClick={() => {
-          window.open(link, "_blank");
-        }}
-      >
-        Click me
-      </Button>
+      <Tooltip content="Download" color="warning" css={{ color: "white" }}>
+        <IconButton
+          onClick={() => {
+            window.open(link, "_blank");
+          }}
+        >
+          <Download />
+        </IconButton>
+      </Tooltip>
     </div>
   );
 };

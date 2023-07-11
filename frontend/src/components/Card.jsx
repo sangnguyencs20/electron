@@ -3,8 +3,10 @@ import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function App({ title, createdBy, description }) {
+  const navigate = useNavigate();
   const [isShow, setIsShow] = useState(true);
   const [isExpand, setIsExpand] = useState(false);
   const ref = useRef(null);
@@ -74,7 +76,14 @@ export default function App({ title, createdBy, description }) {
         </Card.Body>
         <Card.Footer className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
           <Row justify="flex-end">
-            <Button size="sm" light className="text-white hover:text-gray-100">
+            <Button
+              size="sm"
+              light
+              className="text-white hover:text-gray-100"
+              onClick={() => {
+                navigate("/draft/1");
+              }}
+            >
               Detail
             </Button>
             <Button

@@ -11,11 +11,6 @@ const GeneralRouters = [
     element: SignUp,
     title: "Signup",
   },
-  {
-    path: "draft/:id",
-    element: DraftDetail,
-    title: "DraftDetail",
-  },
 ];
 
 export default GeneralRouters;

@@ -8,7 +8,6 @@ const Home = () => {
   useEffect(() => {
     axiosGetAllDocument()
       .then((res) => {
-        console.log(res.data);
         setDocuments(res.data);
       })
       .catch((err) => {

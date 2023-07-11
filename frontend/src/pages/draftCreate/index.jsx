@@ -42,13 +42,11 @@ const DraftCreate = () => {
       handleSubmit(values);
     },
   });
-  console.log(isLoading);
   const handleSubmit = async (values) => {
     const receiver = selected;
     const secretState = secret.name;
     const urgencyState = urgency.name;
-    console.log(receiver);
-    // setIsLoading((pre) => !pre);
+    setIsLoading((pre) => !pre);
 
     await axiosCreateDoc({
       ...values,
@@ -58,7 +56,6 @@ const DraftCreate = () => {
       fileLink: file,
     })
       .then((res) => {
-        console.log(res);
         setTimeout(() => {
           setIsLoading((pre) => !pre);
         }, 3000);

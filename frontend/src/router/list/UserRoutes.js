@@ -21,6 +21,11 @@ const UserRoutes = [
     element: Approve,
     title: "Approve",
   },
+  {
+    path: "draft/:id",
+    element: DraftDetail,
+    title: "DraftDetail",
+  },
 ];
 
 export default UserRoutes;

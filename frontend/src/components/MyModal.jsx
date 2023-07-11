@@ -13,15 +13,16 @@ export default function MyModal({ receiver }) {
         onClick={() => {
           setVisible(true);
         }}
+        class
       />
       <Modal
-        scroll
-        width="600px"
+        width="1000px"
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
+        css={{ maxHeight: "900px" }}
         {...bindings}
       >
-        <Modal.Header>
+        <Modal.Header css={{ pb: "10px", bgColor: "$accents4" }}>
           <Text id="modal-title" size={18} css={{ fontWeight: "bold" }}>
             Time Line
           </Text>
