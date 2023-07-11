@@ -8,6 +8,8 @@ const {
   updateDocumentApprovalStatus,
   handleGetAllDocumentsOfReceiver,
 } = require("../services/documents");
+
+const { sendMail, createPayloadForSendingReceiver, createPayloadForSendingFeedback } = require("../libs/mail");
 const { ObjectId } = require("mongoose").Types;
 
 const { createANewLog } = require("../services/log");
@@ -91,38 +93,47 @@ const updateDocumentApproval = async (req, res) => {
 };
 
 const getAllDocumentsOfReceiver = async (req, res) => {
-    if (req.role == 'Citizen') {
-        return res.status(403).json({ message: "You are not authorized to view this content." });
-    }
+  if (req.role == 'Citizen') {
+    return res.status(403).json({ message: "You are not authorized to view this content." });
+  }
 
-    const { receiverId } = req.params;
-    try {
-        const documents = await handleGetAllDocumentsOfReceiver(receiverId);
-        res.status(200).json(documents);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const { receiverId } = req.params;
+  try {
+
+    const documents = await handleGetAllDocumentsOfReceiver(receiverId);
+    res.status(200).json(documents);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 }
 
 
 const submitDocument = async (req, res) => {
-    const { documentId } = req.params;
-    const document = await getOneDocumentById(documentId);
-    if (!document) {
-        return res.status(404).json({ message: 'Document not found' });
-    }
+  const { documentId } = req.params;
+  const document = await getOneDocumentById(documentId);
+  if (!document) {
+    return res.status(404).json({ message: 'Document not found' });
+  }
 
-    if (document.createdBy._id.toString() !== req.userId) {
-        return res.status(401).json({ message: 'You are not authorized to submit this document' });
-    }
-    if (document.status !== 'Draft') {
-        return res.status(401).json({ message: 'You can only submit draft document' });
-    }
+  if (document.createdBy._id.toString() !== req.userId) {
+    return res.status(401).json({ message: 'You are not authorized to submit this document' });
+  }
 
-    document.status = 'Submitted';
-    document.timeSubmit = new Date();
-    await document.save();
-    return res.status(200).json({ message: 'Document submitted successfully' });
+  if (document.status !== 'Draft') {
+    return res.status(401).json({ message: 'You can only submit draft document' });
+  }
+
+  document.status = 'Submitted';
+  document.timeSubmit = new Date();
+
+  const receivers = document.receiver;
+  const emailArray = receivers.map(receivers => receivers.receiverId.email);
+
+
+  const payload = createPayloadForSendingReceiver(emailArray, document);
+  sendMail(payload);
+  await document.save();
+  return res.status(200).json({ message: 'Document submitted successfully' });
 }
 
 
@@ -130,12 +141,17 @@ const submitFeedback = async (req, res) => {
   const { documentId, receiverId } = req.params;
   const { comment, status } = req.body;
 
+
+
   try {
     // Find the document by documentId and receiverId
     const document = await handleGetASpecificDocumentOfReceiver(
       documentId,
       receiverId
     );
+
+
+    console.log(document)
 
     if (!document) {
       return res
@@ -145,8 +161,10 @@ const submitFeedback = async (req, res) => {
 
     // Find the receiver within the document's receiver array
     const receiver = document.receiver.find(
-      (receiver) => receiver._id.toString() === receiverId
+      (receiver) => receiver.receiverId.toString() === receiverId
     );
+
+    
 
     if (!receiver) {
       return res
@@ -158,6 +176,9 @@ const submitFeedback = async (req, res) => {
     receiver.status = status;
     receiver.comment = comment;
     receiver.time = new Date();
+
+    const payload = createPayloadForSendingFeedback(status, comment, document);
+    sendMail(payload);
 
     await document.save();
 

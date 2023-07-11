@@ -1,7 +1,7 @@
 const Document = require('../models/documentModel');
 
 const getAllDocuments = async (req, res) => {
-    return await Document.find().populate('createdBy').populate('receiver');
+    return await Document.find().populate('createdBy').populate('receiver.receiverId').sort({ _id: -1 });
 }
 
 const createOneDocument = async (document) => {
@@ -11,12 +11,12 @@ const createOneDocument = async (document) => {
 }
 
 const getOneDocumentById = async (id) => {
-    const document = await Document.findById(id).populate('createdBy').populate('receiver._id');
+    const document = await Document.findById(id).populate('createdBy').populate('receiver.receiverId').populate('createdBy.department');
     return document;
 }
 
 const getAllDocumentsOfUser = async (userId) => {
-    const document = await Document.find({ createdBy: userId });
+    const document = await Document.find({ createdBy: userId }).sort({ _id: -1 });
     return document;
 }
 
@@ -29,18 +29,19 @@ const updateDocumentApprovalStatus = async (id, approval) => {
 
 const handleGetAllDocumentsOfReceiver = async (id) => {
     const documents = await Document.find({
-        // "receiver.receiverId": id
-        receiver: { $elemMatch: { _id: id } },
+        receiver: { $elemMatch: { receiverId: id } },
         status: { $ne: "Draft" }
-    });
+    }).populate('receiver.receiverId').sort({ timeSubmit: -1 });
     return documents;
 };
 
+
 const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
-    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { _id: receiverId } } });
+    console.log(documentId, receiverId)
+    return await Document.findOne({ _id: documentId, receiver: { $elemMatch: { receiverId: receiverId } } }).populate('createdBy').populate('createdBy.department');
 }
 
 const handleGetAllAcceptedDocument = async () => {
-    return await Document.find({ status: 'Approved' }).exec();
+    return (await Document.find({ status: 'Approved' }).exec()).sort({ timeSubmit: -1 });
 };
 module.exports = { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
