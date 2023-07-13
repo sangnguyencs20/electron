@@ -8,7 +8,7 @@ const opinionRouter = require('./opinion');
 const documentRouter = require('./document');
 const departmentRouter = require('./department');
 const logRouter = require('./log');
-
+const approvalRouter = require('./approval');
 
 router.use("/auth", authRouter);
 router.use("/users", verifyToken, userRouter);
@@ -16,5 +16,5 @@ router.use("/opinions", verifyToken, opinionRouter);
 router.use("/documents", verifyToken, documentRouter);
 router.use("/departments", verifyToken, departmentRouter);
 router.use("/logs", verifyToken, logRouter);
-
+router.use("/approvals", verifyToken, approvalRouter);
 module.exports = router;

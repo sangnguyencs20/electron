@@ -12,7 +12,11 @@ const {
     submitFeedback,
     deleteDocument,
     getAllAcceptedDocuments,
-    submitDocument
+    submitDocument,
+    publishDocument,
+    sendDocumentToApprover,
+    submitFeedbackFromApprover,
+    getAllDocumentsOfApprover
 }
     = require("../controllers/documentController");
 
@@ -366,8 +370,6 @@ router.post("/approval/:id", updateDocumentApproval);
 
 // router.post("/:id", updateDocument);
 
-
-
 /**
  * @swagger
  * /api/documents/receiver/{receiverId}:
@@ -396,7 +398,6 @@ router.post("/approval/:id", updateDocumentApproval);
  *         description: Internal server error
  */
 router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
-
 
 /**
  * @swagger
@@ -434,7 +435,10 @@ router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
  *       500:
  *         description: Internal server error
  */
+//this will submit to the boss
 router.post("/submit/:documentId", submitDocument);
+
+
 
 /**
  * @swagger
@@ -476,8 +480,8 @@ router.post("/submit/:documentId", submitDocument);
  *       '500':
  *         description: Server error
  */
-router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
-
+// it will post the feedback from the boss to the creator of the document
+router.post("/:documentId/receiver/feedback", submitFeedback);
 
 /**
  * @swagger
@@ -501,6 +505,35 @@ router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
  */
 router.delete("/:documentId", deleteDocument);
 
+router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
+
+router.post("/send/:documentId", sendDocumentToApprover);
+
+/**
+* @swagger
+* /documents/{documentId}:
+*   post:
+*     summary: Publish a document
+*     parameters:
+*       - name: documentId
+*         in: path
+*         description: ID of the document to publish
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       '200':
+*         description: Document updated successfully
+*       '404':
+*         description: Document not found
+*       '500':
+*         description: Server error
+*/
+// it will publish the document to home
+router.post("/publish/:id", publishDocument);
+
+
+router.get("/approver/:approveId", getAllDocumentsOfApprover);
 
 
 module.exports = router;

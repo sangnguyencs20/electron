@@ -67,9 +67,36 @@ const DocumentSchema = new mongoose.Schema({
         enum: ['Low', 'Neutral', 'High'],
         default: 'Neutral',
     },
-    fileLink: {
-        type: String,
+    file: {
+        type: {
+            fileLink: String,
+            times: Number,
+        },
         required: [true, 'Vui long nhap Link file'],
+    },
+    isPublished: {
+        type: Boolean,
+        default: false,
+        // validate: {
+        //     validator: async function (value) {
+        //         // If the document is a draft (no approvalId), allow publishing
+        //         if (!this.approvalId) {
+        //             return true;
+        //         }
+
+        //         // Retrieve the associated approval document
+        //         const approval = await mongoose.model('Approval').findOne({ _id: this.approvalId });
+
+        //         // Check if the approval exists and is approved
+        //         return approval && approval.isApproved === true;
+        //     },
+        //     message: 'The document can only be published if it is approved.',
+        // },
+    },
+    approvalId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Approval',
+        default: null,
     }
 },
     { timestamp: true, }
