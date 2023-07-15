@@ -20,3 +20,15 @@ export const checkIfImage = (url, callback) => {
   img.onload = () => callback(true);
   img.onerror = () => callback(false);
 };
+
+const options = {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  timeZone: "UTC",
+};
+export const formattedDateTime = (dateTimeString) =>
+  new Date(dateTimeString).toLocaleString("en-US", options);

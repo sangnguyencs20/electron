@@ -15,6 +15,7 @@ const CommentBox = () => {
       <Card
         isHoverable
         isPressable
+        variant="bordered"
         className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900"
       >
         <footer className="flex justify-between items-center mb-2">

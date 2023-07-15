@@ -13,6 +13,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import CommentSection from "../../components/CommentSection";
+import DetailBox from "../../components/DetailBox";
 const DraftDetail = () => {
   const data = [
     {
@@ -41,13 +42,13 @@ const DraftDetail = () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-20 ">
+    <div className="flex flex-col gap-10 ">
       <div>
         <div className="w-full flex justify-start">
-          <div className="max-w-2xl whitespace-pre-line mt-20">
+          <div className="max-w-2xl whitespace-pre-line mt-5">
             <Text
               h1
-              size={40}
+              size={30}
               color="#005C97"
               weight="bold"
               className="font-sans subpixel-antialiased"
@@ -56,32 +57,7 @@ const DraftDetail = () => {
             </Text>
           </div>
         </div>
-        <hr className="my-3 h-0.5 border-t-0 bg-blue-gray-100 opacity-100 dark:opacity-50" />
-        <div className="flex gap-10 w-full justify-between">
-          <div className="flex gap-10 w-2/4">
-            <Text
-              className="justify-self-end text-gray-500 font-sans antialiased "
-              size="$sm"
-              b
-            >
-              Sarah Roberts
-            </Text>
-            <Text
-              className="justify-self-end text-gray-500 font-sans antialiased "
-              size="$sm"
-              b
-            >
-              August 5, 2023
-            </Text>
-          </div>
-          <Text
-            className="justify-self-end text-gray-500 font-sans antialiased "
-            size="$sm"
-            b
-          >
-            26 comments
-          </Text>
-        </div>
+        <hr className="my-3 h-0.5 border-t-0 bg-gradient-to-br from-cyan-500 to-blue-500 opacity-100 dark:opacity-50" />
       </div>
 
       <Tabs value="dashboard">
@@ -106,15 +82,7 @@ const DraftDetail = () => {
             if (idx === 0)
               return (
                 <TabPanel key={value} value={value}>
-                  <div className="bg-blue-gray-50 p-4 w-fit">
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Exercitationem quam saepe officiis, eum corrupti
-                      cupiditate tempore. Inventore a assumenda minima
-                      provident, fuga facere molestiae, laboriosam fugiat
-                      deserunt rerum quos sequi.
-                    </Text>
-                  </div>
+                  <DetailBox />
                 </TabPanel>
               );
             else if (idx === 1)
@@ -124,13 +92,15 @@ const DraftDetail = () => {
                   value={value}
                   className="flex justify-center"
                 >
-                  <div className="bg-blue-gray-50 p-4 w-fit">
+                  <div className="bg-blue-gray-50 p-4 w-full flex justify-between">
                     <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Exercitationem quam saepe officiis, eum corrupti
-                      cupiditate tempore. Inventore a assumenda minima
-                      provident, fuga facere molestiae, laboriosam fugiat
-                      deserunt rerum quos sequi.
+                      Công ty VBC
+                    </Text>
+                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
+                      Chấp nhận
+                    </Text>
+                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
+                      Transaction code
                     </Text>
                   </div>
                 </TabPanel>

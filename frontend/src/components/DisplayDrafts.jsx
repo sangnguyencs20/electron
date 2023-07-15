@@ -44,7 +44,7 @@ const DisplayDrafts = ({ documents }) => {
                 "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
               )}
             >
-              <div className="flex flex-wrap mt-[20px] gap-[80px] w-full items-start justify-center">
+              <div className="grid grid-flow-row grid-cols-3 mt-[20px] gap-[80px] w-full justify-center items-stretch">
                 {posts.map((item, idx) => {
                   return (
                     <Card

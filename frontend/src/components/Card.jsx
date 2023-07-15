@@ -4,6 +4,7 @@ import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutl
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { formattedDateTime } from "../utils";
 
 export default function App({ title, createdBy, description }) {
   const navigate = useNavigate();
@@ -30,8 +31,18 @@ export default function App({ title, createdBy, description }) {
         css={{ mw: "330px" }}
         onMouseOver={() => setIsShow(false)}
       >
-        <Card.Header className="flex justify-between gap-2 text-center">
-          <Text b>{title}</Text>
+        <Card.Header className="flex justify-between gap-2 text-center w-full">
+          <Text
+            b
+            css={{
+              h: "60px",
+              display: "block",
+              width: "100%",
+            }}
+            className="whitespace-pre-line text-clip"
+          >
+            {title}
+          </Text>
           {!isExpand ? (
             <MarkEmailUnreadOutlinedIcon className="text-blue-600" />
           ) : (
@@ -49,10 +60,10 @@ export default function App({ title, createdBy, description }) {
             >
               <Text>{description}</Text>
               <p className="text-gray-400 text-xs">Description</p>
-              <div className="mt-10 flex justify-between pl-5">
+              <div className="mt-10 flex justify-between items-stretch pl-5">
                 <div
                   className={
-                    "py-2 px-4 bg-blue-gray-50 flex justify-center items-center flex-col gap-2 rounded-lg min-w-[100px]"
+                    "py-2 px-4 bg-blue-gray-50 flex justify-between items-center flex-col gap-2 rounded-lg min-w-[100px]"
                   }
                 >
                   <p className="font-bold text-sm text-gray-700">
@@ -62,11 +73,11 @@ export default function App({ title, createdBy, description }) {
                 </div>
                 <div
                   className={
-                    "py-2 px-4 bg-blue-gray-50 flex justify-center items-center flex-col gap-3 rounded-lg min-w-[100px]"
+                    "py-2 px-4 bg-blue-gray-50 flex justify-between items-center flex-col gap-3 rounded-lg min-w-[100px]"
                   }
                 >
                   <p className="font-bold text-sm text-gray-700 max-w-[105px] pr-1 whitespace-pre-line text-clip mr-1">
-                    {createdBy.updatedAt}
+                    {formattedDateTime(createdBy.updatedAt)}
                   </p>
                   <p className="text-gray-400 text-xs">To Date</p>
                 </div>

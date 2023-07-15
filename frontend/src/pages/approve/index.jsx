@@ -13,6 +13,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Download } from "../../assets";
+import { formattedDateTime } from "../../utils";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -34,7 +35,9 @@ const DetailCell = ({ id, title, createdBy, time }) => {
         <p className="text-gray-400 text-xs ">Title</p>
       </div>
       <div className="col-span-1">
-        <p className="font-bold text-sm text-gray-800">{time}</p>
+        <p className="font-bold text-sm text-gray-800">
+          {formattedDateTime(time)}
+        </p>
         <p className="text-gray-400 text-xs">Time</p>
       </div>
     </div>
@@ -61,30 +64,32 @@ const StatusCell = ({ receiver, userId }) => {
     <div className="grid grid-cols-1 grid-flow-row w-full justify-center items-center gap-5 px-5 mx-2">
       <span
         className={`${
-          receiver.filter((item) => item._id === userId)[0].status === "Pending"
+          receiver.filter((item) => item.receiverId._id === userId)[0]
+            ?.status === "Pending"
             ? "text-orange-500"
-            : receiver.filter((item) => item._id === userId)[0].status ===
-              "Approved"
+            : receiver.filter((item) => item.receiverId._id === userId)[0]
+                ?.status === "Approved"
             ? "text-green-500"
             : "text-red-500"
         }
         ${
-          receiver.filter((item) => item._id === userId)[0].status === "Pending"
+          receiver.filter((item) => item.receiverId._id === userId)[0]
+            ?.status === "Pending"
             ? "bg-orange-100"
-            : receiver.filter((item) => item._id === userId)[0].status ===
-              "Approved"
+            : receiver.filter((item) => item.receiverId._id === userId)[0]
+                ?.status === "Approved"
             ? "bg-green-100"
             : "bg-red-100"
         }  rounded-md  px-3 py-1 font-semibold text-center `}
       >
-        {receiver.filter((item) => item._id === userId)[0].status}
+        {receiver.filter((item) => item.receiverId._id === userId)[0]?.status}
       </span>
       <div className="flex flex-col justify-center w-full text-center">
         <span className="font-bold text-sm text-gray-800">
-          {receiver.filter((item) => item._id === userId)[0].name}
+          {receiver.filter((item) => item.receiverId._id === userId)[0]?.name}
         </span>
         <span className="text-gray-400 text-xs font-medium">
-          {receiver.filter((item) => item._id === userId)[0].time}
+          {receiver.filter((item) => item.receiverId._id === userId)[0]?.time}
         </span>
       </div>
     </div>
