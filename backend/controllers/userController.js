@@ -67,4 +67,18 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, getUserById, updateUser, deleteUser };
+const getUserOfADepartment = async (req, res) => {
+    if (req.role == 'Citizen') {
+        return res.status(403).json({ message: "You are not authorized to view this content." });
+    }
+    const { departmentId } = req.params;
+    try {
+        console.log(departmentId)
+        const users = await User.find({ department: departmentId });
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+module.exports = { getUsers, getUserById, updateUser, deleteUser, getUserOfADepartment };

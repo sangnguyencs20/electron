@@ -1,4 +1,4 @@
-const { getAllDepartments, createOneDepartment } = require('../services/departments');
+const { getAllDepartments, createOneDepartment, getOneDepartmentByAbbr } = require('../services/departments');
 
 const getDepartments = async (req, res) => {
     try {
@@ -10,10 +10,13 @@ const getDepartments = async (req, res) => {
 };
 
 const createDepartment = async (req, res) => {
+    const { abbr, name, address } = req.body;
     try {
-        const departments = await getAllDepartments(req, res);
+        const department = await getOneDepartmentByAbbr(abbr);
 
-        if (departments.length > 0) {
+        console.log(department);
+
+        if (department) {
             return res.status(400).json({ message: "Department already exists" });
         }
 

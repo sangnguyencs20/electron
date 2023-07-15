@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getUsers, getUserById, updateUser, deleteUser } = require("../controllers/userController");
+const { getUsers, getUserById, updateUser, deleteUser, getUserOfADepartment } = require("../controllers/userController");
 
 /**
  * @swagger
@@ -100,5 +100,28 @@ router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.post("/:id", updateUser);
 router.delete("/:id", deleteUser);
+/**
+ * @swagger
+ * /department/{departmentId}:
+ *   get:
+ *     summary: Get user of a department
+ *     description: Retrieve information about the user of a specific department.
+ *     parameters:
+ *       - name: departmentId
+ *         in: path
+ *         description: ID of the department to retrieve user information for
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User information retrieved successfully
+ *       404:
+ *         description: Department not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/department/:departmentId", getUserOfADepartment);
+
 
 module.exports = router;

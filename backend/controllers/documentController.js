@@ -174,9 +174,14 @@ const submitFeedback = async (req, res) => {
     }
 
     // Update the comment and time for the receiver
-    receiver.status = status;
-    receiver.comment = comment;
-    receiver.time = new Date();
+
+    receiver.push({
+      receiverId: receiverId,
+      status: status,
+      comment: comment,
+      time: new Date(),
+    })
+
 
     const payload = createPayloadForSendingFeedback(status, comment, document);
     sendMail(payload);
