@@ -299,11 +299,6 @@ const submitFeedbackFromApprover = async (req, res) => {
     if (!receiver) {
       return res.status(404).json({ message: 'Receiver not found in the document' });
     }
-
-
-
-
-
     receiver.log.push({
       status: status,
       time: new Date(),

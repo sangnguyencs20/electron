@@ -155,6 +155,7 @@ router.get("/", getDocuments);
  * paths:
  *   /api/documents/accepted:
  *     get:
+ *       tags: [Document]
  *       summary: Get all accepted documents
  *       description: Retrieve all documents with a status of "Accepted"
  *       responses:
@@ -177,6 +178,7 @@ router.post("/", createDocument);
 
 
 router.get("/accepted", getAllAcceptedDocuments);
+
 /**
  * @swagger
  * /api/documents/{id}:
@@ -404,6 +406,7 @@ router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
  * /submit/{documentId}:
  *   post:
  *     summary: Submit a document
+ *     tags: [Document]
  *     description: Submit a document by its ID
  *     parameters:
  *       - in: path
@@ -442,9 +445,10 @@ router.post("/submit/:documentId", submitDocument);
 
 /**
  * @swagger
- * /documents/{documentId}/receiver/{receiverId}/feedback:
+ * /documents/{documentId}/receiver/feedback:
  *   post:
  *     summary: Submit feedback for a document by a receiver
+ *     tags: [Document]
  *     parameters:
  *       - name: documentId
  *         in: path
@@ -488,6 +492,7 @@ router.post("/:documentId/receiver/feedback", submitFeedback);
  * /documents/{documentId}:
  *   delete:
  *     summary: Delete a document
+ *     tags: [Document]
  *     parameters:
  *       - name: documentId
  *         in: path
@@ -505,6 +510,51 @@ router.post("/:documentId/receiver/feedback", submitFeedback);
  */
 router.delete("/:documentId", deleteDocument);
 
+/**
+ * @swagger
+ * /documents/{documentId}/approver/comment:
+ *   post:
+ *     summary: Submit feedback from approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               comment: This document requires revision.
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * /documents/send/{documentId}:
+ *   post:
+ *     summary: Send document to approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     responses:
+ *       200:
+ *         description: Success message
+ */
 router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
 router.post("/send/:documentId", sendDocumentToApprover);
@@ -514,6 +564,7 @@ router.post("/send/:documentId", sendDocumentToApprover);
 * /documents/{documentId}:
 *   post:
 *     summary: Publish a document
+*     tags: [Document]
 *     parameters:
 *       - name: documentId
 *         in: path
@@ -531,9 +582,55 @@ router.post("/send/:documentId", sendDocumentToApprover);
 */
 // it will publish the document to home
 router.post("/publish/:id", publishDocument);
+/**
+ * @swagger
+ * /documents/{documentId}/approver/comment:
+ *   post:
+ *     summary: Submit feedback from approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               comment: This document requires revision.
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * /documents/approver/{approveId}:
+ *   get:
+ *     summary: Get all documents of approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: approveId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the approver
+ *     responses:
+ *       200:
+ *         description: List of documents
+ */
+
+router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
 
 router.get("/approver/:approveId", getAllDocumentsOfApprover);
-
 
 module.exports = router;
