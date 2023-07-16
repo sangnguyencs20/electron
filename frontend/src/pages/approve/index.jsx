@@ -14,6 +14,8 @@ import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Download } from "../../assets";
 import { formattedDateTime } from "../../utils";
+import AssignPopper from "../../components/AssignPopper";
+import CustomDatepicker from "../../components/CustomDatePicker";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -197,8 +199,15 @@ export default function Approve() {
 
       case "actions":
         return (
-          <Row justify="center" align="center" className="w-[100px] ml-10">
-            <Col css={{ d: "flex", width: "100%" }}>
+          <Row
+            justify="center"
+            align="center"
+            className="w-[100px] ml-10 flex flex-nowrap gap-2"
+          >
+            <Col>
+              <AssignPopper />
+            </Col>
+            <Col>
               <Tooltip content="Time Line">
                 <MyModal
                   receiver={doc.receiver.map((item, idx) => {
@@ -207,7 +216,7 @@ export default function Approve() {
                 />
               </Tooltip>
             </Col>
-            <Col css={{ d: "flex" }}>
+            <Col>
               <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
@@ -219,7 +228,7 @@ export default function Approve() {
                 </IconButton>
               </Tooltip>
             </Col>
-            <Col css={{ d: "flex" }}>
+            <Col>
               <Tooltip
                 content="Reject"
                 color="error"

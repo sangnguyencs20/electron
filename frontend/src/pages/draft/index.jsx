@@ -11,7 +11,7 @@ import { IconButton } from "../../components/IconButton";
 import { EyeIcon } from "../../components/EyeIcon";
 import { EditIcon } from "../../components/EditIcon";
 import { DeleteIcon } from "../../components/DeleteIcon";
-
+import TimelineIcon from "@mui/icons-material/Timeline";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { DescriptionCell, FileCell, StateCell } from "../approve";
@@ -131,11 +131,20 @@ const Draft = () => {
         return <FileCell link={doc.fileLink} />;
       case "actions":
         return (
-          <Row justify="flex-end" align="center" fluid className="md:w-[100px]">
+          <Row
+            justify="center"
+            align="center"
+            className="w-[100px] ml-10 flex flex-nowrap gap-2"
+          >
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
                 <IconButton onClick={() => {}}>
                   <EyeIcon size={20} fill="#2196f3" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content="Status">
+                <IconButton onClick={() => {}}>
+                  <TimelineIcon sx={{ padding: "2px", mx: "2px" }} />
                 </IconButton>
               </Tooltip>
             </Col>

@@ -1,7 +1,7 @@
 import { Modal, useModal, Button, Text, Grid, Card } from "@nextui-org/react";
 import { EyeIcon } from "./EyeIcon";
 import CustomTable from "./CustomTable";
-import TimeLineTable from "./TimeLineTable";
+import TimeLineTable from "./TimeLine";
 
 export default function MyModal({ receiver }) {
   const { setVisible, bindings } = useModal();
@@ -27,7 +27,7 @@ export default function MyModal({ receiver }) {
             Time Line
           </Text>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body css={{ bgColor: "#f3f3f3" }}>
           <TimeLineTable receiver={receiver} />
         </Modal.Body>
         <Modal.Footer>
