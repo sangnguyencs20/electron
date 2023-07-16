@@ -25,6 +25,7 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Tab } from "@headlessui/react";
 import { classNames } from "../../components/DisplayDrafts";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
+import StatusPopper from "../../components/StatusPopper";
 
 const StyledBadge = styled("span", {
   display: "inline-block",
@@ -134,7 +135,7 @@ const Draft = () => {
           <Row
             justify="center"
             align="center"
-            className="w-[100px] ml-10 flex flex-nowrap gap-2"
+            className=" ml-2 flex flex-nowrap gap-2"
           >
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
@@ -144,7 +145,7 @@ const Draft = () => {
               </Tooltip>
               <Tooltip content="Status">
                 <IconButton onClick={() => {}}>
-                  <TimelineIcon sx={{ padding: "2px", mx: "2px" }} />
+                  <StatusPopper />
                 </IconButton>
               </Tooltip>
             </Col>
@@ -159,7 +160,6 @@ const Draft = () => {
                   }}
                 >
                   <ForwardToInboxOutlinedIcon
-                    size={20}
                     color="#ff9900"
                     className={
                       //   `text-[${

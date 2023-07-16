@@ -9,12 +9,19 @@ import {
   Row,
   Grid,
   Card,
+  Badge,
+  Spacer,
 } from "@nextui-org/react";
 import { Mail } from "./Mail";
 import { Password } from "./Password";
-import { ArrowUturnDownIcon } from "@heroicons/react/24/outline";
-
-export default function AssignPopper() {
+import {
+  ArrowUturnDownIcon,
+  CameraIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import ReSubmitPopper from "./ReSubmitPopper";
+export default function StatusPopper() {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
   const closeHandler = () => {
@@ -23,9 +30,10 @@ export default function AssignPopper() {
   };
   return (
     <div>
-      <Tooltip content="Assign">
-        <ArrowUturnDownIcon
-          className="text-red-700 h-6 cursor-pointer m-1"
+      <Tooltip content="Status">
+        <TimelineIcon
+          className="text-black h-6 cursor-pointer m-1 rounded-[100px] border border-black"
+          sx={{ padding: "2px", mx: "2px" }}
           onClick={handler}
         />
       </Tooltip>
@@ -38,14 +46,13 @@ export default function AssignPopper() {
         onClose={closeHandler}
         width={"60%"}
         height={"1000px"}
-        // blur
+        blur
       >
         {" "}
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            Select{" "}
             <Text b size={18}>
-              Employee
+              Status
             </Text>
           </Text>
         </Modal.Header>
@@ -62,67 +69,73 @@ export default function AssignPopper() {
               <Table.Column>NAME</Table.Column>
               <Table.Column>ROLE</Table.Column>
               <Table.Column>STATUS</Table.Column>
+              <Table.Column>RESUBMIT</Table.Column>
             </Table.Header>
             <Table.Body>
               <Table.Row key="1">
                 <Table.Cell>Tony Reichert</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Active</Table.Cell>
+                <Table.Cell>VBC CEO</Table.Cell>
+                <Table.Cell>
+                  <Badge
+                    enableShadow
+                    disableOutline
+                    color="success"
+                    variant="bordered"
+                    width="100px"
+                  >
+                    Approve
+                  </Badge>
+                </Table.Cell>
+                <Table.Cell>
+                  <ReSubmitPopper />
+                </Table.Cell>
               </Table.Row>
               <Table.Row key="2">
                 <Table.Cell>Zoey Lang</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Paused</Table.Cell>
-              </Table.Row>
-              <Table.Row key="3">
-                <Table.Cell>Jane Fisher</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Active</Table.Cell>
-              </Table.Row>
-              <Table.Row key="4">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
-              </Table.Row>
-              <Table.Row key="5">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
-              </Table.Row>
-              <Table.Row key="6">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
+                <Table.Cell>BK CEO</Table.Cell>
+                <Table.Cell>
+                  <Badge
+                    enableShadow
+                    disableOutline
+                    color="error"
+                    width="100px"
+                    variant="bordered"
+                  >
+                    Error
+                  </Badge>
+                </Table.Cell>
+                <Table.Cell>
+                  {" "}
+                  <ReSubmitPopper />
+                </Table.Cell>
               </Table.Row>
             </Table.Body>
             <Table.Pagination
               shadow
               noMargin
               align="center"
-              rowsPerPage={5}
+              rowsPerPage={3}
               onPageChange={(page) => console.log({ page })}
             />
           </Table>
           <Card css={{ mt: "10px", p: 10 }}>
             <Grid.Container>
               <Text b css={{ textTransform: "uppercase", color: "gray" }}>
-                To date:{" "}
+                ReSubmit (MULTI)
               </Text>
               <Grid.Container gap={4}>
                 <Grid>
-                  <Input width="186px" label="Time" type="time" />
-                </Grid>
-                <Grid>
-                  <Input width="186px" label="Date" type="date" />
+                  <Input width="100%" label="Input File" type="file" />
+                  <Spacer y={1} />
+                  <Button bordered color="primary" flat>
+                    Submit
+                  </Button>
                 </Grid>
               </Grid.Container>
             </Grid.Container>
           </Card>
         </Modal.Body>
         <Modal.Footer>
-          <Button auto flat color="default" onPress={closeHandler}>
-            Assign
-          </Button>
           <Button auto flat color="error" onPress={closeHandler}>
             Close
           </Button>

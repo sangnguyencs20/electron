@@ -17,3 +17,23 @@
     min-width: 80px;
     text-align: center;
 }
+
+.title {
+    font-weight: bold;
+    font-size: 30px;
+    color: #ea086a;
+}
+
+.content {
+    font-size: 15px;
+    line-height: 20px;
+    display: block;
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 5px;
+    padding: 10px;
+    background: rgb(217, 78, 138, 0.2);
+    color: #d94e8a;
+    text-align: justify;
+    border-radius: 10px;
+}
