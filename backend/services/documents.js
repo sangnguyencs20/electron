@@ -1,5 +1,5 @@
 const Document = require('../models/documentModel');
-
+const Approval = require('../models/approvalModel');
 const getAllDocuments = async (req, res) => {
     return await Document.find().populate('createdBy').populate('receiver.receiverId').sort({ _id: -1 });
 }
@@ -44,4 +44,21 @@ const handleGetASpecificDocumentOfReceiver = async (documentId, receiverId) => {
 const handleGetAllAcceptedDocument = async () => {
     return (await Document.find({ status: 'Approved' }).exec()).sort({ timeSubmit: -1 });
 };
-module.exports = { handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
+
+
+
+const handleGetApprovalOfADocument = async (documentId) => {
+    return await Approval.findOne({ documentId: documentId });
+}
+
+
+const handleGetAllDocumentsOfApprover = async (id) => {
+    const approvals = await Approval.find({
+        history: { $elemMatch: { receiverId: id } },
+    }).sort({ _id: -1 });
+
+    return await approvals;
+}
+
+
+module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };

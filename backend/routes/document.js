@@ -12,7 +12,12 @@ const {
     submitFeedback,
     deleteDocument,
     getAllAcceptedDocuments,
-    submitDocument
+    submitDocument,
+    publishDocument,
+    submitFeedbackFromApprover,
+    getAllDocumentsOfApprover,
+    assignDocumentToApprover,
+    approveADocument
 }
     = require("../controllers/documentController");
 
@@ -87,9 +92,6 @@ router.get("/", getDocuments);
  *               title:
  *                 type: string
  *                 description: The title of the document
- *               createdBy:
- *                 type: string
- *                 description: The ID of the user who created the document
  *               receiver:
  *                 type: array
  *                 items:
@@ -151,6 +153,7 @@ router.get("/", getDocuments);
  * paths:
  *   /api/documents/accepted:
  *     get:
+ *       tags: [Document]
  *       summary: Get all accepted documents
  *       description: Retrieve all documents with a status of "Accepted"
  *       responses:
@@ -173,6 +176,7 @@ router.post("/", createDocument);
 
 
 router.get("/accepted", getAllAcceptedDocuments);
+
 /**
  * @swagger
  * /api/documents/{id}:
@@ -366,8 +370,6 @@ router.post("/approval/:id", updateDocumentApproval);
 
 // router.post("/:id", updateDocument);
 
-
-
 /**
  * @swagger
  * /api/documents/receiver/{receiverId}:
@@ -397,12 +399,12 @@ router.post("/approval/:id", updateDocumentApproval);
  */
 router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
 
-
 /**
  * @swagger
  * /submit/{documentId}:
  *   post:
  *     summary: Submit a document
+ *     tags: [Document]
  *     description: Submit a document by its ID
  *     parameters:
  *       - in: path
@@ -434,13 +436,17 @@ router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
  *       500:
  *         description: Internal server error
  */
+//this will submit to the boss
 router.post("/submit/:documentId", submitDocument);
+
+
 
 /**
  * @swagger
- * /documents/{documentId}/receiver/{receiverId}/feedback:
+ * /documents/{documentId}/receiver/feedback:
  *   post:
  *     summary: Submit feedback for a document by a receiver
+ *     tags: [Document]
  *     parameters:
  *       - name: documentId
  *         in: path
@@ -476,14 +482,15 @@ router.post("/submit/:documentId", submitDocument);
  *       '500':
  *         description: Server error
  */
-router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
-
+// it will post the feedback from the boss to the creator of the document
+router.post("/:documentId/receiver/feedback", submitFeedback);
 
 /**
  * @swagger
  * /documents/{documentId}:
  *   delete:
  *     summary: Delete a document
+ *     tags: [Document]
  *     parameters:
  *       - name: documentId
  *         in: path
@@ -501,6 +508,163 @@ router.post("/:documentId/receiver/:receiverId/feedback", submitFeedback);
  */
 router.delete("/:documentId", deleteDocument);
 
+/**
+ * @swagger
+ * /documents/{documentId}/approver/comment:
+ *   post:
+ *     summary: Submit feedback from approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               comment: This document requires revision.
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * /documents/send/{documentId}:
+ *   post:
+ *     summary: Send document to approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     responses:
+ *       200:
+ *         description: Success message
+ */
+router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
+
+
+/**
+* @swagger
+* /documents/{documentId}:
+*   post:
+*     summary: Publish a document
+*     tags: [Document]
+*     parameters:
+*       - name: documentId
+*         in: path
+*         description: ID of the document to publish
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       '200':
+*         description: Document updated successfully
+*       '404':
+*         description: Document not found
+*       '500':
+*         description: Server error
+*/
+// it will publish the document to home
+router.post("/publish/:id", publishDocument);
+/**
+ * @swagger
+ * /documents/{documentId}/approver/comment:
+ *   post:
+ *     summary: Submit feedback from approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               comment: This document requires revision.
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * /documents/approver/{approveId}:
+ *   get:
+ *     summary: Get all documents of approver
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: approveId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the approver
+ *     responses:
+ *       200:
+ *         description: List of documents
+ */
+
+router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
+
+
+router.get("/approver/:approveId", getAllDocumentsOfApprover);
+
+
+/**
+ * @swagger
+ * /documents/:documentId/assign:
+ *   post:
+ *     summary: Assign a document to an user
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: ObjectID
+ *                 required: true
+ *             example:
+ *               comment: userid
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * */
+router.post("/:documentId/assign", assignDocumentToApprover);
+
+router.post("/:documentId/approve", approveADocument);
 
 
 module.exports = router;
