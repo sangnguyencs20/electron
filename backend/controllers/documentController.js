@@ -7,10 +7,11 @@ const {
   getAllDocumentsOfUser,
   updateDocumentApprovalStatus,
   handleGetAllDocumentsOfReceiver,
-  handleSendToApprover,
   handleGetApprovalOfADocument,
   handleGetAllDocumentsOfApprover
 } = require("../services/documents");
+
+const { handleAssignAnUserToADocument, handleCommentAnApprovalOfADocument } = require("../services/approval");
 
 const { sendMail, createPayloadForSendingReceiver, createPayloadForSendingFeedback } = require("../libs/mail");
 
@@ -41,6 +42,7 @@ const createDocument = async (req, res) => {
       .json({ message: "You are not authorized to view this content." });
   }
   const document = req.body;
+  document.createdBy = req.userId;
   try {
     const newDocument = await createOneDocument(document);
 
@@ -284,7 +286,6 @@ const sendDocumentToApprover = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
 }
 
 const submitFeedbackFromApprover = async (req, res) => {
@@ -336,6 +337,28 @@ const getAllDocumentsOfApprover = async (req, res) => {
   }
 }
 
+const assignDocumentToApprover = async (req, res) => {
+  const { documentId } = req.params;
+  try {
+    await handleAssignAnUserToADocument(documentId, req.body.userId);
+    res.status(200).json({ message: "Document assigned to approver successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+const approveADocument = async (req, res) => {
+  const { documentId } = req.params;
+  const { comment, status } = req.body;
+  try {
+    await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
+    res.status(200).json({ message: "Document approved and commented successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
 
 module.exports = {
   submitDocument,
@@ -351,5 +374,7 @@ module.exports = {
   publishDocument,
   sendDocumentToApprover,
   submitFeedbackFromApprover,
-  getAllDocumentsOfApprover
+  getAllDocumentsOfApprover,
+  assignDocumentToApprover,
+  approveADocument
 };

@@ -1,4 +1,5 @@
-const { getAllApprovals } = require('../services/approval');
+const { getAllApprovals, handlePostAnApprovalOfADocument, handleAssignAnUserToADocument
+} = require('../services/approval');
 
 const getApprovalsOfADocument = async (req, res) => {
     const { documentId } = req.params;
@@ -10,6 +11,30 @@ const getApprovalsOfADocument = async (req, res) => {
     }
 }
 
+const postAnApprovalOfADocument = async (req, res) => {
+    const { documentId } = req.params;
+    const { userId, status, content } = req.body;
+    try {
+        await handlePostAnApprovalOfADocument(documentId, userId);
+        return res.status(200).json({ message: 'Approval successfully' });
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+}
+
+const assignAnUserToADocument = async (req, res) => {
+    const { documentId } = req.params;
+    const { userId } = req.body;
+    try {
+        await handleAssignAnUserToADocument(documentId, userId);
+        return res.status(200).json({ message: 'Assign successfully' });
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+}
+
 module.exports = {
-    getApprovalsOfADocument
+    getApprovalsOfADocument,
+    postAnApprovalOfADocument,
+    assignAnUserToADocument
 }

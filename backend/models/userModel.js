@@ -48,7 +48,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['User', 'Citizen'],
         required: [true, 'Please enter your role'],
-    }
+    },
+    
 },
     {
         timestamps: true,

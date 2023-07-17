@@ -67,11 +67,8 @@ const DocumentSchema = new mongoose.Schema({
         enum: ['Low', 'Neutral', 'High'],
         default: 'Neutral',
     },
-    file: {
-        type: {
-            fileLink: String,
-            times: Number,
-        },
+    fileLink: {
+        type: String,
         required: [true, 'Vui long nhap Link file'],
     },
     isPublished: {
@@ -93,11 +90,6 @@ const DocumentSchema = new mongoose.Schema({
         //     message: 'The document can only be published if it is approved.',
         // },
     },
-    approvalId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Approval',
-        default: null,
-    }
 },
     { timestamp: true, }
 )

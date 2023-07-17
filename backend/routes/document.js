@@ -14,9 +14,10 @@ const {
     getAllAcceptedDocuments,
     submitDocument,
     publishDocument,
-    sendDocumentToApprover,
     submitFeedbackFromApprover,
-    getAllDocumentsOfApprover
+    getAllDocumentsOfApprover,
+    assignDocumentToApprover,
+    approveADocument
 }
     = require("../controllers/documentController");
 
@@ -91,9 +92,6 @@ router.get("/", getDocuments);
  *               title:
  *                 type: string
  *                 description: The title of the document
- *               createdBy:
- *                 type: string
- *                 description: The ID of the user who created the document
  *               receiver:
  *                 type: array
  *                 items:
@@ -557,7 +555,6 @@ router.delete("/:documentId", deleteDocument);
  */
 router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
-router.post("/send/:documentId", sendDocumentToApprover);
 
 /**
 * @swagger
@@ -632,5 +629,42 @@ router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
 
 router.get("/approver/:approveId", getAllDocumentsOfApprover);
+
+
+/**
+ * @swagger
+ * /documents/:documentId/assign:
+ *   post:
+ *     summary: Assign a document to an user
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the document
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: ObjectID
+ *                 required: true
+ *             example:
+ *               comment: userid
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * */
+router.post("/:documentId/assign", assignDocumentToApprover);
+
+router.post("/:documentId/approve", approveADocument);
+
 
 module.exports = router;

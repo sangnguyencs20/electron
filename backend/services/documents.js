@@ -45,19 +45,6 @@ const handleGetAllAcceptedDocument = async () => {
     return (await Document.find({ status: 'Approved' }).exec()).sort({ timeSubmit: -1 });
 };
 
-const handleSendToApprover = async (documentId, receiverIds) => {
-    const newApproval = new Approval({
-        documentId: documentId,
-        history: receiverIds.map((receiverId) => ({
-            receiverId: receiverId,
-        })),
-    });
-
-    const savedApproval = await newApproval.save();
-
-
-    return savedApproval._id; // Return the object ID of the saved approval
-};
 
 
 const handleGetApprovalOfADocument = async (documentId) => {
@@ -74,4 +61,4 @@ const handleGetAllDocumentsOfApprover = async (id) => {
 }
 
 
-module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleSendToApprover, handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
+module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleGetAllAcceptedDocument, handleGetASpecificDocumentOfReceiver, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById, handleGetAllDocumentsOfReceiver };
