@@ -656,7 +656,7 @@ router.get("/approver/:approveId", getAllDocumentsOfApprover);
  *                 type: ObjectID
  *                 required: true
  *             example:
- *               comment: userid
+ *               userId: userid
  *     responses:
  *       200:
  *         description: Success message
