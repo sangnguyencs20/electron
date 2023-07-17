@@ -1,4 +1,4 @@
-const { getAllDepartments, createOneDepartment, getOneDepartmentByAbbr } = require('../services/departments');
+const { getAllDepartments, createOneDepartment, getOneDepartmentByAbbr, handleGetAllUsersOfADepartment } = require('../services/departments');
 
 const getDepartments = async (req, res) => {
     try {
@@ -27,4 +27,17 @@ const createDepartment = async (req, res) => {
     }
 };
 
-module.exports = { getDepartments, createDepartment };
+
+const getAllUsersOfADepartment = async (req, res) => {    
+    try {
+        const users = await handleGetAllUsersOfADepartment(req.userId);
+        if(!users) {
+            return res.status(404).json({ message: "No users found" });
+        }
+        return res.status(200).json(users);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error.message });
+    }
+}
+module.exports = { getDepartments, createDepartment, getAllUsersOfADepartment };

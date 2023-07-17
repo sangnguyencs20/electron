@@ -4,6 +4,7 @@ const router = express.Router();
 const {
     getDepartments,
     createDepartment,
+    getAllUsersOfADepartment
 } = require("../controllers/departmentController");
 
 
@@ -94,5 +95,20 @@ router.get("/", getDepartments);
 
 router.post("/", createDepartment);
 
+/**
+ * @swagger
+ * /api/departments/users:
+ *   post:
+ *     summary: Get all users of a department of a user (in request.userId)
+ *     tags: [Department]
+*     responses:
+ *       200:
+ *         description: Successfully retrieved users
+ *       404:
+ *         description: No users found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/users", getAllUsersOfADepartment)
 
 module.exports = router;
