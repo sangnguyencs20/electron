@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { logo, sun } from "../../assets";
 import { navlinks } from "../../constants";
-
+import { motion } from "framer-motion";
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
     className={`w-[48px] h-[48px] rounded-[10px] ${
@@ -34,10 +34,21 @@ const Sidebar = () => {
   let local = useLocation();
   const [isActive, setIsActive] = useState(local);
   console.log(isActive);
+
   return (
     <div className="flex justify-between items-center flex-col sticky h-[85vh]">
       <div className="bg-blue-100 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-blue-50 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 shadow-xl">
-        <div className="flex flex-col justify-center items-center gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 100 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+          }}
+          className="flex flex-col justify-center items-center gap-3"
+        >
           {navlinks.map((link) => (
             <Icon
               key={link.name}
@@ -51,7 +62,7 @@ const Sidebar = () => {
               }}
             />
           ))}
-        </div>
+        </motion.div>
 
         <Icon styles="bg-white shadow-secondary" imgUrl={sun} />
       </div>
