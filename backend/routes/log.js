@@ -24,10 +24,6 @@ const { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpini
  *     tags: [Logs]
  *     requestBody:
  *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/definitions/Log"
  *     responses:
  *       201:
  *         description: Successfully created log
