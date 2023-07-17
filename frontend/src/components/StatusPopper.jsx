@@ -29,7 +29,7 @@ export default function StatusPopper() {
     console.log("closed");
   };
   return (
-    <div>
+    <div className="mx-1">
       <Tooltip content="Status">
         <TimelineIcon
           className="text-black h-6 cursor-pointer m-1 rounded-[100px] border border-black"
@@ -76,15 +76,29 @@ export default function StatusPopper() {
                 <Table.Cell>Tony Reichert</Table.Cell>
                 <Table.Cell>VBC CEO</Table.Cell>
                 <Table.Cell>
-                  <Badge
-                    enableShadow
-                    disableOutline
-                    color="success"
-                    variant="bordered"
-                    width="100px"
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
                   >
-                    Approve
-                  </Badge>
+                    <Badge
+                      enableShadow
+                      disableOutline
+                      color="success"
+                      variant="bordered"
+                      width="100px"
+                    >
+                      Approve
+                    </Badge>
+                    <div
+                      style={{ marginTop: 10, color: "gray", fontSize: "15px" }}
+                    >
+                      July, 16 2023
+                    </div>
+                  </div>
                 </Table.Cell>
                 <Table.Cell>
                   <ReSubmitPopper />
@@ -94,15 +108,29 @@ export default function StatusPopper() {
                 <Table.Cell>Zoey Lang</Table.Cell>
                 <Table.Cell>BK CEO</Table.Cell>
                 <Table.Cell>
-                  <Badge
-                    enableShadow
-                    disableOutline
-                    color="error"
-                    width="100px"
-                    variant="bordered"
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
                   >
-                    Error
-                  </Badge>
+                    <Badge
+                      enableShadow
+                      disableOutline
+                      color="error"
+                      variant="bordered"
+                      width="100px"
+                    >
+                      Error
+                    </Badge>
+                    <div
+                      style={{ marginTop: 10, color: "gray", fontSize: "15px" }}
+                    >
+                      July, 16 2023
+                    </div>
+                  </div>
                 </Table.Cell>
                 <Table.Cell>
                   {" "}

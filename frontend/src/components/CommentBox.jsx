@@ -86,18 +86,52 @@ const CommentBox = () => {
             </ul>
           </div>
         </footer>
-        <p className="text-gray-500 dark:text-gray-400">
-          Very straight-to-point article. Really worth time reading. Thank you!
-          But tools are just the instruments for the UX designers. The knowledge
-          of the design tools are as important as the creation of the design
-          strategy.
+        <p className="text-gray-800 dark:text-gray-400">
+          Bài dự thảo về bảo vệ môi trường thành thị đề cập đến một vấn đề rất
+          quan trọng và cấp bách trong thời đại hiện nay. Tôi đã đọc bài dự thảo
+          và nhận thấy một số điểm mạnh và ý tưởng tiềm năng trong nội dung:
+          <ul className="ml-3 mt-3 flex flex-col gap-2 list-disc">
+            <li className="">
+              Nhận thức về tầm quan trọng: Bài dự thảo đã làm rõ tầm quan trọng
+              của bảo vệ môi trường thành thị. Việc nhấn mạnh vấn đề này là cần
+              thiết để tạo ra sự nhận thức và sự quan tâm từ cộng đồng và các
+              bên liên quan.
+            </li>
+            <li>
+              Giới thiệu các vấn đề chính: Bài dự thảo đề cập đến các vấn đề
+              chính như ô nhiễm không khí, ô nhiễm nước, quản lý chất thải và sử
+              dụng tài nguyên. Việc xác định các vấn đề này giúp tạo ra một
+              khung nhìn tổng quan và tập trung vào những khía cạnh quan trọng
+              cần giải quyết.
+            </li>
+            <li>
+              Giải pháp và ứng dụng: Bài dự thảo đưa ra một số giải pháp và ứng
+              dụng để bảo vệ môi trường thành thị, như tăng cường quản lý rác
+              thải, thúc đẩy vận chuyển công cộng và khuyến khích sử dụng năng
+              lượng tái tạo. Các giải pháp này mang tính thiết thực và có thể
+              thực hiện được trong thực tế.
+            </li>
+            <li>
+              Hướng phát triển và hợp tác: Bài dự thảo đề xuất cần thiết để phát
+              triển kế hoạch dài hạn và tạo ra các chính sách cụ thể để thúc đẩy
+              bảo vệ môi trường thành thị. Ngoài ra, cũng nhấn mạnh tầm quan
+              trọng của hợp tác giữa chính quyền địa phương, cộng đồng và các tổ
+              chức để đạt được hiệu quả tốt nhất.
+            </li>
+          </ul>
         </p>
         <div className="flex items-center mt-4 space-x-4">
           <button
             type="button"
             className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
+            onClick={() => {
+              window.open(
+                "https://explorer.vbchain.vn/agd/tx/0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3",
+                "_blank"
+              );
+            }}
           >
-            <svg
+            {/* <svg
               aria-hidden="true"
               className="mr-1 w-4 h-4"
               fill="none"
@@ -111,8 +145,9 @@ const CommentBox = () => {
                 stroke-width="2"
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               ></path>
-            </svg>
-            Reply
+            </svg> */}
+            Transaction code
+            (0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3)
           </button>
         </div>
       </Card>

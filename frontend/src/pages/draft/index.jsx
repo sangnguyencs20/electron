@@ -135,11 +135,15 @@ const Draft = () => {
           <Row
             justify="center"
             align="center"
-            className=" ml-2 flex flex-nowrap gap-2"
+            className="w-[13  0px] ml-2 flex flex-nowrap gap-3"
           >
             <Col css={{ d: "flex" }}>
               <Tooltip content="Details">
-                <IconButton onClick={() => {}}>
+                <IconButton
+                  onClick={() => {
+                    navigate("/draft/1");
+                  }}
+                >
                   <EyeIcon size={20} fill="#2196f3" />
                 </IconButton>
               </Tooltip>
@@ -162,9 +166,6 @@ const Draft = () => {
                   <ForwardToInboxOutlinedIcon
                     color="#ff9900"
                     className={
-                      //   `text-[${
-                      //   doc.status === "Draft" ? "#ff9900" : "gray"
-                      // }]`
                       doc.status === "Draft"
                         ? "text-[#ff9900]"
                         : "text-blue-gray-200"

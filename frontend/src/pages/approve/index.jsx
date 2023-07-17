@@ -16,6 +16,8 @@ import { Download } from "../../assets";
 import { formattedDateTime } from "../../utils";
 import AssignPopper from "../../components/AssignPopper";
 import CustomDatepicker from "../../components/CustomDatePicker";
+import CustomMenu from "../../components/CustomMenu";
+import { useNavigate } from "react-router-dom";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -146,6 +148,7 @@ export default function Approve() {
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [needRefresh, setNeedRefresh] = useState(0);
+  const navigate = useNavigate();
   useEffect(() => {
     axiosGetReceiveDoc(id)
       .then((res) => {
