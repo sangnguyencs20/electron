@@ -10,7 +10,7 @@ import { AnimatePresence } from "framer-motion";
 const RouterList = () => {
   // Check if user is logged in
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="popLayout">
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         {GeneralRoutes.map((item, idx) => (

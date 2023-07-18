@@ -6,6 +6,7 @@ import {
   Approve,
   Profile,
 } from "../../pages";
+import Create from "../../pages/create";
 
 const UserRoutes = [
   {
@@ -37,6 +38,11 @@ const UserRoutes = [
     path: "profile",
     element: Profile,
     title: "Profile",
+  },
+  {
+    path: "newCreate",
+    element: Create,
+    title: "Create",
   },
 ];
 

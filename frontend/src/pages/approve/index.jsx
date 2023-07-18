@@ -18,7 +18,7 @@ import AssignPopper from "../../components/AssignPopper";
 import CustomDatepicker from "../../components/CustomDatePicker";
 import CustomMenu from "../../components/CustomMenu";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
@@ -270,61 +270,63 @@ export default function Approve() {
     <div className="container">
       <CustomSugar customLoading={!setISReady} />
       {isLoading && <CustomRotatingSquare />}
-      <motion.div
-        initial={{ opacity: 0, y: -200 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -200 }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-        }}
-      >
-        {" "}
-        <Table
-          aria-label="Example table with custom cells"
-          sticked
-          striped
-          lined
-          headerLined
-          css={{
-            height: "auto",
-            maxWidth: "100%",
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          initial={{ opacity: 0, y: -200 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -200 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
           }}
-          className=" bg-white"
         >
-          <Table.Header columns={columns} className="p-48 m-0 ">
-            {(column) => (
-              <Table.Column
-                key={column.uid}
-                // hideHeader={column.uid === "id"}
-                align={column.uid === "description" ? "start" : "center"}
-                className={" bg-blue-gray-50"}
-              >
-                {column.name}
-              </Table.Column>
-            )}
-          </Table.Header>
-          <Table.Body items={documents} css={{ gap: "12px" }}>
-            {(item) => (
-              <Table.Row>
-                {(columnKey) => (
-                  <Table.Cell css={{ maxWidth: "700px" }}>
-                    {renderCell(item, columnKey)}
-                  </Table.Cell>
-                )}
-              </Table.Row>
-            )}
-          </Table.Body>
-          <Table.Pagination
-            shadow
-            noMargin
-            align="center"
-            rowsPerPage={4}
-            onPageChange={(page) => console.log({ page })}
-          />
-        </Table>
-      </motion.div>
+          {" "}
+          <Table
+            aria-label="Example table with custom cells"
+            sticked
+            striped
+            lined
+            headerLined
+            css={{
+              height: "auto",
+              maxWidth: "100%",
+            }}
+            className=" bg-white"
+          >
+            <Table.Header columns={columns} className="p-48 m-0 ">
+              {(column) => (
+                <Table.Column
+                  key={column.uid}
+                  // hideHeader={column.uid === "id"}
+                  align={column.uid === "description" ? "start" : "center"}
+                  className={" bg-blue-gray-50"}
+                >
+                  {column.name}
+                </Table.Column>
+              )}
+            </Table.Header>
+            <Table.Body items={documents} css={{ gap: "12px" }}>
+              {(item) => (
+                <Table.Row>
+                  {(columnKey) => (
+                    <Table.Cell css={{ maxWidth: "700px" }}>
+                      {renderCell(item, columnKey)}
+                    </Table.Cell>
+                  )}
+                </Table.Row>
+              )}
+            </Table.Body>
+            <Table.Pagination
+              shadow
+              noMargin
+              align="center"
+              rowsPerPage={4}
+              onPageChange={(page) => console.log({ page })}
+            />
+          </Table>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

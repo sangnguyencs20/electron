@@ -22,7 +22,7 @@ const Profile = () => {
           }}
         >
           <Card isPressable>
-            <div className="bg-white p-3  border-t-4 border-blue-400 shadow-md">
+            <div className="bg-white p-4 border-t-4 border-blue-400 shadow-md">
               <div className="image overflow-hidden">
                 <img
                   className="h-auto w-full mx-auto"
@@ -41,11 +41,11 @@ const Profile = () => {
                 Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur
                 non deserunt
               </p>
-              <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+              <ul className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:text-gray-100 hover:shadow py-2 px-3 mt-3 divide-y rounded-lg">
                 <li className="flex items-center py-3">
                   <span>Status</span>
                   <span className="ml-auto">
-                    <span className="bg-blue-500 py-1 px-2 rounded text-white text-sm">
+                    <span className="bg-white py-2 px-2 rounded text-blue-500 text-sm">
                       Active
                     </span>
                   </span>
@@ -75,23 +75,23 @@ const Profile = () => {
             <Card variant="bordered" className="p-4">
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">First Name</div>
                     <div className="px-4 py-2">Jane</div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">Last Name</div>
                     <div className="px-4 py-2">Doe</div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">Gender</div>
                     <div className="px-4 py-2">Female</div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">Contact No.</div>
                     <div className="px-4 py-2">+11 998001001</div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">
                       Current Address
                     </div>
@@ -99,7 +99,7 @@ const Profile = () => {
                       Beech Creek, PA, Pennsylvania
                     </div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">
                       Permanant Address
                     </div>
@@ -107,7 +107,7 @@ const Profile = () => {
                       Arlington Heights, IL, Illinois
                     </div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">Email.</div>
                     <div className="px-4 py-2">
                       <a
@@ -118,7 +118,7 @@ const Profile = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-2 hover:bg-gray-100 rounded-md">
                     <div className="px-4 py-2 font-semibold">Birthday</div>
                     <div className="px-4 py-2">Feb 06, 1998</div>
                   </div>
@@ -143,7 +143,7 @@ const Profile = () => {
               }}
               className="grid grid-cols-2 gap-5"
             >
-              <Card variant="bordered" className="p-4">
+              <Card variant="flat" className="p-4">
                 <div>
                   <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                     <span className="text-black">
@@ -165,7 +165,7 @@ const Profile = () => {
                     <span className="tracking-wide">User History</span>
                   </div>
                   <ul className="list-inside space-y-2">
-                    <li>
+                    <li className="hover:bg-light-blue-50 py-2 px-2">
                       <div className="text-blue-900">
                         Owner at Her Company Inc.
                       </div>
@@ -173,7 +173,7 @@ const Profile = () => {
                         March 2020 - Now
                       </div>
                     </li>
-                    <li>
+                    <li className="hover:bg-light-blue-50 py-2 px-2">
                       <div className="text-blue-900">
                         Owner at Her Company Inc.
                       </div>
@@ -181,7 +181,7 @@ const Profile = () => {
                         March 2020 - Now
                       </div>
                     </li>
-                    <li>
+                    <li className="hover:bg-light-blue-50 py-2 px-2">
                       <div className="text-blue-900">
                         Owner at Her Company Inc.
                       </div>
@@ -189,7 +189,7 @@ const Profile = () => {
                         March 2020 - Now
                       </div>
                     </li>
-                    <li>
+                    <li className="hover:bg-light-blue-50 py-2 px-2">
                       <div className="text-blue-900">
                         Owner at Her Company Inc.
                       </div>
@@ -201,7 +201,7 @@ const Profile = () => {
                 </div>
               </Card>
 
-              <Card variant="bordered" className="p-4">
+              <Card variant="flat" className="p-4">
                 <div>
                   <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                     <span clas="text-green-500">

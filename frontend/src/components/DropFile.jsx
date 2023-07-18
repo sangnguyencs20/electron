@@ -42,7 +42,7 @@ const DropFile = ({ file, setFile }) => {
           console.log("User clicked cancel/close button");
         }
         if (data.action === "picked") {
-          setFile(data.docs[0].url);
+          setFile(data.docs[0].downloadUrl);
           handleButtonClick();
           console.log("User clicked cancel/close button");
         }
@@ -94,9 +94,15 @@ const DropFile = ({ file, setFile }) => {
       </div>
       {file !== "" && (
         <div className="text-black w-1/3 h-32 py-2 pl-3 pr-2 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-gray-50 mt-10 flex justify-center items-center">
-          <p className="w-4/5 text-[10px] text-slate-500 overflow-clip text-sty">
+          <p
+            className="w-4/5 text-[10px] text-slate-500 overflow-clip text-sty"
+            onClick={() => {
+              if (file !== "") window.open(file, "_blank");
+            }}
+          >
             {file}
           </p>
+
           <CircularIntegration
             loading={loading}
             success={success}
