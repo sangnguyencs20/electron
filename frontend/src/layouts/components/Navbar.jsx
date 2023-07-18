@@ -1,4 +1,12 @@
-import { Navbar, Button, Link, Text, useTheme } from "@nextui-org/react";
+import {
+  Navbar,
+  Button,
+  Link,
+  Text,
+  useTheme,
+  Dropdown,
+  Avatar,
+} from "@nextui-org/react";
 import { Layout } from "./Layout";
 import { AcmeLogo } from "./AcmeLogo";
 import { ButtonBase } from "@mui/material";
@@ -15,6 +23,7 @@ export default function CustomNavbar() {
   const isDark = useTheme();
 
   const handleClick = (e) => {
+    console.log("clicked");
     dispatch(clearInfo());
     navigate("/login");
   };
@@ -33,19 +42,58 @@ export default function CustomNavbar() {
           <Navbar.Item>
             <Ring />
           </Navbar.Item>
-          <Navbar.Link color="inherit" href="#">
-            Profile
-          </Navbar.Link>
           <Navbar.Item>
-            <Button
-              auto
-              flat
-              onClick={(e) => {
-                handleClick(e);
-              }}
-            >
-              Log out
-            </Button>
+            <Dropdown placement="bottom-right">
+              <Navbar.Item>
+                <Dropdown.Trigger>
+                  <Avatar
+                    bordered
+                    as="button"
+                    color="primary"
+                    size="md"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                </Dropdown.Trigger>
+              </Navbar.Item>
+              <Dropdown.Menu
+                aria-label="User menu actions"
+                color="primary"
+                onAction={(actionKey) => {
+                  if (actionKey === "logout") handleClick();
+                  if (actionKey === "profile") navigate("/profile");
+                }}
+              >
+                <Dropdown.Item key="profiles" css={{ height: "$18" }}>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    Signed in as
+                  </Text>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    zoey@example.com
+                  </Text>
+                </Dropdown.Item>
+                <Dropdown.Item key="profile" withDivider>
+                  My Profile
+                </Dropdown.Item>
+                <Dropdown.Item key="analytics" withDivider>
+                  Analytics
+                </Dropdown.Item>
+                <Dropdown.Item key="system">System</Dropdown.Item>
+                <Dropdown.Item key="configurations">
+                  Configurations
+                </Dropdown.Item>
+                <Dropdown.Item key="help_and_feedback" withDivider>
+                  Help & Feedback
+                </Dropdown.Item>
+                <Dropdown.Item
+                  key="logout"
+                  withDivider
+                  color="error"
+                  css={{ width: "100%", textAlign: "start" }}
+                >
+                  Log Out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Navbar.Item>
         </Navbar.Content>
       </Navbar>
