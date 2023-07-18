@@ -11,24 +11,45 @@ const checkIfAllApproved = async (documentId) => {
 }
 
 const getAnApprovalByDocumentId = async (documentId) => {
-    const approval = await Approval.findOne({documentId: documentId});
+    const approval = await Approval.findOne({ documentId: documentId });
     return approval;
 }
 
 const handlePostAnApprovalOfADocument = async (documentId, userId) => {
-    if (await getOneDocumentById(documentId)) {
-        throw new Error('The approval of this document is already exist');
+    if (await getAnApprovalByDocumentId(documentId)) {
+        throw new Error('The approval of this document already exists');
     }
-    const approval = await Approval.create({ documentId: documentId, userId: userId});
+
+
+    const approval = new Approval({
+        documentId: documentId,
+        history: [
+            {
+                receiverId: userId,
+                log: [],
+            },
+        ],
+    });
+
     await approval.save();
-}
+};
+
 
 const handleAssignAnUserToADocument = async (documentId, userId) => {
     const approval = await getAnApprovalByDocumentId(documentId);
+
+    if (userId.length === 0) {
+        throw new Error('Please select a user');
+    }
+
     if (!approval) {
         await handlePostAnApprovalOfADocument(documentId, userId);
         return;
     }
+    else if (userId === approval.history[approval.history.length - 1].receiverId) {
+        throw new Error('This user is already assigned to this document');
+    }
+
     approval.history.push({
         receiverId: userId,
         log: [],

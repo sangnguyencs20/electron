@@ -609,31 +609,27 @@ router.post("/publish/:id", publishDocument);
  *       200:
  *         description: Success message
  *
- * /documents/approver/{approveId}:
- *   get:
- *     summary: Get all documents of approver
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: approveId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the approver
- *     responses:
- *       200:
- *         description: List of documents
+
  */
 
 router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
-
-router.get("/approver/:approveId", getAllDocumentsOfApprover);
+/*
+* @swagger
+ * /documents/comingDocument:
+ *   post:
+ *     summary: Get all coming documents of approver
+ *     tags: [Document]
+ *     responses:
+ *       200:
+ *         description: List of documents
+*/
+router.post("/comingDocument", getAllDocumentsOfApprover);
 
 
 /**
  * @swagger
- * /documents/:documentId/assign:
+ * /documents/assign:
  *   post:
  *     summary: Assign a document to an user
  *     tags: [Document]
@@ -662,9 +658,46 @@ router.get("/approver/:approveId", getAllDocumentsOfApprover);
  *         description: Success message
  *
  * */
-router.post("/:documentId/assign", assignDocumentToApprover);
+router.post("/assign", assignDocumentToApprover);
 
-router.post("/:documentId/approve", approveADocument);
+/**
+ * @swagger
+ * /documents/approve:
+ *   post:
+ *     summary: Approve a document
+ *     tags: [Document]
+ *     requestBody:
+ *       description: Feedback data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               documentId:
+ *                 type: ObjectID
+ *                 required: true
+ *               comment:
+*                  type: string
+*                  required: true
+ *               status:
+ *                type: string
+ *                enum: [Approved, Rejected]
+ *               example:
+ *                documentId: "64b51ac7711bf25db25a32e1"
+ *                comment: "It's okay"
+ *                status: "Approved"
+ *     responses:
+ *       200:
+ *         description: Success message
+ *
+ * */
+// {
+//     "documentId": "64b51ac7711bf25db25a32e1",
+//     "comment": "It's okay",
+//     "status": "Approved"
+// }
+router.post("/approve", approveADocument);
 
 
 module.exports = router;

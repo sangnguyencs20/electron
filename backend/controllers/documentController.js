@@ -45,7 +45,9 @@ const createDocument = async (req, res) => {
   document.createdBy = req.userId;
   try {
     const newDocument = await createOneDocument(document);
-
+    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver[0].receiverId);
+    console.log(req.body.receiver)
+    
     //implement something related to blockchain transaction
     const log = {
       documentId: newDocument._id,
@@ -323,13 +325,12 @@ const submitFeedbackFromApprover = async (req, res) => {
 }
 
 const getAllDocumentsOfApprover = async (req, res) => {
-  const { id } = req.params;
   try {
-    const documents = await handleGetAllDocumentsOfApprover(id);
+    const documents = await handleGetAllDocumentsOfApprover(req.userId);
     if (!documents) {
       return res.status(404).json({ error: "Document not found" });
     }
-
+    res.status(200).json(documents);
   }
   catch (error) {
     console.error(error);
@@ -338,9 +339,10 @@ const getAllDocumentsOfApprover = async (req, res) => {
 }
 
 const assignDocumentToApprover = async (req, res) => {
-  const { documentId } = req.params;
+  const { documentId, userId } = req.body;
+  console.log(documentId, userId)
   try {
-    await handleAssignAnUserToADocument(documentId, req.body.userId);
+    await handleAssignAnUserToADocument(documentId, userId);
     res.status(200).json({ message: "Document assigned to approver successfully" });
   } catch (error) {
     console.log(error);
@@ -349,8 +351,7 @@ const assignDocumentToApprover = async (req, res) => {
 }
 
 const approveADocument = async (req, res) => {
-  const { documentId } = req.params;
-  const { comment, status } = req.body;
+  const { documentId, comment, status } = req.body;
   try {
     await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
     res.status(200).json({ message: "Document approved and commented successfully" });
