@@ -57,6 +57,7 @@ const handleGetAllDocumentsOfApprover = async (id) => {
         history: { $elemMatch: { receiverId: id } },
     }).sort({ _id: -1 });
 
+
     return await approvals;
 }
 
