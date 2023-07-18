@@ -45,7 +45,7 @@ export default function Create() {
     setValue: setDesc,
     reset: descReset,
     bindings: descBindings,
-  } = useInput("Controlled Textarea");
+  } = useInput("");
   const validateEmail = (value) => {
     return value !== "";
   };
