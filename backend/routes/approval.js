@@ -21,10 +21,6 @@ const { getApprovalsOfADocument, postAnApprovalOfADocument } = require("../contr
  *         description: Success message
  * */
 
-
-
-
-//userId, status, content
 router.get("/:documentId", getApprovalsOfADocument);  
 router.post("/:documentId", postAnApprovalOfADocument);
 

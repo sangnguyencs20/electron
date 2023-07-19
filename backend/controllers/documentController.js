@@ -1,21 +1,20 @@
 const {
   handleGetAllAcceptedDocument,
-  handleGetASpecificDocumentOfReceiver,
   getAllDocuments,
   createOneDocument,
   getOneDocumentById,
   getAllDocumentsOfUser,
   updateDocumentApprovalStatus,
-  handleGetAllDocumentsOfReceiver,
   handleGetApprovalOfADocument,
   handleGetAllDocumentsOfApprover
 } = require("../services/documents");
 
-const { handleAssignAnUserToADocument, handleCommentAnApprovalOfADocument } = require("../services/approval");
+const { handleAssignAnUserToADocument, handleCommentAnApprovalOfADocument, getApprovalHistoryAsTimeline } = require("../services/approval");
 
 const { sendMail, createPayloadForSendingReceiver, createPayloadForSendingFeedback } = require("../libs/mail");
 
 const { createANewLog } = require("../services/log");
+
 const { getAllApprovals, checkIfDocumentIsAllApproved } = require("../services/approval");
 
 const getDocuments = async (req, res) => {
@@ -45,9 +44,8 @@ const createDocument = async (req, res) => {
   document.createdBy = req.userId;
   try {
     const newDocument = await createOneDocument(document);
-    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver[0].receiverId);
-    console.log(req.body.receiver)
-    
+    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver);
+
     //implement something related to blockchain transaction
     const log = {
       documentId: newDocument._id,
@@ -57,7 +55,7 @@ const createDocument = async (req, res) => {
     };
 
     await createANewLog(log);
-    res.status(201).json(newDocument);
+    res.status(201).json(newApproval);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -133,12 +131,12 @@ const submitDocument = async (req, res) => {
   document.status = 'Submitted';
   document.timeSubmit = new Date();
 
-  const receivers = document.receiver;
-  const emailArray = receivers.map(receivers => receivers.receiverId.email);
+  // const receivers = document.receiver;
+  // const emailArray = receivers.map(receivers => receivers.receiverId.email);
 
 
-  const payload = createPayloadForSendingReceiver(emailArray, document);
-  sendMail(payload);
+  // const payload = createPayloadForSendingReceiver(emailArray, document);
+  // sendMail(payload);
   await document.save();
   return res.status(200).json({ message: 'Document submitted successfully' });
 }
@@ -326,6 +324,7 @@ const submitFeedbackFromApprover = async (req, res) => {
 
 const getAllDocumentsOfApprover = async (req, res) => {
   try {
+    console.log("Hello")
     const documents = await handleGetAllDocumentsOfApprover(req.userId);
     if (!documents) {
       return res.status(404).json({ error: "Document not found" });
@@ -361,6 +360,21 @@ const approveADocument = async (req, res) => {
   }
 }
 
+const getApprovalHistoryOfDocument = async (req, res) => {
+  const { documentId } = req.params;
+  try {
+    const approval = await handleGetApprovalOfADocument(documentId);
+    if (!approval) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    const timeline = await getApprovalHistoryAsTimeline(approval._id);
+    res.status(200).json(timeline);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   submitDocument,
   getAllAcceptedDocuments,
@@ -377,5 +391,6 @@ module.exports = {
   submitFeedbackFromApprover,
   getAllDocumentsOfApprover,
   assignDocumentToApprover,
-  approveADocument
+  approveADocument,
+  getApprovalHistoryOfDocument
 };
