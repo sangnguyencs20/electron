@@ -338,10 +338,9 @@ const getAllDocumentsOfApprover = async (req, res) => {
 }
 
 const assignDocumentToApprover = async (req, res) => {
-  const { documentId, userId } = req.body;
-  console.log(documentId, userId)
+  const { documentId, userIds } = req.body;
   try {
-    await handleAssignAnUserToADocument(documentId, userId);
+    await handleAssignAnUserToADocument(documentId, userIds);
     res.status(200).json({ message: "Document assigned to approver successfully" });
   } catch (error) {
     console.log(error);
