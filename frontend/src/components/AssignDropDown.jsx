@@ -91,13 +91,13 @@ export default function AssignDropDown({ selected, setSelected }) {
                       key={person.id}
                       className={({ active }) =>
                         `relative rounded-lg cursor-pointer select-none py-2 pr-4 ease-in-out transition-[background] duration-200 ${
-                          active ? "bg-gray-500 text-white" : "text-gray-900"
+                          active ? "bg-gray-400 text-black" : "text-gray-900"
                         }`
                       }
                       value={person}
                     >
                       {({ selected, active }) => (
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence mode="popLayout">
                           <motion.div
                             initial={{ opacity: 0, y: -200 }}
                             animate={{ opacity: 1, y: 0 }}

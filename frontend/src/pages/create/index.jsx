@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Stepper,
   Step,
@@ -23,6 +23,12 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import AssignDropDown from "../../components/AssignDropDown";
 import DropFile from "../../components/DropFile";
+import CustomSugar from "../../components/CustomSugar";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import { toast } from "react-toastify";
+import { axiosCreateDoc } from "../../api";
+import { useSelector } from "react-redux";
+
 export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
@@ -59,9 +65,39 @@ export default function Create() {
   }, [title]);
   //----page2------------------
   const [approvals, setApprovals] = React.useState([]);
-  const [file, setFile] = React.useState("");
+  const [file, setFile] = React.useState("1313");
+  //----page3-----------------handle submit
+  const handleSubmit = async () => {
+    setIsLoading((pre) => !pre);
+    console.log(title, secret, urgency, desc, approvals, file);
+    await axiosCreateDoc({
+      title,
+      secretState: secret,
+      receiver: approvals.map((item) => {
+        return { receiverId: item._id };
+      }),
+      description: desc,
+      fileLink: file,
+    })
+      .then((res) => {
+        setTimeout(() => {
+          setIsLoading((pre) => !pre);
+        }, 3000);
+        console.log("313");
+        toast.success(`Create: ${res.data._id}`);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  };
+  //loading
+  const [isLoading, setIsLoading] = React.useState(false);
+  const id = useSelector((state) => state.userState.id);
   return (
     <div className="w-full py-4 px-40">
+      {<CustomSugar customLoading={false} />}
+      {isLoading && <CustomRotatingSquare />}
       <Stepper
         activeStep={activeStep}
         isLastStep={(value) => setIsLastStep(value)}
@@ -123,7 +159,7 @@ export default function Create() {
         isHoverable
         className="mt-32 flex justify-center  py-10 px-5 rounded-lg "
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           {/* page1 */}
           {(activeStep == 0 || activeStep == 2) && (
             <AnimatePresence mode="popLayout">
@@ -265,6 +301,10 @@ export default function Create() {
                 className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
                 variant="contained"
                 type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
               >
                 Submit
               </Button>
