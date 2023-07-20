@@ -134,6 +134,7 @@ const submitDocument = async (req, res) => {
   // const receivers = document.receiver;
   // const emailArray = receivers.map(receivers => receivers.receiverId.email);
 
+  
 
   // const payload = createPayloadForSendingReceiver(emailArray, document);
   // sendMail(payload);
