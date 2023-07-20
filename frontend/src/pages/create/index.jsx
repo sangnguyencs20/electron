@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stepper,
   Step,
@@ -35,13 +35,27 @@ export default function Create() {
   const [isFirstStep, setIsFirstStep] = React.useState(false);
 
   const handleNext = () => {
-    !isLastStep && title !== "" && setActiveStep((cur) => cur + 1);
+    if (
+      !isLastStep &&
+      title !== "" &&
+      secret != "" &&
+      urgency != "" &&
+      desc != ""
+    )
+      setActiveStep((cur) => cur + 1);
+    else setNeedFill(true);
   };
   const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
   //---------page1--------
   const { value: title, reset, bindings } = useInput("");
-  const [secret, setSecret] = React.useState("");
-  const [urgency, setUrgency] = React.useState("");
+  const [secret, setSecret] = React.useState("Neutral");
+  const [urgency, setUrgency] = React.useState("Neutral");
+  const [needFill, setNeedFill] = React.useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setNeedFill(false);
+    }, 3000);
+  }, [needFill]);
   const handleSecret = (value) => {
     console.log(value);
     setSecret(value);
@@ -52,29 +66,42 @@ export default function Create() {
     reset: descReset,
     bindings: descBindings,
   } = useInput("");
-  const validateEmail = (value) => {
-    return value !== "";
+  const validateTitle = (value) => {
+    if (value === "" && needFill === true) {
+      return 3;
+    }
+    if (value != "") return 2;
+    return 1;
   };
 
   const helper = React.useMemo(() => {
-    const isValid = validateEmail(title);
+    const code = validateTitle(title);
+    if (code == 3)
+      return {
+        text: "Yêu cầu nhập nội dung",
+        color: "error",
+      };
+    if (code == 2)
+      return {
+        text: "Nội dung hợp lệ",
+        color: "success",
+      };
     return {
-      text: isValid ? "" : "Fill here",
-      color: isValid ? "success" : "error",
+      text: "Request",
+      color: "primary",
     };
-  }, [title]);
+  }, [title, needFill]);
   //----page2------------------
   const [approvals, setApprovals] = React.useState([]);
   const [file, setFile] = React.useState("1313");
   //----page3-----------------handle submit
   const handleSubmit = async () => {
     setIsLoading((pre) => !pre);
-    console.log(title, secret, urgency, desc, approvals, file);
     await axiosCreateDoc({
       title,
       secretState: secret,
       receiver: approvals.map((item) => {
-        return { receiverId: item._id };
+        return item._id;
       }),
       description: desc,
       fileLink: file,
@@ -82,18 +109,24 @@ export default function Create() {
       .then((res) => {
         setTimeout(() => {
           setIsLoading((pre) => !pre);
-        }, 3000);
-        console.log("313");
-        toast.success(`Create: ${res.data._id}`);
+          toast.success(`Tạo mới thành công`);
+          setActiveStep(0);
+          reset();
+          setSecret("Neutral");
+          setUrgency("Neutral");
+          setDesc("");
+          setApprovals([]);
+          setConfirm(false);
+        }, 1000);
       })
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
       });
   };
+  const [confirm, setConfirm] = useState(false);
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
-  const id = useSelector((state) => state.userState.id);
   return (
     <div className="w-full py-4 px-40">
       {<CustomSugar customLoading={false} />}
@@ -159,100 +192,119 @@ export default function Create() {
         isHoverable
         className="mt-32 flex justify-center  py-10 px-5 rounded-lg "
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {/* page1 */}
           {(activeStep == 0 || activeStep == 2) && (
-            <AnimatePresence mode="popLayout">
-              <motion.form
-                initial={{ opacity: 0, x: -200 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 1, x: 200 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                }}
-                className="w-full pb-10 mb-10 border-b border-blue-gray-400"
-              >
-                <div className="flex flex-wrap mx-3 mb-6 flex-col">
+            <motion.form
+              aria-label="Detail"
+              key={"page1"}
+              initial={{ opacity: 0, y: -200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 1, y: 200 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+              className="w-full pb-10 mb-10 border-b border-blue-gray-400"
+            >
+              <div className="flex flex-wrap mx-3 mb-6 flex-col">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-password"
+                >
+                  title (* request)
+                </label>
+                <Input
+                  {...bindings}
+                  clearable
+                  shadow={false}
+                  onClearClick={reset}
+                  status={helper.color}
+                  color={helper.color}
+                  helperColor={helper.color}
+                  helperText={helper.text}
+                  type="email"
+                  // label="TITLE"
+                  // placeholder="Fill the draft title"
+                  css={{
+                    width: "50%",
+                    display: "block",
+                  }}
+                />
+              </div>
+              <div className="flex flex-wrap mx-3 mb-6 mt-10">
+                <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     for="grid-password"
                   >
-                    title (* request)
+                    status
                   </label>
-                  <Input
-                    {...bindings}
-                    clearable
-                    shadow={false}
-                    onClearClick={reset}
-                    status={helper.color}
-                    color={helper.color}
-                    helperColor={helper.color}
-                    helperText={helper.text}
-                    type="email"
-                    // label="TITLE"
-                    placeholder="Fill the draft title"
-                    css={{
-                      width: "50%",
-                      display: "block",
-                    }}
-                  />
-                </div>
-                <div className="flex flex-wrap mx-3 mb-6">
-                  <div className="w-full px-3">
-                    <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      for="grid-password"
+                  <div className="mt-5 flex gap-2">
+                    <Select
+                      variant="standard"
+                      label="SELECT SECRET"
+                      value={secret}
+                      color="blue-gray"
+                      error={secret === "" && needFill == true}
+                      success={secret !== ""}
+                      onChange={(value) => {
+                        handleSecret(value);
+                      }}
                     >
-                      status
-                    </label>
-                    <div className="mt-5 flex gap-2">
-                      <Select
-                        variant="standard"
-                        label="SELECT SECRET"
-                        value={secret}
-                        onChange={(value) => {
-                          handleSecret(value);
-                        }}
-                      >
-                        <Option value="Low">Low</Option>
-                        <Option value="Neutral">Neutral</Option>
-                        <Option value="High">High</Option>
-                      </Select>
-                      <Select
-                        variant="standard"
-                        label="SELECT URGENCY"
-                        value={urgency}
-                        onChange={(value) => {
-                          setUrgency(value);
-                        }}
-                      >
-                        <Option value="Low">Low</Option>
-                        <Option value="Neutral">Neutral</Option>
-                        <Option value="High">High</Option>
-                      </Select>
-                    </div>
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
+                    <Select
+                      variant="standard"
+                      label="SELECT URGENCY"
+                      value={urgency}
+                      color="blue-gray"
+                      error={urgency === "" && needFill == true}
+                      success={urgency !== ""}
+                      onChange={(value) => {
+                        setUrgency(value);
+                      }}
+                    >
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
                   </div>
                 </div>
-                <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-city"
-                  >
-                    Description
-                  </label>
-                  <Textarea {...descBindings} className="w-full" rows={8} />
-                </div>
-              </motion.form>
-            </AnimatePresence>
+              </div>
+              <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-city"
+                >
+                  Description
+                </label>
+                <Textarea
+                  {...descBindings}
+                  className="w-full"
+                  rows={8}
+                  status={
+                    needFill == true && desc === ""
+                      ? "error"
+                      : desc !== ""
+                      ? "success"
+                      : "primary"
+                  }
+                />
+              </div>
+            </motion.form>
           )}
           {/* page2 */}
           {(activeStep == 1 || activeStep == 2) && (
             <motion.form
-              initial={{ opacity: 0, x: 200 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 200 }}
+              key={"page2"}
+              aria-label="Approval"
+              initial={{ opacity: 0, y: 200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -200 }}
               transition={{
                 type: "spring",
                 stiffness: 260,
@@ -288,10 +340,14 @@ export default function Create() {
           {activeStep == 2 && (
             <motion.div className="w-full justify-center flex flex-col gap-4 mx-4">
               <div>
-                <Checkbox />
+                <Checkbox
+                  onChange={() => {
+                    setConfirm((pre) => !pre);
+                  }}
+                />
                 <p className="text-sm text-gray-700 max-w-sm">
                   I confirm that I have read and understood{" "}
-                  <span className="underline text-blue-600">
+                  <span className="underline text-blue-600 cursor-pointer">
                     the terms and conditions of the application
                   </span>{" "}
                   and I am certain that I want to submit it{" "}
@@ -301,10 +357,12 @@ export default function Create() {
                 className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
                 variant="contained"
                 type="submit"
+                aria-labelledby="submitButtonLabel"
                 onClick={(e) => {
                   e.preventDefault();
                   handleSubmit();
                 }}
+                disabled={!confirm}
               >
                 Submit
               </Button>

@@ -22,7 +22,7 @@ export default function App({ title, createdBy, description }) {
     <div
       ref={ref}
       className={`relative ease-in duration-1000 ${
-        isInView ? "opacity-100" : "opacity-5"
+        isInView ? "opacity-100" : "opacity-50"
       }`}
     >
       <Card
