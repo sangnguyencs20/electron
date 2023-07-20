@@ -1,5 +1,5 @@
 const {
-  handleGetAllAcceptedDocument,
+  handleGetPublishedDocument,
   getAllDocuments,
   createOneDocument,
   getOneDocumentById,
@@ -18,16 +18,19 @@ const { createANewLog } = require("../services/log");
 const { getAllApprovals, checkIfDocumentIsAllApproved } = require("../services/approval");
 
 const getDocuments = async (req, res) => {
+  const { page, pageSize } = req.query; // Parse page and pageSize from the request query
+  console.log(page, pageSize)
   try {
-    const documents = await getAllDocuments();
+    const documents = await getAllDocuments(page, pageSize);
     res.status(200).json(documents);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
-const getAllAcceptedDocuments = async (req, res) => {
+const getPublishedDocuments = async (req, res) => {
+  const { page, pageSize } = req.query; // Parse page and pageSize from the request query
   try {
-    const documents = await handleGetAllAcceptedDocument();
+    const documents = await handleGetPublishedDocument(page, pageSize);
     res.status(200).json(documents);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -72,9 +75,9 @@ const getDocumentById = async (req, res) => {
 };
 
 const getDocumentOfUser = async (req, res) => {
-  const { userId } = req.params;
+  const { page, pageSize } = req.query; // Parse page and pageSize from the request query
   try {
-    const document = await getAllDocumentsOfUser(userId);
+    const document = await getAllDocumentsOfUser(req.userId, page, pageSize);
     res.status(200).json(document);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -134,68 +137,13 @@ const submitDocument = async (req, res) => {
   // const receivers = document.receiver;
   // const emailArray = receivers.map(receivers => receivers.receiverId.email);
 
-  
+
 
   // const payload = createPayloadForSendingReceiver(emailArray, document);
   // sendMail(payload);
   await document.save();
   return res.status(200).json({ message: 'Document submitted successfully' });
 }
-
-
-const submitFeedback = async (req, res) => {
-  const { documentId } = req.params;
-  const { receiverId, comment, status } = req.body;
-
-  try {
-    // Find the document by documentId and receiverId
-    const document = await handleGetASpecificDocumentOfReceiver(
-      documentId,
-      receiverId
-    );
-
-
-    console.log(document)
-
-    if (!document) {
-      return res
-        .status(404)
-        .json({ message: "Document not found for the receiver" });
-    }
-
-    // Find the receiver within the document's receiver array
-    const receiver = document.receiver.find(
-      (receiver) => receiver.receiverId.toString() === receiverId
-    );
-
-
-
-    if (!receiver) {
-      return res
-        .status(404)
-        .json({ message: "Receiver not found in the document" });
-    }
-
-    // Update the comment and time for the receiver
-
-    receiver.push({
-      receiverId: receiverId,
-      status: status,
-      comment: comment,
-      time: new Date(),
-    })
-
-
-    const payload = createPayloadForSendingFeedback(status, comment, document);
-    sendMail(payload);
-
-    await document.save();
-
-    res.status(200).json({ message: "Feedback submitted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 const deleteDocument = async (req, res) => {
   const { id } = req.params;
@@ -226,11 +174,12 @@ const deleteDocument = async (req, res) => {
 const publishDocument = async (req, res) => {
   const { id } = req.params;
   try {
-    const document = await getDocumentById(id);
+    const document = await getOneDocumentById(id);
     if (!document) {
       return res.status(404).json({ error: "Document not found" });
     }
-    if (document.createdBy !== req.userId) {
+    if (document.createdBy._id.toString() !== req.userId) {
+      console.log(document.createdBy, req.userId)
       return res
         .status(401)
         .json({ error: "You are not authorized to publish this document" });
@@ -289,46 +238,13 @@ const sendDocumentToApprover = async (req, res) => {
   }
 }
 
-const submitFeedbackFromApprover = async (req, res) => {
-  const { documentId } = req.params;
-  const { receiverId, comment, status } = req.body;
-  try {
-    const approval = await handleGetApprovalOfADocument(documentId)
-
-
-    if (!approval) {
-      return res.status(404).json({ message: 'Document not found' });
-    }
-
-    const receiver = approval.history.find(receiver => receiver.receiverId.toString() === receiverId);
-
-
-    if (!receiver) {
-      return res.status(404).json({ message: 'Receiver not found in the document' });
-    }
-    receiver.log.push({
-      status: status,
-      time: new Date(),
-      comment: comment,
-    });
-
-
-    await approval.save();
-
-    res.status(200).json({ message: "Feedback submitted successfully" });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-
-}
-
 const getAllDocumentsOfApprover = async (req, res) => {
   try {
-    console.log("Hello")
-    const documents = await handleGetAllDocumentsOfApprover(req.userId);
+    const { page, pageSize } = req.query; // Parse page and pageSize from the request query
+
+    const documents = await handleGetAllDocumentsOfApprover(req.userId, page, pageSize);
     if (!documents) {
-      return res.status(404).json({ error: "Document not found" });
+      return res.status(404).json({ error: "You have no coming documents!" });
     }
     res.status(200).json(documents);
   }
@@ -377,18 +293,16 @@ const getApprovalHistoryOfDocument = async (req, res) => {
 
 module.exports = {
   submitDocument,
-  getAllAcceptedDocuments,
+  getPublishedDocuments,
   getDocuments,
   createDocument,
   getDocumentById,
   getDocumentOfUser,
   updateDocumentApproval,
   getAllDocumentsOfReceiver,
-  submitFeedback,
   deleteDocument,
   publishDocument,
   sendDocumentToApprover,
-  submitFeedbackFromApprover,
   getAllDocumentsOfApprover,
   assignDocumentToApprover,
   approveADocument,

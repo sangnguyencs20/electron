@@ -1,8 +1,11 @@
 const Opinion = require('../models/opinionModel');
 
-const getOpinionsByDocumentId = async (documentId) => {
-    const opinions = await Opinion.find({ documentID: documentId });
-    return opinions;
+const getOpinionsByDocumentId = async (documentId, page, pageSize) => {
+    const opinions = await Opinion.find({ documentId: documentId });
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + parseInt(pageSize);
+    console.log("There are " + opinions.slice(startIndex, endIndex).length + " opinions")
+    return opinions.slice(startIndex, endIndex);
 }
 
 const createANewOpinion = async (opinion) => {

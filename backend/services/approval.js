@@ -5,7 +5,7 @@ const getAllApprovals = async (documentId) => {
     return await Approval.find({ documentId: documentId }).populate('documentId');
 }
 
-const checkIfAllApproved = async (documentId) => {
+const checkIfDocumentIsAllApproved = async (documentId) => {
     const approvals = await getAllApprovals(documentId);
     return approvals.every((approval) => approval.isApproved);
 }
@@ -124,7 +124,7 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
 
 module.exports = {
     getAllApprovals,
-    checkIfAllApproved,
+    checkIfDocumentIsAllApproved,
     handleAssignAnUserToADocument,
     getAnApprovalByDocumentId,
     handleCommentAnApprovalOfADocument,

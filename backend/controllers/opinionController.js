@@ -3,9 +3,10 @@ const { createANewLog } = require('../services/log');
 
 
 const getOpinionsOfADocument = async (req, res) => {
+    const { page, pageSize } = req.query;
     const { documentId } = req.params;
     try {
-        const opinions = await getOpinionsByDocumentId(documentId);
+        const opinions = await getOpinionsByDocumentId(documentId, page, pageSize);
         res.status(200).json(opinions);
     }
     catch {
