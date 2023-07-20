@@ -52,6 +52,9 @@ const UserSchema = new mongoose.Schema({
     hashedPrivateKey: {
         type: String,
         required: [true, 'Please enter your hashedPrivateKey'],
+    },
+    descriptrion: {
+        type: String,
     }
 },
     {
