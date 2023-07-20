@@ -1,0 +1,383 @@
+import React, { useEffect, useState } from "react";
+import {
+  Stepper,
+  Step,
+  Button,
+  Typography,
+  Select,
+  Option,
+} from "@material-tailwind/react";
+import {
+  CogIcon,
+  UserIcon,
+  BuildingLibraryIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Input,
+  useInput,
+  Grid,
+  Card,
+  Textarea,
+  Checkbox,
+} from "@nextui-org/react";
+import { AnimatePresence, motion } from "framer-motion";
+import AssignDropDown from "../../components/AssignDropDown";
+import DropFile from "../../components/DropFile";
+import CustomSugar from "../../components/CustomSugar";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import { toast } from "react-toastify";
+import { axiosCreateDoc } from "../../api";
+import { useSelector } from "react-redux";
+
+export default function Create() {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [isLastStep, setIsLastStep] = React.useState(false);
+  const [isFirstStep, setIsFirstStep] = React.useState(false);
+
+  const handleNext = () => {
+    if (
+      !isLastStep &&
+      title !== "" &&
+      secret != "" &&
+      urgency != "" &&
+      desc != ""
+    )
+      setActiveStep((cur) => cur + 1);
+    else setNeedFill(true);
+  };
+  const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
+  //---------page1--------
+  const { value: title, reset, bindings } = useInput("");
+  const [secret, setSecret] = React.useState("Neutral");
+  const [urgency, setUrgency] = React.useState("Neutral");
+  const [needFill, setNeedFill] = React.useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setNeedFill(false);
+    }, 3000);
+  }, [needFill]);
+  const handleSecret = (value) => {
+    console.log(value);
+    setSecret(value);
+  };
+  const {
+    value: desc,
+    setValue: setDesc,
+    reset: descReset,
+    bindings: descBindings,
+  } = useInput("");
+  const validateTitle = (value) => {
+    if (value === "" && needFill === true) {
+      return 3;
+    }
+    if (value != "") return 2;
+    return 1;
+  };
+
+  const helper = React.useMemo(() => {
+    const code = validateTitle(title);
+    if (code == 3)
+      return {
+        text: "Yêu cầu nhập nội dung",
+        color: "error",
+      };
+    if (code == 2)
+      return {
+        text: "Nội dung hợp lệ",
+        color: "success",
+      };
+    return {
+      text: "Request",
+      color: "primary",
+    };
+  }, [title, needFill]);
+  //----page2------------------
+  const [approvals, setApprovals] = React.useState([]);
+  const [file, setFile] = React.useState("1313");
+  //----page3-----------------handle submit
+  const handleSubmit = async () => {
+    setIsLoading((pre) => !pre);
+    await axiosCreateDoc({
+      title,
+      secretState: secret,
+      receiver: approvals.map((item) => {
+        return item._id;
+      }),
+      description: desc,
+      fileLink: file,
+    })
+      .then((res) => {
+        setTimeout(() => {
+          setIsLoading((pre) => !pre);
+          toast.success(`Tạo mới thành công`);
+          setActiveStep(0);
+          reset();
+          setSecret("Neutral");
+          setUrgency("Neutral");
+          setDesc("");
+          setApprovals([]);
+          setConfirm(false);
+        }, 1000);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  };
+  const [confirm, setConfirm] = useState(false);
+  //loading
+  const [isLoading, setIsLoading] = React.useState(false);
+  return (
+    <div className="w-full py-4 px-40">
+      {<CustomSugar customLoading={false} />}
+      {isLoading && <CustomRotatingSquare />}
+      <Stepper
+        activeStep={activeStep}
+        isLastStep={(value) => setIsLastStep(value)}
+        isFirstStep={(value) => setIsFirstStep(value)}
+      >
+        <Step onClick={() => setActiveStep(0)}>
+          <UserIcon className="h-5 w-5" />
+          <div className="absolute -bottom-[4.5rem] w-max text-center">
+            <Typography
+              variant="h6"
+              color={activeStep === 0 ? "blue" : "blue-gray"}
+            >
+              Draft Details
+            </Typography>
+            <Typography
+              color={activeStep === 0 ? "blue" : "gray"}
+              className="font-normal"
+            >
+              Your title draft, status and description.
+            </Typography>
+          </div>
+        </Step>
+        <Step onClick={() => setActiveStep(1)}>
+          <CogIcon className="h-5 w-5" />
+          <div className="absolute -bottom-[4.5rem] w-max text-center">
+            <Typography
+              variant="h6"
+              color={activeStep === 1 ? "blue" : "blue-gray"}
+            >
+              Approval -- File
+            </Typography>
+            <Typography
+              color={activeStep === 1 ? "blue" : "gray"}
+              className="font-normal"
+            >
+              Select Approval and upload file
+            </Typography>
+          </div>
+        </Step>
+        <Step onClick={() => setActiveStep(2)}>
+          <BuildingLibraryIcon className="h-5 w-5" />
+          <div className="absolute -bottom-[4.5rem] w-max text-center">
+            <Typography
+              variant="h6"
+              color={activeStep === 2 ? "blue" : "blue-gray"}
+            >
+              Summary
+            </Typography>
+            <Typography
+              color={activeStep === 2 ? "blue" : "gray"}
+              className="font-normal"
+            >
+              Review draft before submit
+            </Typography>
+          </div>
+        </Step>
+      </Stepper>
+      <Card
+        isHoverable
+        className="mt-32 flex justify-center  py-10 px-5 rounded-lg "
+      >
+        <AnimatePresence mode="popLayout">
+          {/* page1 */}
+          {(activeStep == 0 || activeStep == 2) && (
+            <motion.form
+              aria-label="Detail"
+              key={"page1"}
+              initial={{ opacity: 0, y: -200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 1, y: 200 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+              className="w-full pb-10 mb-10 border-b border-blue-gray-400"
+            >
+              <div className="flex flex-wrap mx-3 mb-6 flex-col">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-password"
+                >
+                  title (* request)
+                </label>
+                <Input
+                  {...bindings}
+                  clearable
+                  shadow={false}
+                  onClearClick={reset}
+                  status={helper.color}
+                  color={helper.color}
+                  helperColor={helper.color}
+                  helperText={helper.text}
+                  type="email"
+                  // label="TITLE"
+                  // placeholder="Fill the draft title"
+                  css={{
+                    width: "50%",
+                    display: "block",
+                  }}
+                />
+              </div>
+              <div className="flex flex-wrap mx-3 mb-6 mt-10">
+                <div className="w-full px-3">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    for="grid-password"
+                  >
+                    status
+                  </label>
+                  <div className="mt-5 flex gap-2">
+                    <Select
+                      variant="standard"
+                      label="SELECT SECRET"
+                      value={secret}
+                      color="blue-gray"
+                      error={secret === "" && needFill == true}
+                      success={secret !== ""}
+                      onChange={(value) => {
+                        handleSecret(value);
+                      }}
+                    >
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
+                    <Select
+                      variant="standard"
+                      label="SELECT URGENCY"
+                      value={urgency}
+                      color="blue-gray"
+                      error={urgency === "" && needFill == true}
+                      success={urgency !== ""}
+                      onChange={(value) => {
+                        setUrgency(value);
+                      }}
+                    >
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-city"
+                >
+                  Description
+                </label>
+                <Textarea
+                  {...descBindings}
+                  className="w-full"
+                  rows={8}
+                  status={
+                    needFill == true && desc === ""
+                      ? "error"
+                      : desc !== ""
+                      ? "success"
+                      : "primary"
+                  }
+                />
+              </div>
+            </motion.form>
+          )}
+          {/* page2 */}
+          {(activeStep == 1 || activeStep == 2) && (
+            <motion.form
+              key={"page2"}
+              aria-label="Approval"
+              initial={{ opacity: 0, y: 200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -200 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+              className="w-full pb-10 mb-10 border-b border-blue-gray-300"
+            >
+              <div className="flex flex-wrap mx-3 mb-6 flex-col z-50">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-password"
+                >
+                  approval (* request)
+                </label>
+                <AssignDropDown
+                  selected={approvals}
+                  setSelected={setApprovals}
+                />
+              </div>
+
+              <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2 z-0">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-city"
+                >
+                  Submit File
+                </label>
+                <DropFile file={file} setFile={setFile} />
+              </div>
+            </motion.form>
+          )}
+          {/* page3 */}
+          {activeStep == 2 && (
+            <motion.div className="w-full justify-center flex flex-col gap-4 mx-4">
+              <div>
+                <Checkbox
+                  onChange={() => {
+                    setConfirm((pre) => !pre);
+                  }}
+                />
+                <p className="text-sm text-gray-700 max-w-sm">
+                  I confirm that I have read and understood{" "}
+                  <span className="underline text-blue-600 cursor-pointer">
+                    the terms and conditions of the application
+                  </span>{" "}
+                  and I am certain that I want to submit it{" "}
+                </p>
+              </div>
+              <Button
+                className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
+                variant="contained"
+                type="submit"
+                aria-labelledby="submitButtonLabel"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+                disabled={!confirm}
+              >
+                Submit
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Card>
+      <div className="mt-10 flex justify-between">
+        <Button onClick={handlePrev} disabled={isFirstStep}>
+          Prev
+        </Button>
+        <Button onClick={handleNext} disabled={isLastStep}>
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
