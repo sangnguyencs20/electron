@@ -49,7 +49,10 @@ const UserSchema = new mongoose.Schema({
         enum: ['User', 'Citizen'],
         required: [true, 'Please enter your role'],
     },
-    
+    hashedPrivateKey: {
+        type: String,
+        required: [true, 'Please enter your hashedPrivateKey'],
+    }
 },
     {
         timestamps: true,
