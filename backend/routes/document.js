@@ -6,18 +6,13 @@ const {
     createDocument,
     getDocumentById,
     getDocumentOfUser,
-    updateDocumentApproval,
-    updateDocument,
-    getAllDocumentsOfReceiver,
-    submitFeedback,
-    deleteDocument,
     getAllAcceptedDocuments,
     submitDocument,
     publishDocument,
-    submitFeedbackFromApprover,
     getAllDocumentsOfApprover,
     assignDocumentToApprover,
-    approveADocument
+    approveADocument,
+    getApprovalHistoryOfDocument
 }
     = require("../controllers/documentController");
 
@@ -97,19 +92,12 @@ router.get("/", getDocuments);
  *                 items:
  *                   type: string
  *                 description: The IDs of the users who are the receivers of the document
- *               secretState:
- *                 type: string
- *                 enum: ['Low', 'Neutral', 'High']
- *                 default: 'Neutral'
- *                 description: The secret state of the document
- *               urgencyState:
- *                 type: string
- *                 enum: ['Low', 'Neutral', 'High']
- *                 default: 'Neutral'
- *                 description: The urgency state of the document
  *               fileLink:
  *                 type: string
  *                 description: The link to the file of the document
+ *               description:
+ *                 type: string
+ *                 description: The description of the document
  *     responses:
  *       201:
  *         description: Successfully created document
@@ -121,33 +109,24 @@ router.get("/", getDocuments);
  *                 title:
  *                   type: string
  *                   description: The title of the document
- *                 createdBy:
- *                   type: string
- *                   description: The ID of the user who created the document
  *                 receiver:
  *                   type: array
  *                   items:
  *                     type: string
  *                   description: The IDs of the users who are the receivers of the document
- *                 secretState:
- *                   type: string
- *                   enum: ['Low', 'Neutral', 'High']
- *                   default: 'Neutral'
- *                   description: The secret state of the document
- *                 urgencyState:
- *                   type: string
- *                   enum: ['Low', 'Neutral', 'High']
- *                   default: 'Neutral'
- *                   description: The urgency state of the document
  *                 fileLink:
  *                   type: string
  *                   description: The link to the file of the document
+ *                 description:
+ *                   type: string
+ *                   description: The description of the document
  *       409:
  *         description: Document creation conflict
  *       500:
  *         description: Internal server error
  */
 
+router.post("/", createDocument);
 /**
  * @swagger
  * paths:
@@ -172,7 +151,6 @@ router.get("/", getDocuments);
  *       security:
  *         - bearerAuth: []
  */
-router.post("/", createDocument);
 
 
 router.get("/accepted", getAllAcceptedDocuments);
@@ -287,120 +265,6 @@ router.get("/users/:userId", getDocumentOfUser);
 
 /**
  * @swagger
- * /api/documents/approval/{id}:
- *   post:
- *     summary: Update document approval status
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the document
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               approvalStatus:
- *                 type: string
- *                 enum: ['Approved', 'Rejected']
- *                 description: The approval status of the document
- *     responses:
- *       200:
- *         description: Successfully updated document approval status
- *       404:
- *         description: Document not found
- *       500:
- *         description: Internal server error
- */
-
-router.post("/approval/:id", updateDocumentApproval);
-
-// /**
-//  * @swagger
-//  * /api/documents/{id}:
-//  *   post:
-//  *     summary: Update a document
-//  *     tags: [Document]
-//  *     parameters:
-//  *       - in: path
-//  *         name: id
-//  *         required: true
-//  *         schema:
-//  *           type: string
-//  *         description: The ID of the document
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               title:
-//  *                 type: string
-//  *                 description: The updated title of the document
-//  *               receiver:
-//  *                 type: array
-//  *                 items:
-//  *                   type: string
-//  *                 description: The updated IDs of the users who are the receivers of the document
-//  *               secretState:
-//  *                 type: string
-//  *                 enum: ['Low', 'Neutral', 'High']
-//  *                 description: The updated secret state of the document
-//  *               urgencyState:
-//  *                 type: string
-//  *                 enum: ['Low', 'Neutral', 'High']
-//  *                 description: The updated urgency state of the document
-//  *               fileLink:
-//  *                 type: string
-//  *                 description: The updated link to the file of the document
-//  *     responses:
-//  *       200:
-//  *         description: Successfully updated document
-//  *       404:
-//  *         description: Document not found
-//  *       500:
-//  *         description: Internal server error
-//  */
-
-// router.post("/:id", updateDocument);
-
-/**
- * @swagger
- * /api/documents/receiver/{receiverId}:
- *   get:
- *     summary: Get all documents of a specific receiver
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: receiverId
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the receiver
- *     responses:
- *       200:
- *         description: Successfully retrieved documents
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Document'
- *       404:
- *         description: Receiver not found or no documents found for the receiver
- *       500:
- *         description: Internal server error
- */
-router.get("/receiver/:receiverId", getAllDocumentsOfReceiver);
-
-/**
- * @swagger
  * /submit/{documentId}:
  *   post:
  *     summary: Submit a document
@@ -442,123 +306,8 @@ router.post("/submit/:documentId", submitDocument);
 
 
 /**
- * @swagger
- * /documents/{documentId}/receiver/feedback:
- *   post:
- *     summary: Submit feedback for a document by a receiver
- *     tags: [Document]
- *     parameters:
- *       - name: documentId
- *         in: path
- *         description: ID of the document
- *         required: true
- *         schema:
- *           type: string
- *       - name: receiverId
- *         in: path
- *         description: ID of the receiver
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               comment:
- *                 type: string
- *               status:
- *                 type: string
- *                 enum: [Not Submitted, Submitted, Approved, Rejected]
- *     responses:
- *       '200':
- *         description: Feedback submitted successfully
- *       '400':
- *         description: Invalid request payload
- *       '404':
- *         description: Document or receiver not found
- *       '500':
- *         description: Server error
- */
-// it will post the feedback from the boss to the creator of the document
-router.post("/:documentId/receiver/feedback", submitFeedback);
-
-/**
- * @swagger
- * /documents/{documentId}:
- *   delete:
- *     summary: Delete a document
- *     tags: [Document]
- *     parameters:
- *       - name: documentId
- *         in: path
- *         description: ID of the document to delete
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Document deleted successfully
- *       '404':
- *         description: Document not found
- *       '500':
- *         description: Server error
- */
-router.delete("/:documentId", deleteDocument);
-
-/**
- * @swagger
- * /documents/{documentId}/approver/comment:
- *   post:
- *     summary: Submit feedback from approver
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: documentId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the document
- *     requestBody:
- *       description: Feedback data
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               comment:
- *                 type: string
- *                 required: true
- *             example:
- *               comment: This document requires revision.
- *     responses:
- *       200:
- *         description: Success message
- *
- * /documents/send/{documentId}:
- *   post:
- *     summary: Send document to approver
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: documentId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the document
- *     responses:
- *       200:
- *         description: Success message
- */
-router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
-
-
-/**
 * @swagger
-* /documents/{documentId}:
+* /documents/publish/{documentId}:
 *   post:
 *     summary: Publish a document
 *     tags: [Document]
@@ -577,42 +326,9 @@ router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 *       '500':
 *         description: Server error
 */
+
 // it will publish the document to home
 router.post("/publish/:id", publishDocument);
-/**
- * @swagger
- * /documents/{documentId}/approver/comment:
- *   post:
- *     summary: Submit feedback from approver
- *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: documentId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the document
- *     requestBody:
- *       description: Feedback data
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               comment:
- *                 type: string
- *                 required: true
- *             example:
- *               comment: This document requires revision.
- *     responses:
- *       200:
- *         description: Success message
- *
-
- */
-
-router.post("/:documentId/approver/comment", submitFeedbackFromApprover);
 
 /*
 * @swagger
@@ -633,13 +349,6 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
  *   post:
  *     summary: Assign a document to an user
  *     tags: [Document]
- *     parameters:
- *       - in: path
- *         name: documentId
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the document
  *     requestBody:
  *       description: Feedback data
  *       required: true
@@ -648,11 +357,15 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               documentId: 
  *                 type: ObjectID
  *                 required: true
+ *               userId:
+ *                 type: Array
+ *                 required: true
  *             example:
- *               userId: userid
+ *               documentId: "64b51ac7711bf25db25a32e0"
+ *               userId: ["64b51ac7711bf25db25a32e1", "64b51ac7711bf25db25a32e2"]
  *     responses:
  *       200:
  *         description: Success message
@@ -675,23 +388,29 @@ router.post("/assign", assignDocumentToApprover);
  *             type: object
  *             properties:
  *               documentId:
- *                 type: ObjectID
+ *                 type: string
  *                 required: true
  *               comment:
-*                  type: string
-*                  required: true
+ *                 type: string
+ *                 required: true
  *               status:
- *                type: string
- *                enum: [Approved, Rejected]
- *               example:
- *                documentId: "64b51ac7711bf25db25a32e1"
- *                comment: "It's okay"
- *                status: "Approved"
+ *                 type: string
+ *                 enum: [Approved, Rejected]
+ *             example:
+ *               documentId: "64b76498dd6d5ecad41c04cd"
+ *               comment: "This document looks good."
+ *               status: "Approved"
  *     responses:
  *       200:
  *         description: Success message
- *
- * */
+ *       400:
+ *         description: Invalid request data
+ *       404:
+ *         description: Document not found
+ *       500:
+ *         description: Internal server error
+ */
+
 // {
 //     "documentId": "64b51ac7711bf25db25a32e1",
 //     "comment": "It's okay",
@@ -699,5 +418,50 @@ router.post("/assign", assignDocumentToApprover);
 // }
 router.post("/approve", approveADocument);
 
+/**
+ * @swagger
+ * /api/documents/{documentId}/history:
+ *   get:
+ *     summary: Get approval history of a document
+ *     tags: [Document]
+ *     parameters:
+ *       - name: documentId
+ *         in: path
+ *         description: ID of the document
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   receiver:
+ *                     type: string
+ *                     description: The ID of the receiver
+ *                   status:
+ *                     type: string
+ *                     description: The status of the approval
+ *                   time:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The timestamp of the approval
+ *                   comment:
+ *                     type: string
+ *                     description: The comment of the approval
+ *       400:
+ *         description: Invalid document ID
+ *       404:
+ *         description: Document not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.get("/:documentId/history", getApprovalHistoryOfDocument)
 
 module.exports = router;

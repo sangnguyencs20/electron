@@ -22,19 +22,8 @@ const postAnApprovalOfADocument = async (req, res) => {
     }
 }
 
-const assignAnUserToADocument = async (req, res) => {
-    const { documentId } = req.params;
-    const { userId } = req.body;
-    try {
-        await handleAssignAnUserToADocument(documentId, userId);
-        return res.status(200).json({ message: 'Assign successfully' });
-    } catch (error) {
-        return res.status(500).json(error);
-    }
-}
 
 module.exports = {
     getApprovalsOfADocument,
     postAnApprovalOfADocument,
-    assignAnUserToADocument
 }
