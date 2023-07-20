@@ -16,6 +16,16 @@ const { getOpinionsOfADocument, createOpinion } = require("../controllers/opinio
  *         schema:
  *           type: string
  *         description: The ID of the document
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number for pagination (e.g., 1, 2, 3, ...)
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *         description: The number of opinions to fetch per page
  *     responses:
  *       200:
  *         description: Successfully retrieved opinions of the document
@@ -42,6 +52,7 @@ const { getOpinionsOfADocument, createOpinion } = require("../controllers/opinio
  */
 
 router.get("/:documentId", getOpinionsOfADocument);
+
 
 /**
  * @swagger

@@ -1,7 +1,11 @@
 const Document = require('../models/documentModel');
 const Approval = require('../models/approvalModel');
-const getAllDocuments = async (req, res) => {
-    return await Document.find().populate('createdBy').sort({ _id: -1 });
+const getAllDocuments = async (page, pageSize) => {
+    const documents = await Document.find().populate('createdBy').sort({ _id: -1 });
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + parseInt(pageSize);
+    console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
+    return documents.slice(startIndex, endIndex);
 }
 
 const createOneDocument = async (document) => {
@@ -15,9 +19,12 @@ const getOneDocumentById = async (id) => {
     return document;
 }
 
-const getAllDocumentsOfUser = async (userId) => {
-    const document = await Document.find({ createdBy: userId }).sort({ _id: -1 });
-    return document;
+const getAllDocumentsOfUser = async (userId, page, pageSize) => {
+    const documents = await Document.find({ createdBy: userId }).sort({ _id: -1 });
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + parseInt(pageSize);
+    console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
+    return documents.slice(startIndex, endIndex);
 }
 
 const updateDocumentApprovalStatus = async (id, approval) => {
@@ -27,17 +34,31 @@ const updateDocumentApprovalStatus = async (id, approval) => {
     return document;
 }
 
-
-
-
-const handleGetAllAcceptedDocument = async () => {
-    return (await Document.find({ status: 'Approved' }).exec()).sort({ timeSubmit: -1 });
+const handleGetPublishedDocument = async (page, pageSize) => {
+    const documents = await Document.find({ isPublished: true }).sort({ timeSubmit: -1 });
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + parseInt(pageSize);
+    console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
+    return documents.slice(startIndex, endIndex)
 };
-
-
 
 const handleGetApprovalOfADocument = async (documentId) => {
     return await Approval.findOne({ documentId: documentId });
 }
 
-module.exports = { handleGetApprovalOfADocument, handleGetAllAcceptedDocument, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById };
+const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
+    const documents = await Approval.find({ 'history.receiverId': approverId })
+        .select('documentId')
+        .populate('documentId');
+
+    const filteredDocuments = documents.filter((doc) => doc.documentId.status !== "Draft");
+
+    // Calculate the starting index and the ending index of the current page
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + parseInt(pageSize);
+
+    // Return the documents for the current page
+    return filteredDocuments.slice(startIndex, endIndex);
+};
+
+module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleGetPublishedDocument, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById };

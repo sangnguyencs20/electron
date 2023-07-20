@@ -6,7 +6,7 @@ const {
     createDocument,
     getDocumentById,
     getDocumentOfUser,
-    getAllAcceptedDocuments,
+    getPublishedDocuments,
     submitDocument,
     publishDocument,
     getAllDocumentsOfApprover,
@@ -29,6 +29,17 @@ const {
  *   get:
  *     summary: Get all documents
  *     tags: [Document]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number for pagination (e.g., 1, 2, 3, ...)
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *         description: The number of documents to fetch per page
  *     responses:
  *       200:
  *         description: Successfully retrieved documents
@@ -68,8 +79,8 @@ const {
  *       500:
  *         description: Internal server error
  */
-
 router.get("/", getDocuments);
+
 
 /**
  * @swagger
@@ -153,7 +164,7 @@ router.post("/", createDocument);
  */
 
 
-router.get("/accepted", getAllAcceptedDocuments);
+router.get("/accepted", getPublishedDocuments);
 
 /**
  * @swagger
@@ -210,17 +221,21 @@ router.get("/:id", getDocumentById);
 
 /**
  * @swagger
- * /api/documents/users/{userId}:
- *   get:
- *     summary: Get documents of a user
+ * /api/documents/myDocument:
+ *   post:
+ *     summary: Get draft documents of a user (DOCUMENTS THAT USER CREATED)
  *     tags: [Document]
  *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
+ *       - in: query
+ *         name: page
  *         schema:
- *           type: string
- *         description: The ID of the user
+ *           type: integer
+ *         description: The page number for pagination (e.g., 1, 2, 3, ...)
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *         description: The number of documents to fetch per page
  *     responses:
  *       200:
  *         description: Successfully retrieved user's documents
@@ -260,8 +275,9 @@ router.get("/:id", getDocumentById);
  *       500:
  *         description: Internal server error
  */
+router.post("/myDocument", getDocumentOfUser);
 
-router.get("/users/:userId", getDocumentOfUser);
+
 
 /**
  * @swagger
@@ -303,8 +319,6 @@ router.get("/users/:userId", getDocumentOfUser);
 //this will submit to the boss
 router.post("/submit/:documentId", submitDocument);
 
-
-
 /**
 * @swagger
 * /documents/publish/{documentId}:
@@ -330,17 +344,29 @@ router.post("/submit/:documentId", submitDocument);
 // it will publish the document to home
 router.post("/publish/:id", publishDocument);
 
-/*
-* @swagger
+/**
+ * @swagger
  * /documents/comingDocument:
  *   post:
- *     summary: Get all coming documents of approver
+ *     summary: Get all coming documents of an approver
  *     tags: [Document]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number for pagination (e.g., 1, 2, 3, ...)
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *         description: The number of documents to fetch per page
  *     responses:
  *       200:
  *         description: List of documents
-*/
+ */
 router.post("/comingDocument", getAllDocumentsOfApprover);
+
 
 
 /**
@@ -411,11 +437,6 @@ router.post("/assign", assignDocumentToApprover);
  *         description: Internal server error
  */
 
-// {
-//     "documentId": "64b51ac7711bf25db25a32e1",
-//     "comment": "It's okay",
-//     "status": "Approved"
-// }
 router.post("/approve", approveADocument);
 
 /**
@@ -461,7 +482,6 @@ router.post("/approve", approveADocument);
  *       500:
  *         description: Internal server error
  */
-
 router.get("/:documentId/history", getApprovalHistoryOfDocument)
 
 module.exports = router;
