@@ -48,14 +48,14 @@ export default function AssignDropDown({ selected, setSelected }) {
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col">
+    <div className="flex-1 w-full flex flex-col bg-gray-50 rounded-lg px-4 py-2">
       <div className=" top-16 w-full">
         <Combobox value={selected} onChange={setSelected} multiple>
-          <div className="relative mt-1 min-h-[100px]">
+          <div className="relative mt-1">
             <div className="relative w-2/5 cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
               <Combobox.Input
                 placeholder="Search here"
-                className="text-left relative w-full cursor-default  py-[10px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-black text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
+                className="text-left relative w-full cursor-default  py-[10px] sm:px-[25px] px-[15px] shadow-2xl shadow-black bg-transparent font-epilogue text-gray-blue-400 text-[14px] placeholder:text-sm rounded-[10px] sm:min-w-[300px] focus:outline-none"
                 displayValue={(people) =>
                   people[people.length - 1]?.name
                     ? people[people.length - 1]?.name

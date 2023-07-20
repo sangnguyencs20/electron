@@ -18,16 +18,15 @@ import { DescriptionCell, FileCell, StateCell } from "../approve";
 import DefaultSpeedDial from "../../components/DefaultSpeedDial";
 import { useEffect, useState } from "react";
 import { axiosGetDoc, axiosGetMyDoc, axiosSubmitMyDoc } from "../../api";
-import { useSelect } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Tab } from "@headlessui/react";
 import { classNames } from "../../components/DisplayDrafts";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import StatusPopper from "../../components/StatusPopper";
-
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -76,6 +75,7 @@ const Draft = () => {
   const [isReady, setISReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
+  const [showText, setShowText] = useState(false);
   const id = useSelector((state) => state.userState.id);
   useEffect(() => {
     axiosGetMyDoc(id)
@@ -228,7 +228,47 @@ const Draft = () => {
           stiffness: 260,
           damping: 20,
         }}
+        className="flex flex-col gap-5"
       >
+        <div className="w-full flex">
+          <Button
+            className="w-fit rounded-2xl flex justify-between px-2 gap-4 hover:bg-blue-100 "
+            onMouseOver={() => setShowText(true)}
+            onMouseLeave={() => setShowText(false)}
+            onClick={() => {
+              navigate("/draft/create");
+            }}
+          >
+            <PlusCircleIcon className="w-10 hover:scale-125 hover:text-blue-900 ease-in-out duration-700" />
+            <AnimatePresence mode="sync">
+              {showText && (
+                <motion.span
+                  initial={{ opacity: 0, x: 200 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 200 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                  }}
+                >
+                  Thêm Dự thảo
+                </motion.span>
+              )}
+            </AnimatePresence>
+
+            <motion.div
+              initial={{ opacity: 0, y: -200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -200 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+            ></motion.div>
+          </Button>
+        </div>
         <Tab.Group vertical>
           <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
             {Object.keys(dosObj).map((category) => (

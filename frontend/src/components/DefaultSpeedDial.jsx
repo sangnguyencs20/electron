@@ -32,7 +32,7 @@ export default function DefaultSpeedDial() {
             </IconButton>
           </SpeedDialHandler>
           <SpeedDialContent>
-            <Link to="/newcreate">
+            <Link to="/draft/create">
               <SpeedDialAction className="relative">
                 <Square3Stack3DIcon className="h-5 w-18" />
                 <Typography {...labelProps}>Create Draft</Typography>

@@ -40,7 +40,7 @@ const UserRoutes = [
     title: "Profile",
   },
   {
-    path: "newCreate",
+    path: "draft/create",
     element: Create,
     title: "Create",
   },
