@@ -91,6 +91,7 @@ export default function Create() {
         setIsLoading(false);
       });
   };
+  const [confirm, setConfirm] = useState(false);
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
   const id = useSelector((state) => state.userState.id);
@@ -162,90 +163,88 @@ export default function Create() {
         <AnimatePresence mode="wait">
           {/* page1 */}
           {(activeStep == 0 || activeStep == 2) && (
-            <AnimatePresence mode="popLayout">
-              <motion.form
-                initial={{ opacity: 0, x: -200 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 1, x: 200 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                }}
-                className="w-full pb-10 mb-10 border-b border-blue-gray-400"
-              >
-                <div className="flex flex-wrap mx-3 mb-6 flex-col">
+            <motion.form
+              initial={{ opacity: 0, x: -200 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 1, x: 200 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+              className="w-full pb-10 mb-10 border-b border-blue-gray-400"
+            >
+              <div className="flex flex-wrap mx-3 mb-6 flex-col">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-password"
+                >
+                  title (* request)
+                </label>
+                <Input
+                  {...bindings}
+                  clearable
+                  shadow={false}
+                  onClearClick={reset}
+                  status={helper.color}
+                  color={helper.color}
+                  helperColor={helper.color}
+                  helperText={helper.text}
+                  type="email"
+                  // label="TITLE"
+                  placeholder="Fill the draft title"
+                  css={{
+                    width: "50%",
+                    display: "block",
+                  }}
+                />
+              </div>
+              <div className="flex flex-wrap mx-3 mb-6">
+                <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     for="grid-password"
                   >
-                    title (* request)
+                    status
                   </label>
-                  <Input
-                    {...bindings}
-                    clearable
-                    shadow={false}
-                    onClearClick={reset}
-                    status={helper.color}
-                    color={helper.color}
-                    helperColor={helper.color}
-                    helperText={helper.text}
-                    type="email"
-                    // label="TITLE"
-                    placeholder="Fill the draft title"
-                    css={{
-                      width: "50%",
-                      display: "block",
-                    }}
-                  />
-                </div>
-                <div className="flex flex-wrap mx-3 mb-6">
-                  <div className="w-full px-3">
-                    <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      for="grid-password"
+                  <div className="mt-5 flex gap-2">
+                    <Select
+                      variant="standard"
+                      label="SELECT SECRET"
+                      value={secret}
+                      onChange={(value) => {
+                        handleSecret(value);
+                      }}
                     >
-                      status
-                    </label>
-                    <div className="mt-5 flex gap-2">
-                      <Select
-                        variant="standard"
-                        label="SELECT SECRET"
-                        value={secret}
-                        onChange={(value) => {
-                          handleSecret(value);
-                        }}
-                      >
-                        <Option value="Low">Low</Option>
-                        <Option value="Neutral">Neutral</Option>
-                        <Option value="High">High</Option>
-                      </Select>
-                      <Select
-                        variant="standard"
-                        label="SELECT URGENCY"
-                        value={urgency}
-                        onChange={(value) => {
-                          setUrgency(value);
-                        }}
-                      >
-                        <Option value="Low">Low</Option>
-                        <Option value="Neutral">Neutral</Option>
-                        <Option value="High">High</Option>
-                      </Select>
-                    </div>
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
+                    <Select
+                      variant="standard"
+                      label="SELECT URGENCY"
+                      value={urgency}
+                      onChange={(value) => {
+                        setUrgency(value);
+                      }}
+                    >
+                      <Option value="Low">Low</Option>
+                      <Option value="Neutral">Neutral</Option>
+                      <Option value="High">High</Option>
+                    </Select>
                   </div>
                 </div>
-                <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-city"
-                  >
-                    Description
-                  </label>
-                  <Textarea {...descBindings} className="w-full" rows={8} />
-                </div>
-              </motion.form>
-            </AnimatePresence>
+              </div>
+              <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-city"
+                >
+                  Description
+                </label>
+                <Textarea {...descBindings} className="w-full" rows={8} />
+              </div>
+            </motion.form>
           )}
           {/* page2 */}
           {(activeStep == 1 || activeStep == 2) && (
@@ -288,10 +287,15 @@ export default function Create() {
           {activeStep == 2 && (
             <motion.div className="w-full justify-center flex flex-col gap-4 mx-4">
               <div>
-                <Checkbox />
+                <Checkbox
+                  onCha={() => {
+                    setConfirm((pre) => !pre);
+                    console.log(confirm);
+                  }}
+                />
                 <p className="text-sm text-gray-700 max-w-sm">
                   I confirm that I have read and understood{" "}
-                  <span className="underline text-blue-600">
+                  <span className="underline text-blue-600 cursor-pointer">
                     the terms and conditions of the application
                   </span>{" "}
                   and I am certain that I want to submit it{" "}
@@ -305,6 +309,7 @@ export default function Create() {
                   e.preventDefault();
                   handleSubmit();
                 }}
+                disabled={!confirm}
               >
                 Submit
               </Button>
