@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Stepper,
   Step,
-  Button,
+  Button as MuiButton,
   Typography,
   Select,
   Option,
@@ -19,6 +19,10 @@ import {
   Card,
   Textarea,
   Checkbox,
+  Popover,
+  Row,
+  Text,
+  Button,
 } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import AssignDropDown from "../../components/AssignDropDown";
@@ -200,7 +204,7 @@ export default function Create() {
               key={"page1"}
               initial={{ opacity: 0, y: -200 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 1, y: 200 }}
+              exit={{ opacity: 0, y: 200 }}
               transition={{
                 type: "spring",
                 stiffness: 260,
@@ -353,30 +357,77 @@ export default function Create() {
                   and I am certain that I want to submit it{" "}
                 </p>
               </div>
-              <Button
-                className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
-                variant="contained"
-                type="submit"
-                aria-labelledby="submitButtonLabel"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-                disabled={!confirm}
-              >
-                Submit
-              </Button>
+
+              <Popover shouldCloseOnBlur={true} triggerType="grid">
+                <Popover.Trigger>
+                  <MuiButton
+                    className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
+                    variant="contained"
+                    type="submit"
+                    aria-labelledby="submitButtonLabel"
+                    disabled={!confirm}
+                  >
+                    Submit
+                  </MuiButton>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <Grid.Container
+                    css={{
+                      borderRadius: "14px",
+                      paddingBlock: "2rem",
+                      maxWidth: "330px",
+                      gap: "20px",
+                    }}
+                  >
+                    <Row justify="center" align="center">
+                      <Text b>Confirm</Text>
+                    </Row>
+                    <Row
+                      css={{
+                        paddingInline: "10%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Input
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Password"
+                        // contentLeft={<Password fill="currentColor" />}
+                      />
+                    </Row>
+                    <Grid.Container justify="center" alignContent="center">
+                      <Button
+                        size="sm"
+                        flat
+                        color="default"
+                        css={{
+                          backgroundColor: "#CEE4FE !important",
+                          width: "80% !important",
+                          padding: "10px !important",
+                          height: "50px",
+                          borderRadius: "17px",
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                    </Grid.Container>
+                  </Grid.Container>
+                </Popover.Content>
+              </Popover>
             </motion.div>
           )}
         </AnimatePresence>
       </Card>
       <div className="mt-10 flex justify-between">
-        <Button onClick={handlePrev} disabled={isFirstStep}>
+        <MuiButton onClick={handlePrev} disabled={isFirstStep}>
           Prev
-        </Button>
-        <Button onClick={handleNext} disabled={isLastStep}>
+        </MuiButton>
+        <MuiButton onClick={handleNext} disabled={isLastStep}>
           Next
-        </Button>
+        </MuiButton>
       </div>
     </div>
   );
