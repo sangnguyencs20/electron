@@ -291,7 +291,7 @@ export default function NewSignup() {
         isLastStep={(value) => setIsLastStep(value)}
         isFirstStep={(value) => setIsFirstStep(value)}
       >
-        <Step onClick={() => setActiveStep(0)}>
+        <Step>
           <UserIcon className="h-5 w-5" />
           <div className="absolute -bottom-[4.5rem] w-max text-center">
             <Typography
@@ -308,7 +308,7 @@ export default function NewSignup() {
             </Typography>
           </div>
         </Step>
-        <Step onClick={() => setActiveStep(1)}>
+        <Step>
           <CogIcon className="h-5 w-5" />
           <div className="absolute -bottom-[4.5rem] w-max text-center">
             <Typography
@@ -325,7 +325,7 @@ export default function NewSignup() {
             </Typography>
           </div>
         </Step>
-        <Step onClick={() => setActiveStep(2)}>
+        <Step>
           <BuildingLibraryIcon className="h-5 w-5" />
           <div className="absolute -bottom-[4.5rem] w-max text-center">
             <Typography
@@ -368,7 +368,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Họ và tên
                   </label>
@@ -391,7 +391,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap mb-6 flex-col w-[95%]">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     CCCD/CMND
                   </label>
@@ -416,7 +416,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Ngày sinh
                   </label>
@@ -439,7 +439,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Số điện thoại cá nhân
                   </label>
@@ -462,7 +462,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-[95%] mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Địa chỉ cá nhân
                   </label>
@@ -488,7 +488,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Địa chỉ e-mail
                   </label>
@@ -514,7 +514,7 @@ export default function NewSignup() {
                 <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Làm việc tại
                   </label>
@@ -559,7 +559,7 @@ export default function NewSignup() {
               <div className="mt-7 flex flex-wrap flex-col  mb-2">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-city"
+                  htmlFor="grid-city"
                 >
                   Mô tả cá nhân
                 </label>
@@ -594,7 +594,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Tài khoản
                   </label>
@@ -620,7 +620,7 @@ export default function NewSignup() {
                 <div className="flex flex-wrap w-full mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Mật khẩu
                   </label>
@@ -643,7 +643,7 @@ export default function NewSignup() {
                 <div className="w-[95%] flex flex-wrap mb-6 flex-col">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     Nhập lại mật khẩu
                   </label>
@@ -685,7 +685,7 @@ export default function NewSignup() {
               </div>
               <MuiButton
                 className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
-                variant="contained"
+                variant="filled"
                 type="submit"
                 aria-labelledby="submitButtonLabel"
                 onClick={(e) => {
@@ -701,12 +701,12 @@ export default function NewSignup() {
         </AnimatePresence>
       </Card>
       <div className="mt-10 flex justify-between">
-        <Button onClick={handlePrev} disabled={isFirstStep}>
+        <MuiButton onClick={handlePrev} disabled={isFirstStep}>
           Prev
-        </Button>
-        <Button onClick={handleNext} disabled={isLastStep}>
+        </MuiButton>
+        <MuiButton onClick={handleNext} disabled={isLastStep}>
           Next
-        </Button>
+        </MuiButton>
       </div>
     </div>
   );

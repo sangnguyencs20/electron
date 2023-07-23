@@ -8,7 +8,7 @@ const GeneralRouters = [
   },
   {
     path: "signup",
-    element: SignUp,
+    element: NewSignup,
     title: "Signup",
   },
   {

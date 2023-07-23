@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Stepper,
   Step,
@@ -32,6 +32,7 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
 import { axiosCreateDoc } from "../../api";
 import { useSelector } from "react-redux";
+import { addDraft } from "../../contract";
 
 export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -92,43 +93,39 @@ export default function Create() {
       };
     return {
       text: "Request",
-      color: "primary",
+      color: "default",
     };
   }, [title, needFill]);
   //----page2------------------
   const [approvals, setApprovals] = React.useState([]);
   const [file, setFile] = React.useState("1313");
   //----page3-----------------handle submit
-  const handleSubmit = async () => {
-    setIsLoading((pre) => !pre);
-    await axiosCreateDoc({
-      title,
-      secretState: secret,
-      receiver: approvals.map((item) => {
-        return item._id;
-      }),
-      description: desc,
-      fileLink: file,
-    })
-      .then((res) => {
-        setTimeout(() => {
-          setIsLoading((pre) => !pre);
-          toast.success(`Tạo mới thành công`);
-          setActiveStep(0);
-          reset();
-          setSecret("Neutral");
-          setUrgency("Neutral");
-          setDesc("");
-          setApprovals([]);
-          setConfirm(false);
-        }, 1000);
-      })
-      .catch((err) => {
-        console.error(err);
-        setIsLoading(false);
-      });
+  const {
+    value: privateKey,
+    setValue: setPrivateKey,
+    reset: descPrivateKey,
+    bindings: privateKeyBindings,
+  } = useInput("");
+  const handleSubmit = async (e) => {
+    // setIsLoading(true);
+    await addDraft(`${import.meta.env.VITE_REACT_PRIVATE_KEY}`, form);
+    // await addDraft(
+    //   `6f5272ae7556fcc599544c646cb6c26a8df106182ac1fc0213810263e3897a3e`
+    // );
   };
   const [confirm, setConfirm] = useState(false);
+  const id = useSelector((state) => state.userState.id);
+  const form = useMemo(() => {
+    return {
+      title: title,
+      secretStatus: secret,
+      urgencyStatus: urgency,
+      description: desc,
+      approvals: approvals,
+      fileLink: file,
+      owner: id,
+    };
+  }, [title, secret, desc, approvals, file]);
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
   return (
@@ -295,7 +292,7 @@ export default function Create() {
                       ? "error"
                       : desc !== ""
                       ? "success"
-                      : "primary"
+                      : "default"
                   }
                 />
               </div>
@@ -390,6 +387,7 @@ export default function Create() {
                       }}
                     >
                       <Input
+                        {...privateKeyBindings}
                         bordered
                         fullWidth
                         color="primary"
@@ -410,6 +408,9 @@ export default function Create() {
                           height: "50px",
                           borderRadius: "17px",
                         }}
+                        onClick={(e) => {
+                          handleSubmit();
+                        }}
                       >
                         Confirm
                       </Button>
@@ -425,6 +426,7 @@ export default function Create() {
         <MuiButton onClick={handlePrev} disabled={isFirstStep}>
           Prev
         </MuiButton>
+
         <MuiButton onClick={handleNext} disabled={isLastStep}>
           Next
         </MuiButton>
