@@ -281,7 +281,7 @@ router.post("/myDocument", getDocumentOfUser);
 
 /**
  * @swagger
- * /submit/{documentId}:
+ * /api/submit/{documentId}:
  *   post:
  *     summary: Submit a document
  *     tags: [Document]
@@ -321,7 +321,7 @@ router.post("/submit/:documentId", submitDocument);
 
 /**
 * @swagger
-* /documents/publish/{documentId}:
+* /api/documents/publish/{documentId}:
 *   post:
 *     summary: Publish a document
 *     tags: [Document]
@@ -346,7 +346,7 @@ router.post("/publish/:id", publishDocument);
 
 /**
  * @swagger
- * /documents/comingDocument:
+ * /api/documents/comingDocument:
  *   post:
  *     summary: Get all coming documents of an approver
  *     tags: [Document]
@@ -371,7 +371,7 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
 
 /**
  * @swagger
- * /documents/assign:
+ * /api/documents/assign:
  *   post:
  *     summary: Assign a document to an user
  *     tags: [Document]
@@ -401,7 +401,7 @@ router.post("/assign", assignDocumentToApprover);
 
 /**
  * @swagger
- * /documents/approve:
+ * /api/documents/approve:
  *   post:
  *     summary: Approve a document
  *     tags: [Document]
