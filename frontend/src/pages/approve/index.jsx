@@ -7,7 +7,11 @@ import { DeleteIcon } from "../../components/DeleteIcon";
 import { useEffect, useState } from "react";
 import MyModal from "../../components/MyModal";
 import RejectModal from "../../components/RejectModal";
-import { axiosGetReceiveDoc, axiosSubmitFeedback } from "../../api";
+import {
+  axiosComingDocument,
+  axiosGetReceiveDoc,
+  axiosSubmitFeedback,
+} from "../../api";
 import { useSelector } from "react-redux";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
@@ -150,16 +154,9 @@ export default function Approve() {
   const [needRefresh, setNeedRefresh] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
-    axiosGetReceiveDoc(id)
+    axiosComingDocument()
       .then((res) => {
         console.log(res);
-        setTimeout(() => {
-          setDocuments(
-            res.data.map((item, idx) => {
-              return { id: idx, ...item };
-            })
-          );
-        }, 1000);
       })
       .catch((err) => {
         console.log(err);

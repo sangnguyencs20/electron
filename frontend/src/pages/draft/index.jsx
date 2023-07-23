@@ -6,12 +6,12 @@ import {
   User,
   Text,
   styled,
+  Pagination,
 } from "@nextui-org/react";
 import { IconButton } from "../../components/IconButton";
 import { EyeIcon } from "../../components/EyeIcon";
 import { EditIcon } from "../../components/EditIcon";
 import { DeleteIcon } from "../../components/DeleteIcon";
-import TimelineIcon from "@mui/icons-material/Timeline";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { DescriptionCell, FileCell, StateCell } from "../approve";
@@ -27,6 +27,7 @@ import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlin
 import { AnimatePresence, motion } from "framer-motion";
 import StatusPopper from "../../components/StatusPopper";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import MyModal from "../../components/MyModal";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -77,8 +78,10 @@ const Draft = () => {
   const [needRefresh, setNeedRefresh] = useState(0);
   const [showText, setShowText] = useState(false);
   const id = useSelector((state) => state.userState.id);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    axiosGetMyDoc(id)
+    setIsLoading(true);
+    axiosGetMyDoc(page)
       .then((res) => {
         console.log(res);
         setTimeout(() => {
@@ -87,12 +90,13 @@ const Draft = () => {
               return { id: idx, ...item };
             })
           );
-        }, 1000);
+          setIsLoading(false);
+        }, 500);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [needRefresh]);
+  }, [needRefresh, page]);
 
   const columns = [
     { name: "TITLE", uid: "title" },
@@ -100,7 +104,6 @@ const Draft = () => {
     { name: "STATE", uid: "state" },
     { name: "DESCRIPTION", uid: "description" },
     { name: "FILE", uid: "files" },
-
     { name: "ACTIONS", uid: "actions" },
   ];
 
@@ -113,7 +116,7 @@ const Draft = () => {
             b
             size={14}
             css={{ tt: "capitalize" }}
-            className="flex md:max-w-[300px] whitespace-pre-line"
+            className="flex w-[300px] whitespace-pre-line"
           >
             {cellValue}
           </Text>
@@ -136,9 +139,9 @@ const Draft = () => {
           <Row
             justify="center"
             align="center"
-            className="w-[13  0px] ml-2 flex flex-nowrap gap-3"
+            className="w-[130px] ml-2 grid grid-cols-4 gap-1"
           >
-            <Col css={{ d: "flex" }}>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Details">
                 <IconButton
                   onClick={() => {
@@ -148,13 +151,19 @@ const Draft = () => {
                   <EyeIcon size={20} fill="#2196f3" />
                 </IconButton>
               </Tooltip>
+            </Col>
+
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Status">
                 <IconButton onClick={() => {}}>
-                  <StatusPopper />
+                  <MyModal
+                    receiver={doc._id}
+                    isSubmit={doc.status !== "Draft"}
+                  />
                 </IconButton>
               </Tooltip>
             </Col>
-            <Col css={{ d: "flex" }}>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
                 <IconButton
                   className={`${
@@ -175,7 +184,7 @@ const Draft = () => {
                 </IconButton>
               </Tooltip>
             </Col>
-            <Col css={{ d: "flex" }}>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
                 content="Delete Draft"
                 color="error"
@@ -328,18 +337,29 @@ const Draft = () => {
                       </Table.Row>
                     )}
                   </Table.Body>
-                  <Table.Pagination
+                  {/* <Table.Pagination
                     shadow
                     noMargin
                     align="center"
-                    rowsPerPage={5}
-                    onPageChange={(page) => console.log({ page })}
-                  />
+                    rowsPerPage={10}
+                    onPageChange={(page) => {
+                      setPage(page);
+                    }}
+                  /> */}
                 </Table>
               </Tab.Panel>
             ))}
-            <div className="flex w-full justify-end mt-36">
-              {/* <Pagination total={5} initialPage={1} /> */}
+            <div className="flex w-full justify-end">
+              <Pagination
+                total={14}
+                siblings={1}
+                initialPage={1}
+                controls
+                onChange={(page) => {
+                  console.log(page);
+                  setPage(page);
+                }}
+              />
             </div>
           </Tab.Panels>
         </Tab.Group>

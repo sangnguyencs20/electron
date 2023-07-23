@@ -80,8 +80,8 @@ export const axiosCreateDoc = (data) =>
   axiosClient.post("/api/documents", data);
 
 export const axiosGetDoc = () => axiosClient.get("/api/documents");
-export const axiosGetMyDoc = (id) =>
-  axiosClient.get(`/api/documents/users/${id}`);
+export const axiosGetMyDoc = (page) =>
+  axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
 export const axiosSubmitMyDoc = (docId, userId) =>
   axiosClient.post(`/api/documents/submit/${docId}`, { userId });
 
@@ -94,3 +94,9 @@ export const axiosSubmitFeedback = (receiId, docId, data) =>
   );
 export const axiosGetAllDocument = () => axiosClient.get(`/api/documents`);
 export const axiosGetAllDepartment = () => axiosClient.get(`/api/departments`);
+export const axiosCreateDocument = (data) =>
+  axiosClient.post(`api/documents`, data);
+export const axiosHistoryDocument = (id) =>
+  axiosClient.get(`api/documents/${id}/history`);
+export const axiosComingDocument = () =>
+  axiosClient.post(`api/documents/comingDocument`);
