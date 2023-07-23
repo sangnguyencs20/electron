@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-//api
-import { axiosLogin } from "../../api";
 
 const initialState = {
   accessToken: "",
   refreshToken: "",
   id: "",
+  password: "",
 };
 
 const userSlice = createSlice({
@@ -13,10 +12,11 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     saveInfo: (state, action) => {
-      const { accessToken, refreshToken, id } = action.payload;
+      const { accessToken, refreshToken, id, password } = action.payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.id = id;
+      state.password = password;
     },
     clearInfo: (state, action) => {
       state = initialState;

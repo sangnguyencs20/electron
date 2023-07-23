@@ -93,3 +93,4 @@ export const axiosSubmitFeedback = (receiId, docId, data) =>
     data
   );
 export const axiosGetAllDocument = () => axiosClient.get(`/api/documents`);
+export const axiosGetAllDepartment = () => axiosClient.get(`/api/departments`);

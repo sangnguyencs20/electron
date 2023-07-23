@@ -47,11 +47,13 @@ const Login = () => {
 
     await axiosLogin(values)
       .then((res) => {
+        console.log(res.data);
         dispatch(
           saveInfo({
             accessToken: res.data.accessToken,
             refreshToken: res.data.refreshToken,
             id: res.data.user._id,
+            password: res.data.user.password,
           })
         );
         toast.success("Đăng nhập thành công");

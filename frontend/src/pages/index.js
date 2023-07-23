@@ -7,3 +7,4 @@ export { default as DraftCreate } from "./draftCreate";
 export { default as SignUp } from "./signup";
 export { default as Approve } from "./approve";
 export { default as Profile } from "./profile";
+export { default as NewSignup } from "./newsignup";

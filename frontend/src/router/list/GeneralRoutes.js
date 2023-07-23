@@ -1,4 +1,4 @@
-import { DraftDetail, Login, SignUp } from "../../pages";
+import { DraftDetail, Login, SignUp, NewSignup } from "../../pages";
 
 const GeneralRouters = [
   {
@@ -8,8 +8,13 @@ const GeneralRouters = [
   },
   {
     path: "signup",
-    element: SignUp,
+    element: NewSignup,
     title: "Signup",
+  },
+  {
+    path: "newsignup",
+    element: NewSignup,
+    title: "NewSignup",
   },
 ];
 

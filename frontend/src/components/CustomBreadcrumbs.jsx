@@ -25,7 +25,11 @@ export default function CustomBreadcrumbs() {
         let link = "";
         for (let i = 0; i <= idx; i++) link = link + "/" + arrayLocal[i];
         return (
-          <Link to={link} className={idx !== len - 1 && "opacity-60"}>
+          <Link
+            to={link}
+            className={`${idx !== len - 1 && "opacity-60"}`}
+            key={link}
+          >
             <span>{arrayLocal[idx].toLocaleUpperCase()}</span>
           </Link>
         );
