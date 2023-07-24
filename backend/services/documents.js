@@ -48,16 +48,17 @@ const handleGetApprovalOfADocument = async (documentId) => {
 
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
     const documents = await Approval.find({ 'history.receiverId': approverId })
-        .select('documentId')
+        .select('documentId history')
         .populate('documentId');
 
     const filteredDocuments = documents.filter((doc) => doc.documentId.status !== "Draft");
 
+    
     // Calculate the starting index and the ending index of the current page
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
-
     // Return the documents for the current page
+    console.log("There are " + filteredDocuments.slice(startIndex, endIndex).length + " documents")
     return filteredDocuments.slice(startIndex, endIndex);
 };
 

@@ -146,15 +146,27 @@ router.post("/", createDocument);
  *       tags: [Document]
  *       summary: Get all accepted documents
  *       description: Retrieve all documents with a status of "Accepted"
+ *       parameters:
+ *         - name: page
+ *           in: query
+ *           description: Page number for pagination (if applicable)
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *             default: 1
+ *         - name: pageSize
+ *           in: query
+ *           description: Number of items per page for pagination (if applicable)
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *             maximum: 100
+ *             default: 20
  *       responses:
  *         200:
  *           description: Successful operation
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   $ref: '#/components/schemas/Document'
  *         403:
  *           description: Unauthorized - User is not authorized to view this content
  *         500:
@@ -162,6 +174,7 @@ router.post("/", createDocument);
  *       security:
  *         - bearerAuth: []
  */
+
 
 
 router.get("/accepted", getPublishedDocuments);
@@ -386,12 +399,12 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
  *               documentId: 
  *                 type: ObjectID
  *                 required: true
- *               userId:
+ *               userIds:
  *                 type: Array
  *                 required: true
  *             example:
  *               documentId: "64b51ac7711bf25db25a32e0"
- *               userId: ["64b51ac7711bf25db25a32e1", "64b51ac7711bf25db25a32e2"]
+ *               userIds: ["64b51ac7711bf25db25a32e1", "64b51ac7711bf25db25a32e2"]
  *     responses:
  *       200:
  *         description: Success message
