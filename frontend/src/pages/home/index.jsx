@@ -7,10 +7,12 @@ import { Pagination } from "@nextui-org/react";
 const Home = () => {
   const [documents, setDocuments] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     axiosPublishedDocument(page)
       .then((res) => {
-        setDocuments(res.data);
+        setDocuments(res.data.allDocuments);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
         console.error(err);
@@ -22,7 +24,7 @@ const Home = () => {
       <DisplayDrafts documents={documents} />
       <div className="flex w-full justify-end mt-36">
         <Pagination
-          total={14}
+          total={totalPages}
           siblings={1}
           initialPage={1}
           controls

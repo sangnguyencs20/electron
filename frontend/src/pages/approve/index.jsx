@@ -68,39 +68,11 @@ export const StateCell = ({ secretState, urgencyState }) => {
   );
 };
 
-const StatusCell = ({ receiver, userId }) => {
+const StatusCell = ({ status }) => {
   return (
-    <div className="grid grid-cols-1 grid-flow-row w-full justify-center items-center gap-5 px-5 mx-2">
-      {/* <span
-        className={`${
-          receiver.filter((item) => item.receiverId._id === userId)[0]
-            ?.status === "Pending"
-            ? "text-orange-500"
-            : receiver.filter((item) => item.receiverId._id === userId)[0]
-                ?.status === "Approved"
-            ? "text-green-500"
-            : "text-red-500"
-        }
-        ${
-          receiver.filter((item) => item.receiverId._id === userId)[0]
-            ?.status === "Pending"
-            ? "bg-orange-100"
-            : receiver.filter((item) => item.receiverId._id === userId)[0]
-                ?.status === "Approved"
-            ? "bg-green-100"
-            : "bg-red-100"
-        }  rounded-md  px-3 py-1 font-semibold text-center `}
-      >
-        {receiver.filter((item) => item.receiverId._id === userId)[0]?.status}
-      </span>
-      <div className="flex flex-col justify-center w-full text-center">
-        <span className="font-bold text-sm text-gray-800">
-          {receiver.filter((item) => item.receiverId._id === userId)[0]?.name}
-        </span>
-        <span className="text-gray-400 text-xs font-medium">
-          {receiver.filter((item) => item.receiverId._id === userId)[0]?.time}
-        </span>
-      </div> */}
+    <div className="col-span-1 flex flex-col items-center bg-deep-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
+      <p className="font-bold text-sm text-gray-900">{status}</p>
+      <p className="text-gray-500 text-xs">Current Status</p>
     </div>
   );
 };
@@ -154,7 +126,7 @@ export default function Approve() {
   const [documents, setDocuments] = useState([]);
   const [needRefresh, setNeedRefresh] = useState(0);
   const [page, setPage] = useState(1);
-
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
     setIsLoading(true);
@@ -162,10 +134,11 @@ export default function Approve() {
       .then((res) => {
         console.log(res);
         setDocuments(
-          res.data.map((item, idx) => {
+          res.data.allDocuments.map((item, idx) => {
             return { id: idx, ...item };
           })
         );
+        setTotalPages(res.data.totalPages);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -194,7 +167,7 @@ export default function Approve() {
           />
         );
       case "status":
-        return <StatusCell receiver={doc.receiver} userId={id} />;
+        return <StatusCell status={doc.currentStatus} />;
       case "state":
         return (
           <StateCell
@@ -326,7 +299,7 @@ export default function Approve() {
           </Table>
           <div className="flex w-full justify-end mt-10">
             <Pagination
-              total={14}
+              total={totalPages}
               siblings={1}
               initialPage={1}
               controls

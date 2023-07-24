@@ -17,30 +17,39 @@ const CommentSection = ({ docId }) => {
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {
     console.log(comment);
-    setLoading(true);
-    axiosPostComment({ content: comment, documentId: docId })
-      .then((res) => {
-        console.log(res),
-          setTimeout(() => {
-            setLoading(false);
-          }, 3000);
-      })
-      .catch((err) => {
-        console.error(err),
-          setTimeout(() => {
-            setLoading(false);
-          }, 3000);
-      });
+    {
+      docId && setLoading(true);
+      axiosPostComment({ content: comment, documentId: docId })
+        .then((res) => {
+          console.log(res),
+            setTimeout(() => {
+              setLoading(false);
+            }, 3000);
+          setIsNeed((pre) => pre + 1);
+        })
+        .catch((err) => {
+          console.error(err),
+            setTimeout(() => {
+              setLoading(false);
+            }, 3000);
+        });
+    }
   };
   const [comments, setComments] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isNeed, setIsNeed] = useState(0);
   useEffect(() => {
-    axiosGetComment(docId, page)
-      .then((res) => {
-        setComments(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [page, docId]);
+    {
+      docId !== undefined &&
+        axiosGetComment(docId, page)
+          .then((res) => {
+            setComments(res.data.allOpinions);
+            setTotalPages(res.data.totalPages);
+          })
+          .catch((err) => console.log(err));
+    }
+  }, [page, docId, isNeed]);
   const {
     value: comment,
     setValue: setComment,
@@ -95,15 +104,11 @@ const CommentSection = ({ docId }) => {
         {comments.map((item) => {
           return <CommentBox item={item} />;
         })}
-        <CommentBox />
-        <CommentBox />
-        {/* <CommentBox2nd /> */}
-        <CommentBox />
       </div>
       <div className="flex justify-end p-10 mr-[-50px]">
         <Pagination
           initialPage={1}
-          total={14}
+          total={totalPages}
           siblings={1}
           controls
           onChange={(page) => {

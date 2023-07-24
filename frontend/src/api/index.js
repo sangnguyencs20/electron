@@ -112,6 +112,6 @@ export const axiosPublishedDocument = (page) =>
   axiosClient.get(`api/documents/accepted?page=${page}&pageSize=5`);
 export const axiosDocument = (id) => axiosClient.get(`api/documents/${id}`);
 export const axiosGetComment = (docId, page) =>
-  axiosClient.get(`api/opinions/${docId}?page=${page}&&pageSize=5`);
+  axiosClient.get(`api/opinions/${docId}?page=${page}&pageSize=5`);
 export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);

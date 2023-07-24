@@ -79,6 +79,7 @@ const Draft = () => {
   const [showText, setShowText] = useState(false);
   const id = useSelector((state) => state.userState.id);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     setIsLoading(true);
     axiosGetMyDoc(page)
@@ -86,10 +87,11 @@ const Draft = () => {
         console.log(res);
         setTimeout(() => {
           setMyDocuments(
-            res.data.map((item, idx) => {
+            res.data.allDocuments.map((item, idx) => {
               return { id: idx, ...item };
             })
           );
+          setTotalPages(res.data.totalPages);
           setIsLoading(false);
         }, 500);
       })
@@ -351,7 +353,7 @@ const Draft = () => {
             ))}
             <div className="flex w-full justify-end mt-10">
               <Pagination
-                total={14}
+                total={totalPages}
                 siblings={1}
                 initialPage={1}
                 controls
