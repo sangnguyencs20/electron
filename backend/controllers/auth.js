@@ -75,12 +75,11 @@ const signup = async (req, res) => {
 
 const confirmPassword = async (req, res) => {
     const id = req.userId;
-    console.log(req.userId)
-    console.log(id)
     const { password } = req.body;
 
     try {
         const user = await getOneUserById(id);
+        console.log(user)
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

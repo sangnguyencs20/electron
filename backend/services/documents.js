@@ -53,7 +53,11 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
 
     const filteredDocuments = documents.filter((doc) => doc.documentId.status !== "Draft");
 
+    const documentWithLastestLogs = filteredDocuments.map((doc) => {
+        const lastestLogOfAReceiver = doc.history.filter((log) => log.receiverId == approverId).pop();
+    });
     
+
     // Calculate the starting index and the ending index of the current page
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
