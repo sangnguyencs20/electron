@@ -121,7 +121,7 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
     const flattenedTimeline = [].concat(...timeline);
 
     // Sort the timeline events by time in ascending order
-    const sortedTimeline = flattenedTimeline.sort((a, b) => a.time - b.time);
+    const sortedTimeline = flattenedTimeline.sort((a, b) => b.time - a.time);
 
     return sortedTimeline;
 };
