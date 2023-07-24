@@ -30,10 +30,15 @@ import DropFile from "../../components/DropFile";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
-import { axiosCreateDoc, axiosCreateDocument } from "../../api";
+import { axiosCheckPassword, axiosCreateDocument } from "../../api";
 import { useSelector } from "react-redux";
 import { addDraft } from "../../contract";
-import { checkPassword, hashPassword } from "../../utils";
+import {
+  checkPassword,
+  decryptPrivateKey,
+  encryptPrivateKey,
+  hashPassword,
+} from "../../utils";
 
 export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -105,37 +110,51 @@ export default function Create() {
     value: password,
     setValue: setPrivateKey,
     reset: descPrivateKey,
-    bindings: privateKeyBindings,
+    bindings: passwordBindings,
   } = useInput("");
   const hashedPassword = useSelector((state) => state.userState.password);
+  const hashedPrivateKey = useSelector(
+    (state) => state.userState.hashedPrivateKey
+  );
   const handleSubmit = async () => {
     setIsLoading(true);
+    await axiosCheckPassword({ password })
+      .then(async (res) => {
+        console.log(
+          "privatekey",
+          decryptPrivateKey(hashedPrivateKey, password)
+        );
+        await addDraft(
+          decryptPrivateKey(hashedPrivateKey, password),
+          form
+        ).then(async (res) => {
+          await axiosCreateDocument({
+            title: form.title,
+            receiver: form.approvals,
+            fileLink: form.fileLink,
+            description: form.description,
+          })
+            .then((res) => {
+              setTimeout(() => {
+                setIsLoading(false);
+              }, 3000);
+              toast.success(`Create: ${res.data._id}`);
+            })
+            .catch((err) => {
+              console.error(err);
+              setIsLoading(false);
+            });
+        });
+      })
+
+      .catch((err) => console.error(err));
     // await checkPassword(password, hashedPassword)
     //   .then((res) => console.log(res))
     //   .catch((error) => console.log(error));
 
-    // await addDraft(`${import.meta.env.VITE_REACT_PRIVATE_KEY}`, form);
-
     // await addDraft(
     //   `6f5272ae7556fcc599544c646cb6c26a8df106182ac1fc0213810263e3897a3e`
     // );
-
-    await axiosCreateDocument({
-      title: form.title,
-      receiver: form.approvals,
-      fileLink: form.fileLink,
-      description: form.description,
-    })
-      .then((res) => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 3000);
-        toast.success(`Create: ${res.data._id}`);
-      })
-      .catch((err) => {
-        console.error(err);
-        setIsLoading(false);
-      });
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
@@ -236,7 +255,7 @@ export default function Create() {
               <div className="flex flex-wrap mx-3 mb-6 flex-col">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-password"
+                  htmlFor="grid-password"
                 >
                   title (* request)
                 </label>
@@ -262,7 +281,7 @@ export default function Create() {
                 <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     status
                   </label>
@@ -303,7 +322,7 @@ export default function Create() {
               <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-city"
+                  htmlFor="grid-city"
                 >
                   Description
                 </label>
@@ -340,7 +359,7 @@ export default function Create() {
               <div className="flex flex-wrap mx-3 mb-6 flex-col z-50">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-password"
+                  htmlFor="grid-password"
                 >
                   approval (* request)
                 </label>
@@ -353,7 +372,7 @@ export default function Create() {
               <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2 z-0">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-city"
+                  htmlFor="grid-city"
                 >
                   Submit File
                 </label>
@@ -386,7 +405,15 @@ export default function Create() {
                     variant="filled"
                     type="submit"
                     aria-labelledby="submitButtonLabel"
-                    disabled={!confirm}
+                    disabled={
+                      !confirm ||
+                      title === "" ||
+                      secret === "" ||
+                      urgency === "" ||
+                      desc === "" ||
+                      approvals.length === 0 ||
+                      file === ""
+                    }
                   >
                     Submit
                   </MuiButton>
@@ -411,7 +438,7 @@ export default function Create() {
                       }}
                     >
                       <Input
-                        {...privateKeyBindings}
+                        {...passwordBindings}
                         bordered
                         fullWidth
                         color="primary"

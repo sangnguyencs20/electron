@@ -3,7 +3,7 @@ import { EyeIcon } from "./EyeIcon";
 import CustomTable from "./CustomTable";
 import TimeLineTable from "./TimeLine";
 import TimelineIcon from "@mui/icons-material/Timeline";
-export default function MyModal({ receiver, isSubmit }) {
+export default function MyModal({ receiver, timeSubmit, isSubmit }) {
   const { setVisible, bindings } = useModal();
   return (
     <div>
@@ -27,7 +27,7 @@ export default function MyModal({ receiver, isSubmit }) {
           </Text>
         </Modal.Header>
         <Modal.Body css={{ bgColor: "#f3f3f3" }}>
-          <TimeLineTable receiver={receiver} />
+          <TimeLineTable receiver={receiver} timeSubmit={timeSubmit} />
         </Modal.Body>
         <Modal.Footer>
           <Button auto flat color="error" onPress={() => setVisible(false)}>

@@ -106,3 +106,5 @@ export const axiosAssignDocument = (data) => {
   axiosClient.post(`api/documents/assign`, data);
 };
 export const axiosSignUp = (data) => axiosClient.post(`api/auth/signup`, data);
+export const axiosCheckPassword = (data) =>
+  axiosClient.post(`api/auth/confirm`, data);

@@ -5,6 +5,7 @@ const initialState = {
   refreshToken: "",
   id: "",
   password: "",
+  hashedPrivateKey: "",
 };
 
 const userSlice = createSlice({
@@ -12,11 +13,13 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     saveInfo: (state, action) => {
-      const { accessToken, refreshToken, id, password } = action.payload;
+      const { accessToken, refreshToken, id, password, hashedPrivateKey } =
+        action.payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.id = id;
       state.password = password;
+      state.hashedPrivateKey = hashedPrivateKey;
     },
     clearInfo: (state, action) => {
       state = initialState;

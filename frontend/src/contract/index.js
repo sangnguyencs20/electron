@@ -12,19 +12,10 @@ console.log(provider);
 const contractAddress = `${import.meta.env.VITE_REACT_CONTRACT_ADDRESS}`;
 
 const contractABI = abi; // Thay thế bằng ABI của smart contract bạn muốn tương tác
-
+let contract = null;
 // Hàm tạo wallet từ private key
 async function createWallet(privatekey) {
   try {
-    // if (
-    //   !privatekey ||
-    //   typeof privatekey !== "string" ||
-    //   privatekey.length !== 66 ||
-    //   !ethers.utils.isHexString(privatekey)
-    // ) {
-    //   throw new Error("Private key không hợp lệ." + privatekey);
-    // }
-
     const wallet = new ethers.Wallet(privatekey, provider);
     console.log(
       "Địa chỉ ví:",
@@ -42,15 +33,72 @@ async function createWallet(privatekey) {
 }
 
 // Hàm tạo connected contract từ private key
-async function createConnectedContract(privateKey) {
+export async function createConnectedContract(privateKey) {
   try {
     const wallet = await createWallet(privateKey, provider);
     const connectedContract = new ethers.Contract(
       contractAddress,
-      // "0x0859aDdfc2273D7f0f66E7776E578639C80dEEB9",
       contractABI,
       wallet
     );
+    contract = connectedContract;
+    // Lắng nghe sự kiện 'DraftCreate'
+    const filterDraftCreate = connectedContract.filters.DraftCreate(
+      null,
+      null,
+      null,
+      null
+    );
+    connectedContract.on(
+      filterDraftCreate,
+      (draftId, creator, value, status, event) => {
+        console.log("DraftCreate:", draftId, creator, value, status);
+        // Xử lý sự kiện 'DraftCreate' ở đây
+      }
+    );
+
+    // Lắng nghe sự kiện 'DraftSubmit'
+    const filterDraftSubmit = connectedContract.filters.DraftSubmit(null);
+    connectedContract.on(filterDraftSubmit, (draftId, event) => {
+      console.log("DraftSubmit:", draftId);
+      // Xử lý sự kiện 'DraftSubmit' ở đây
+    });
+
+    // Lắng nghe sự kiện 'DraftApproved'
+    const filterDraftApproved = connectedContract.filters.DraftApproved(
+      null,
+      null
+    );
+    connectedContract.on(filterDraftApproved, (id, approver, event) => {
+      console.log("DraftApproved:", id, approver);
+      // Xử lý sự kiện 'DraftApproved' ở đây
+    });
+
+    // Lắng nghe sự kiện 'ApproverAdded'
+    const filterApproverAdded = connectedContract.filters.ApproverAdded(
+      null,
+      null
+    );
+    connectedContract.on(filterApproverAdded, (id, approver, event) => {
+      console.log("ApproverAdded:", id, approver);
+      // Xử lý sự kiện 'ApproverAdded' ở đây
+    });
+
+    // Lắng nghe sự kiện 'CommentAdded'
+    const filterCommentAdded = connectedContract.filters.CommentAdded(
+      null,
+      null,
+      null
+    );
+    connectedContract.on(
+      filterCommentAdded,
+      (id, commenter, commentId, event) => {
+        console.log("CommentAdded:", id, commenter, commentId);
+        // Xử lý sự kiện 'CommentAdded' ở đây
+      }
+    );
+
+    console.log("contract", contract);
     return connectedContract;
   } catch (error) {
     console.error("Lỗi khi tạo connected contract:", error);
@@ -60,28 +108,19 @@ async function createConnectedContract(privateKey) {
 
 export const addDraft = async (privateKey, data) => {
   try {
-    // Tạo connected contract từ private key
-    console.log(data);
-    const connectedContract = await createConnectedContract(privateKey);
-    console.log(31313);
-    // // Gọi hàm addDraft trong smart contract
-    connectedContract
+    if (!contract)
+      contract = await createConnectedContract(
+        `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+      );
+    contract
       .addDraft(1, 1, {
-        gasLimit: 300000, // Replace this value with an appropriate gas limit for your function
+        gasLimit: 300000,
       })
       .then((res) => console.log(res))
       .catch((err) => {
         toast.error(err.toString());
       });
-    // console.log("Giao dịch:", transaction);
-
-    // // Đợi giao dịch được xác nhận
-    // const receipt = await transaction.wait();
-    // console.log("Giao dịch được xác nhận:", receipt);
-
-    // // Xử lý kết quả của giao dịch (nếu cần)
-    // ...
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error);
+    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }
 };

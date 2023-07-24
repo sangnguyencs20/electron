@@ -223,6 +223,7 @@ export default function Approve() {
               <Tooltip content="Time Line">
                 <MyModal
                   receiver={doc.documentId._id}
+                  timeSubmit={doc.documentId.timeSubmit}
                   isSubmit={doc.status !== "Draft"}
                 />
               </Tooltip>

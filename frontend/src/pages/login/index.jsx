@@ -13,6 +13,8 @@ import { saveInfo } from "../../state/user/userSlice";
 import { toast } from "react-toastify";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import { decryptPrivateKey } from "../../utils";
+import { createConnectedContract } from "../../contract";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -54,8 +56,15 @@ const Login = () => {
             refreshToken: res.data.refreshToken,
             id: res.data.user._id,
             password: res.data.user.password,
+            hashedPrivateKey: res.data.user.hashedPrivateKey,
           })
         );
+        const privateKey = decryptPrivateKey(
+          res.data.user.hashedPrivateKey,
+          values.password
+        );
+        console.log("login", privateKey);
+        createConnectedContract(privateKey);
         toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {

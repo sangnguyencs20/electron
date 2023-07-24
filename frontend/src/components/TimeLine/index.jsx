@@ -12,7 +12,7 @@ import styles from "./styles.module.css";
 import { useEffect, useState } from "react";
 import { axiosHistoryDocument } from "../../api";
 import { formattedDateTime } from "../../utils";
-const TimeLineTable = ({ receiver }) => {
+const TimeLineTable = ({ receiver, timeSubmit }) => {
   const [history, setHistory] = useState([]);
   console.log(history);
   console.log(receiver);
@@ -89,7 +89,7 @@ const TimeLineTable = ({ receiver }) => {
 
         <VerticalTimelineElement
           iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-          date="July 8, 2023 - Submit"
+          date={formattedDateTime(timeSubmit) + " - Submit"}
           icon={<ChevronDoubleUpIcon />}
         />
       </VerticalTimeline>

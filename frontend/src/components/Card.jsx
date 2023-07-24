@@ -17,7 +17,6 @@ export default function App({ title, createdBy, description }) {
       setIsShow(false);
     }, 60000);
   }, []);
-  console.log(isInView);
   return (
     <div
       ref={ref}
