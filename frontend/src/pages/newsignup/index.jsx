@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import { axiosCreateDoc, axiosGetAllDepartment, axiosSignUp } from "../../api";
 import { useSelector } from "react-redux";
 import { decryptPrivateKey, encryptPrivateKey } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 export default function NewSignup() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -238,6 +239,7 @@ export default function NewSignup() {
   });
 
   //----page3-----------------handle submit
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     setIsLoading(true);
     const encodePrivateKey = encryptPrivateKey(
@@ -278,6 +280,7 @@ export default function NewSignup() {
           passwordReset();
           repasswordReset();
           setConfirm(false);
+          navigate("/login");
         }, 500);
       })
       .catch((err) => {
