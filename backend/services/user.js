@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-
+const hashPassword = require("../utils/helperAuth");
 const getAllUsers = async (req, res) => {
   return await User.find().populate("department");
 };
@@ -30,8 +30,7 @@ const getUserByName = async (username) => {
 };
 
 const isPasswordMatched = (password, hashedPassword) => {
-  console.log(password, hashedPassword);
-  return bcrypt.compare(password, hashedPassword);
+  return bcrypt.compareSync(password, hashedPassword);
 };
 // username: {
 //     type: String,

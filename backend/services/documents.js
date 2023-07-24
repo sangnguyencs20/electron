@@ -53,13 +53,22 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
 
     const filteredDocuments = documents.filter((doc) => doc.documentId.status !== "Draft");
 
-    
+    const latestLogs = filteredDocuments.map((doc) => {
+        const latestLog = doc.history.sort((a, b) => {
+            return new Date(b.time) - new Date(a.time);
+        })[0];
+        return {
+            document: doc.documentId,
+            currentStatus: (latestLog.log.length == 0) ? "Pending" : latestLog.log[latestLog.log.length - 1].status,
+        }
+    })
+
     // Calculate the starting index and the ending index of the current page
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
     // Return the documents for the current page
-    console.log("There are " + filteredDocuments.slice(startIndex, endIndex).length + " documents")
-    return filteredDocuments.slice(startIndex, endIndex);
+    console.log("There are " + latestLogs.slice(startIndex, endIndex).length + " documents")
+    return latestLogs.slice(startIndex, endIndex);
 };
 
 module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleGetPublishedDocument, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById };
