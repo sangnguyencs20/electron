@@ -5,7 +5,10 @@ const getAllDocuments = async (page, pageSize) => {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
     console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
-    return documents.slice(startIndex, endIndex);
+    return {
+        totalPages: Math.ceil(documents.length / pageSize),
+        allDocuments: documents.slice(startIndex, endIndex)
+    };
 }
 
 const createOneDocument = async (document) => {
@@ -24,7 +27,10 @@ const getAllDocumentsOfUser = async (userId, page, pageSize) => {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
     console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
-    return documents.slice(startIndex, endIndex);
+    return {
+        totalPages: Math.ceil(documents.length / pageSize),
+        allDocuments: documents.slice(startIndex, endIndex)
+    };
 }
 
 const updateDocumentApprovalStatus = async (id, approval) => {
@@ -39,7 +45,10 @@ const handleGetPublishedDocument = async (page, pageSize) => {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + parseInt(pageSize);
     console.log("There are " + documents.slice(startIndex, endIndex).length + " documents")
-    return documents.slice(startIndex, endIndex)
+    return {
+        totalPages: Math.ceil(documents.length / pageSize),
+        allDocuments: documents.slice(startIndex, endIndex)
+    };
 };
 
 const handleGetApprovalOfADocument = async (documentId) => {
@@ -68,7 +77,11 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
     const endIndex = startIndex + parseInt(pageSize);
     // Return the documents for the current page
     console.log("There are " + latestLogs.slice(startIndex, endIndex).length + " documents")
-    return latestLogs.slice(startIndex, endIndex);
+
+    return {
+        totalPages: Math.ceil(latestLogs.length / pageSize),
+        allDocuments: latestLogs.slice(startIndex, endIndex)
+    };
 };
 
 module.exports = { handleGetAllDocumentsOfApprover, handleGetApprovalOfADocument, handleGetPublishedDocument, updateDocumentApprovalStatus, getAllDocuments, getAllDocumentsOfUser, createOneDocument, getOneDocumentById };

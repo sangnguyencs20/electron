@@ -6,7 +6,7 @@ const OpinionSchema = new mongoose.Schema({
         ref: 'User',
         required: [true, 'Vui long nhap Nguoi tao'],
     },
-    documentID : {
+    documentId : {
         type: mongoose.Types.ObjectId,
         ref: 'Document',
         required: [true, 'Vui long nhap tai lieu'],
