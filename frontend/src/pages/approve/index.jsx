@@ -157,6 +157,7 @@ export default function Approve() {
 
   const navigate = useNavigate();
   useEffect(() => {
+    setIsLoading(true);
     axiosComingDocument(page)
       .then((res) => {
         console.log(res);
@@ -170,7 +171,7 @@ export default function Approve() {
       .catch((err) => {
         console.log(err);
       });
-  }, [needRefresh]);
+  }, [needRefresh, page]);
   console.log(needRefresh);
   const columns = [
     { name: "DOC DETAIL", uid: "detail" },

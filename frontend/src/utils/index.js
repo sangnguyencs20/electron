@@ -1,4 +1,7 @@
 import bcrypt from "bcryptjs";
+import AES from "aes-js";
+import { SHA256 } from "crypto-js";
+
 export const daysLeft = (deadline) => {
   const difference = new Date(deadline).getTime() - Date.now();
   const remainingDays = difference / (1000 * 3600 * 24);
@@ -57,3 +60,21 @@ export async function checkPassword(inputPassword, hashedPassword) {
     throw new Error("Comparison failed", error);
   }
 }
+
+export const encryptPrivateKey = (privateKey, password) => {
+  const key = SHA256(password).toString();
+  const privateKeyBytes = AES.utils.utf8.toBytes(privateKey);
+  const aesCtr = new AES.ModeOfOperation.ctr(AES.utils.hex.toBytes(key));
+  const encryptedBytes = aesCtr.encrypt(privateKeyBytes);
+  const encryptedHex = AES.utils.hex.fromBytes(encryptedBytes);
+  return encryptedHex;
+};
+
+export const decryptPrivateKey = (encryptedPrivateKey, password) => {
+  const key = SHA256(password).toString();
+  const encryptedBytes = AES.utils.hex.toBytes(encryptedPrivateKey);
+  const aesCtr = new AES.ModeOfOperation.ctr(AES.utils.hex.toBytes(key));
+  const decryptedBytes = aesCtr.decrypt(encryptedBytes);
+  const decryptedPrivateKey = AES.utils.utf8.fromBytes(decryptedBytes);
+  return decryptedPrivateKey;
+};
