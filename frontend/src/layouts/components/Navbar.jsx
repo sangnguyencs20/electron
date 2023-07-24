@@ -10,7 +10,7 @@ import {
 import { Layout } from "./Layout";
 import { AcmeLogo } from "./AcmeLogo";
 import { ButtonBase } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearInfo } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function CustomNavbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDark = useTheme();
-
+  const username = useSelector((state) => state.userState.username);
   const handleClick = (e) => {
     console.log("clicked");
     dispatch(clearInfo());
@@ -64,7 +64,7 @@ export default function CustomNavbar() {
                   Signed in as
                 </Text>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  zoey@example.com
+                  {username}
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="profile" withDivider>

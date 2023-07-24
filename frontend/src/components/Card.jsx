@@ -6,7 +6,7 @@ import { useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { formattedDateTime } from "../utils";
 
-export default function App({ title, createdBy, description }) {
+export default function App({ title, createdBy, description, timeSubmit }) {
   const navigate = useNavigate();
   const [isShow, setIsShow] = useState(true);
   const [isExpand, setIsExpand] = useState(false);
@@ -62,11 +62,11 @@ export default function App({ title, createdBy, description }) {
               <div className="mt-10 flex justify-between items-stretch pl-5">
                 <div
                   className={
-                    "py-2 px-4 bg-blue-gray-50 flex justify-between items-center flex-col gap-2 rounded-lg min-w-[100px]"
+                    "py-2 bg-blue-gray-50 flex justify-between items-center flex-col gap-2 rounded-lg min-w-[100px]"
                   }
                 >
-                  <p className="font-bold text-sm text-gray-700">
-                    {createdBy.fullName}
+                  <p className="font-bold text-sm text-gray-700 w-[80px] overflow-clip">
+                    {createdBy}
                   </p>
                   <p className="text-gray-400 text-xs">Created By</p>
                 </div>
@@ -76,7 +76,7 @@ export default function App({ title, createdBy, description }) {
                   }
                 >
                   <p className="font-bold text-sm text-gray-700 max-w-[105px] pr-1 whitespace-pre-line text-clip mr-1">
-                    {formattedDateTime(createdBy.updatedAt)}
+                    {formattedDateTime(timeSubmit)}
                   </p>
                   <p className="text-gray-400 text-xs">To Date</p>
                 </div>

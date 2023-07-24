@@ -182,17 +182,15 @@ export default function Approve() {
     { name: "ACTIONS", uid: "actions" },
   ];
   const renderCell = (doc, columnKey) => {
-    const cellValue = doc.documentId[columnKey];
+    // const cellValue = doc.document[columnKey];
     switch (columnKey) {
       case "detail":
         return (
           <DetailCell
-            id={doc.documentId._id}
-            title={doc.documentId.title}
-            createdBy={doc.documentId.createdBy}
-            time={
-              doc.documentId.timeSubmit ? doc.documentId.timeSubmit : "time"
-            }
+            id={doc.document._id}
+            title={doc.document.title}
+            createdBy={doc.document.createdBy}
+            time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );
       case "status":
@@ -200,14 +198,14 @@ export default function Approve() {
       case "state":
         return (
           <StateCell
-            secretState={doc.documentId.secretState}
-            urgencyState={doc.documentId.urgencyState}
+            secretState={doc.document.secretState}
+            urgencyState={doc.document.urgencyState}
           />
         );
       case "description":
-        return <DescriptionCell description={doc.documentId.description} />;
+        return <DescriptionCell description={doc.document.description} />;
       case "file":
-        return <FileCell link={doc.documentId.fileLink} />;
+        return <FileCell link={doc.document.fileLink} />;
 
       case "actions":
         return (
@@ -217,13 +215,13 @@ export default function Approve() {
             className="w-[100px] ml-10 flex flex-nowrap gap-2"
           >
             <Col>
-              <AssignPopper docId={doc.documentId._id} />
+              <AssignPopper docId={doc.document._id} />
             </Col>
             <Col>
               <Tooltip content="Time Line">
                 <MyModal
-                  receiver={doc.documentId._id}
-                  timeSubmit={doc.documentId.timeSubmit}
+                  receiver={doc.document._id}
+                  timeSubmit={doc.document.timeSubmit}
                   isSubmit={doc.status !== "Draft"}
                 />
               </Tooltip>
@@ -232,8 +230,8 @@ export default function Approve() {
               <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
-                    console.log("Edit user", doc.documentId._id);
-                    handleSubmit(doc.documentId._id);
+                    console.log("Edit user", doc.document._id);
+                    handleSubmit(doc.document._id);
                   }}
                 >
                   <CheckCircleOutlineIcon className="text-green-500" />
@@ -247,7 +245,7 @@ export default function Approve() {
                 onClick={() => console.log("Delete user", doc.id)}
               >
                 <RejectModal
-                  docId={doc.documentId._id}
+                  docId={doc.document._id}
                   setIsLoading={setIsLoading}
                   setNeedRefresh={setNeedRefresh}
                 />
@@ -262,7 +260,7 @@ export default function Approve() {
   const handleSubmit = (docID) => {
     setIsLoading(true);
     axiosApproveDocument({
-      documentId: docID,
+      document: docID,
       comment: "",
       status: "Approved",
     })

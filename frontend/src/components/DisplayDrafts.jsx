@@ -74,20 +74,11 @@ const DisplayDrafts = ({ documents }) => {
                 className="grid grid-flow-row sm:gird-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-[20px] gap-[80px] w-full justify-center items-stretch"
               >
                 {posts.map((item, idx) => {
-                  return (
-                    <Card
-                      title={item.title}
-                      createdBy={item.createdBy}
-                      description={item.description}
-                    />
-                  );
+                  return <Card {...item} />;
                 })}
               </motion.div>
             </Tab.Panel>
           ))}
-          <div className="flex w-full justify-end mt-36">
-            <Pagination total={5} initialPage={1} />
-          </div>
         </Tab.Panels>
       </Tab.Group>
     </motion.div>

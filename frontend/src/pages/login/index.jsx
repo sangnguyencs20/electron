@@ -57,6 +57,7 @@ const Login = () => {
             id: res.data.user._id,
             password: res.data.user.password,
             hashedPrivateKey: res.data.user.hashedPrivateKey,
+            username: res.data.user.username,
           })
         );
         const privateKey = decryptPrivateKey(
@@ -79,7 +80,7 @@ const Login = () => {
   };
 
   return (
-    <div className="relative h-full mt-20 flex gap-20">
+    <div className="relative h-full mt-20 flex gap-20 items-center">
       {<CustomSugar customLoading={false} />}
       {loading && <CustomRotatingSquare />}
       <div className="w-full h-fit bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 max-h-fit border">
