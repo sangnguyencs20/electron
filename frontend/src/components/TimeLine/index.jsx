@@ -21,28 +21,6 @@ const TimeLineTable = ({ receiver }) => {
       .then((res) => {
         console.log(res.data);
         setHistory(res.data);
-        setHistory((pre) => [
-          {
-            receiver: {
-              _id: "313",
-              fullName: "Nguyen Vinh Sang",
-              position: "Giam doc cong ty",
-            },
-            status: "Approved",
-            time: "2023-07-19T04:23:07:669Z",
-            comment: "its good",
-          },
-          {
-            receiver: {
-              _id: "313",
-              fullName: "Nguyen Vinh Sang",
-              position: "Giam doc cong ty",
-            },
-            status: "Rejected",
-            time: "2023-07-19T04:23:07:669Z",
-            comment: "its good",
-          },
-        ]);
       })
       .catch((err) => console.error(err));
   }, [receiver]);

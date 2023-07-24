@@ -349,7 +349,7 @@ const Draft = () => {
                 </Table>
               </Tab.Panel>
             ))}
-            <div className="flex w-full justify-end">
+            <div className="flex w-full justify-end mt-10">
               <Pagination
                 total={14}
                 siblings={1}

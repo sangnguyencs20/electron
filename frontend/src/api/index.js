@@ -98,5 +98,12 @@ export const axiosCreateDocument = (data) =>
   axiosClient.post(`api/documents`, data);
 export const axiosHistoryDocument = (id) =>
   axiosClient.get(`api/documents/${id}/history`);
-export const axiosComingDocument = () =>
-  axiosClient.post(`api/documents/comingDocument`);
+export const axiosComingDocument = (page) =>
+  axiosClient.post(`api/documents/comingDocument?page=${page}&pageSize=5`);
+export const axiosApproveDocument = (data) =>
+  axiosClient.post(`api/documents/approve`, data);
+export const axiosDepartmentUser = () =>
+  axiosClient.post(`api/departments/users`);
+export const axiosAssignDocument = (data) => {
+  axiosClient.post(`api/documents/assign`, data);
+};
