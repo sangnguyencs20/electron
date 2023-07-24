@@ -6,7 +6,7 @@ import { Pagination } from "@nextui-org/react";
 
 const Home = () => {
   const [documents, setDocuments] = useState([]);
-  const [page, setPages] = useState(1);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     axiosPublishedDocument(page)
       .then((res) => {
