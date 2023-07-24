@@ -39,7 +39,7 @@ const { getOpinionsOfADocument, createOpinion } = require("../controllers/opinio
  *                   createdBy:
  *                     type: string
  *                     description: The ID of the user who created the opinion
- *                   documentID:
+ *                   documentId:
  *                     type: string
  *                     description: The ID of the document
  *                   content:
@@ -67,10 +67,7 @@ router.get("/:documentId", getOpinionsOfADocument);
  *           schema:
  *             type: object
  *             properties:
- *               createdBy:
- *                 type: string
- *                 description: The ID of the user who created the opinion
- *               documentID:
+ *               documentId:
  *                 type: string
  *                 description: The ID of the document
  *               content:
@@ -87,7 +84,7 @@ router.get("/:documentId", getOpinionsOfADocument);
  *                 createdBy:
  *                   type: string
  *                   description: The ID of the user who created the opinion
- *                 documentID:
+ *                 documentId:
  *                   type: string
  *                   description: The ID of the document
  *                 content:

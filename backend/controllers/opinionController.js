@@ -15,9 +15,15 @@ const getOpinionsOfADocument = async (req, res) => {
 }
 
 const createOpinion = async (req, res) => {
+    const userId = req.userId;
     const opinion = req.body;
+    const comment = {
+        "documentId": opinion.documentId,
+        "content": opinion.content,
+        "createdBy": userId,
+    }
     try {
-        const newOpinion = await createANewOpinion(opinion);
+        const newOpinion = await createANewOpinion(comment);
         const log = {
             "documentId": newOpinion.documentId,
             "user": newOpinion.createdBy,
