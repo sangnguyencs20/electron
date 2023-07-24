@@ -80,7 +80,7 @@ export default function AssignDropDown({ selected, setSelected }) {
               enterTo="opacity-100"
               afterLeave={() => setQuery("")}
             >
-              <Combobox.Options className="z-50 absolute mt-2 -ml-4 max-h-60 w-fit overflow-auto rounded-lg bg-white text-base shadow-lg focus:outline-none sm:text-sm border-gray-500 border scrollbar-hide scroll-smooth">
+              <Combobox.Options className="z-50 absolute mt-2 -ml-4 max-h-60 w-fit overflow-auto rounded-lg bg-white text-base shadow-lg focus:outline-none sm:text-sm border-gray-300 border-[0.5px] hover:shadow-lg hover:shadow-blue-500/50 scrollbar-hide scroll-smooth">
                 {filteredPeople.length === 0 && query !== "" ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     Nothing found.
@@ -91,7 +91,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                       key={person.id}
                       className={({ active }) =>
                         `relative rounded-lg cursor-pointer select-none py-2 pr-4 ease-in-out transition-[background] duration-200 ${
-                          active ? "bg-gray-400 text-black" : "text-gray-900"
+                          active ? "bg-gray-200 text-black" : "text-gray-900"
                         }`
                       }
                       value={person}
@@ -114,7 +114,9 @@ export default function AssignDropDown({ selected, setSelected }) {
                                 <div className="flex justify-center items-center bg-transparent rounded-full w-fit h-fit p-1">
                                   <CheckIcon
                                     className={` w-5 h-5 ${
-                                      !active ? "text-blue-500" : "text-white"
+                                      !active
+                                        ? "text-blue-500"
+                                        : "text-gray-700"
                                     }`}
                                     aria-hidden="true"
                                   />
@@ -134,7 +136,9 @@ export default function AssignDropDown({ selected, setSelected }) {
                               </span>
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white " : "text-blue-900"
+                                  active
+                                    ? "text-light-blue-800 "
+                                    : "text-blue-900"
                                 }`}
                               >
                                 Name
@@ -143,14 +147,18 @@ export default function AssignDropDown({ selected, setSelected }) {
                             <div className="flex flex-col items-start w-32">
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white" : "text-light-blue-100"
-                                } p-1 bg-blue-gray-600 rounded-md`}
+                                  active
+                                    ? "text-light-blue-100"
+                                    : "text-light-blue-100"
+                                } p-1 bg-blue-gray-600 rounded-md min-w-[50px] text-center`}
                               >
                                 {person.position}
                               </span>
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white" : "text-gray-blue-900"
+                                  active
+                                    ? "text-gray-700"
+                                    : "text-gray-blue-900"
                                 }`}
                               >
                                 Position
@@ -166,7 +174,9 @@ export default function AssignDropDown({ selected, setSelected }) {
                               </span>
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white" : "text-gray-blue-500"
+                                  active
+                                    ? "text-gray-700"
+                                    : "text-gray-blue-500"
                                 }`}
                               >
                                 Role
@@ -182,7 +192,9 @@ export default function AssignDropDown({ selected, setSelected }) {
                               </span>
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white" : "text-light-blue-900"
+                                  active
+                                    ? "text-gray-700"
+                                    : "text-light-blue-900"
                                 }`}
                               >
                                 Address
@@ -198,7 +210,9 @@ export default function AssignDropDown({ selected, setSelected }) {
                               </span>
                               <span
                                 className={`text-[12px] ${
-                                  active ? "text-white" : "text-gray-blue-500"
+                                  active
+                                    ? "text-gray-700"
+                                    : "text-gray-blue-500"
                                 }`}
                               >
                                 Id
@@ -226,7 +240,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                         stiffness: 260,
                         damping: 20,
                       }}
-                      className="items-center rounded-lg cursor-default w-full border-none py-2 pl-2 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 flex hover:bg-gray-300"
+                      className="items-center rounded-lg cursor-default w-full border-none py-2 pl-2 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 flex  hover:shadow-lg hover:shadow-gray-500/50 ease-out duration-500"
                     >
                       <CheckIcon
                         className="h-5 w-5 text-blue-500 mx-4"

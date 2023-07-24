@@ -2,12 +2,21 @@ import { Card } from "@nextui-org/react";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { formattedDateTime } from "../utils";
-
+import { UserIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 const CommentBox = ({ item }) => {
   const ref = useRef(null);
   const isInView = useInView(ref);
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, y: -200 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+      }}
       ref={ref}
       className={`relative ease-in duration-1000 ${
         isInView ? "opacity-100" : "opacity-5"
@@ -17,17 +26,13 @@ const CommentBox = ({ item }) => {
         isHoverable
         isPressable
         variant="bordered"
-        className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900"
+        className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900 hover:shadow-lg hover:shadow-cyan-500/50"
       >
         <footer className="flex justify-between items-center mb-2">
-          <div className="flex items-center">
-            <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-              <img
-                className="mr-2 w-6 h-6 rounded-full"
-                src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                alt="Michael Gough"
-              />
-              Michael Gough
+          <div className="flex items-center gap-2">
+            <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white gap-1">
+              <UserIcon className="w-5" />
+              {item.createdBy.fullName}
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               <time pubdate datetime="2022-02-08" title="February 8th, 2022">
@@ -125,7 +130,7 @@ const CommentBox = ({ item }) => {
           </button>
         </div>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 
