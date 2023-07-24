@@ -260,7 +260,7 @@ export default function Approve() {
   const handleSubmit = (docID) => {
     setIsLoading(true);
     axiosApproveDocument({
-      document: docID,
+      documentId: docID,
       comment: "",
       status: "Approved",
     })
@@ -323,13 +323,6 @@ export default function Approve() {
                 </Table.Row>
               )}
             </Table.Body>
-            <Table.Pagination
-              shadow
-              noMargin
-              align="center"
-              rowsPerPage={4}
-              onPageChange={(page) => console.log({ page })}
-            />
           </Table>
           <div className="flex w-full justify-end mt-10">
             <Pagination

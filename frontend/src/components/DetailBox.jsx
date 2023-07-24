@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
-const DetailBox = () => {
+const DetailBox = ({ document }) => {
   const [show, setShow] = useState(false);
   const [copied, setCopied] = useState(false);
   return (
@@ -43,7 +43,7 @@ const DetailBox = () => {
               <p
                 className={`ease-in-out duration-500 text-base leading-8 w-full  `}
               >
-                Dự thảo Luật Bảo vệ Môi trường Đô thị
+                {document?.title}
               </p>
               <ClipboardIcon
                 className={`absolute h-5 w-5 right-4 ${
@@ -67,7 +67,7 @@ const DetailBox = () => {
           <p className="bg-gradient-to-tr from-cyan-500 to-blue-500 text-transparent bg-clip-text w-full font-bold uppercase">
             Author
           </p>
-          <p className="w-full leading-8 ">Trần Văn Tài</p>
+          <p className="w-full leading-8 ">{document?.createdBy?.fullName}</p>
         </Card>
       </div>
       <hr className="my-12 h-0.5 border-t-0 bg-black opacity-30 dark:opacity-50" />
@@ -77,33 +77,13 @@ const DetailBox = () => {
           Description
         </p>
         <ul className="list-disc ml-12 mt-5 flex flex-col gap-5 pr-5">
-          <li>
-            <p className="leading-8 ">
-              Dự thảo này nhằm tạo ra một cơ chế chặt chẽ để bảo vệ môi trường
-              đô thị và nâng cao chất lượng cuộc sống của cư dân thành phố. Nó
-              tập trung vào việc quản lý chất thải, ô nhiễm không khí và nước,
-              tái sử dụng tài nguyên, và xây dựng những khu vực sống xanh và bền
-              vững
-            </p>
-          </li>
-          <li>
-            <p className="leading-8 ">
-              Dự thảo này nhằm tạo ra một cơ chế chặt chẽ để bảo vệ môi trường
-              đô thị và nâng cao chất lượng cuộc sống của cư dân thành phố. Nó
-              tập trung vào việc quản lý chất thải, ô nhiễm không khí và nước,
-              tái sử dụng tài nguyên, và xây dựng những khu vực sống xanh và bền
-              vững
-            </p>
-          </li>
-          <li>
-            <p className="leading-8 ">
-              Dự thảo này nhằm tạo ra một cơ chế chặt chẽ để bảo vệ môi trường
-              đô thị và nâng cao chất lượng cuộc sống của cư dân thành phố. Nó
-              tập trung vào việc quản lý chất thải, ô nhiễm không khí và nước,
-              tái sử dụng tài nguyên, và xây dựng những khu vực sống xanh và bền
-              vững
-            </p>
-          </li>
+          {document?.description?.split(". ").map((item) => {
+            return (
+              <li>
+                <p className="leading-8 ">{item}</p>
+              </li>
+            );
+          })}
         </ul>
       </Card>
     </div>

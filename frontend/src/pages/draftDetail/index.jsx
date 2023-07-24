@@ -1,5 +1,5 @@
 import { Text } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Tabs,
   TabsHeader,
@@ -14,6 +14,8 @@ import {
 } from "@heroicons/react/24/solid";
 import CommentSection from "../../components/CommentSection";
 import DetailBox from "../../components/DetailBox";
+import { axiosDocument } from "../../api";
+import { useLocation } from "react-router-dom";
 const DraftDetail = () => {
   const data = [
     {
@@ -41,6 +43,13 @@ const DraftDetail = () => {
       constantly trying to express ourselves and actualize our dreams.`,
     },
   ];
+  const docId = useLocation().pathname.split("/")[2];
+  const [document, setDocument] = useState({});
+  useEffect(() => {
+    axiosDocument(docId)
+      .then((res) => setDocument(res.data))
+      .catch((err) => console.error(err));
+  }, [docId]);
   return (
     <div className="flex flex-col gap-10 ">
       <div>
@@ -53,7 +62,7 @@ const DraftDetail = () => {
               weight="bold"
               className="font-sans subpixel-antialiased"
             >
-              Dự thảo Luật Bảo vệ Môi trường Đô thị
+              {document.title}
             </Text>
           </div>
         </div>
@@ -63,7 +72,11 @@ const DraftDetail = () => {
       <Tabs value="dashboard">
         <TabsHeader>
           {data.map(({ label, value, icon }) => (
-            <Tab key={value} value={value}>
+            <Tab
+              key={value}
+              value={value}
+              disabled={label === "Comments" && !document.isPublished}
+            >
               <Text
                 className="flex items-center gap-2"
                 b
@@ -76,13 +89,19 @@ const DraftDetail = () => {
             </Tab>
           ))}
         </TabsHeader>
-        <TabsBody>
+        <TabsBody
+          animate={{
+            initial: { y: 250 },
+            mount: { y: 0 },
+            unmount: { y: 250 },
+          }}
+        >
           {data.map(({ value, desc }, idx) => {
             console.log(idx);
             if (idx === 0)
               return (
                 <TabPanel key={value} value={value}>
-                  <DetailBox />
+                  <DetailBox document={document} />
                 </TabPanel>
               );
             else if (idx === 1)
@@ -110,10 +129,11 @@ const DraftDetail = () => {
                 <TabPanel
                   key={value}
                   value={value}
-                  className="flex justify-end w-full"
+                  className={`flex justify-end w-full`}
+                  disabled={document.isPublished === true}
                 >
-                  <div className="p-4 w-full flex flex-col items-center">
-                    <CommentSection />
+                  <div className={`p-4 w-full flex flex-col items-center `}>
+                    <CommentSection docId={document._id} />
                   </div>
                 </TabPanel>
               );

@@ -6,7 +6,13 @@ import { useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { formattedDateTime } from "../utils";
 
-export default function App({ title, createdBy, description, timeSubmit }) {
+export default function App({
+  title,
+  createdBy,
+  description,
+  timeSubmit,
+  _id,
+}) {
   const navigate = useNavigate();
   const [isShow, setIsShow] = useState(true);
   const [isExpand, setIsExpand] = useState(false);
@@ -91,7 +97,7 @@ export default function App({ title, createdBy, description, timeSubmit }) {
               light
               className="text-white hover:text-gray-100"
               onClick={() => {
-                navigate("/draft/1");
+                navigate(`/draft/${_id}`);
               }}
             >
               Detail
