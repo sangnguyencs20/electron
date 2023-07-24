@@ -260,7 +260,7 @@ export default function Approve() {
   const handleSubmit = (docID) => {
     setIsLoading(true);
     axiosApproveDocument({
-      document: docID,
+      documentId: docID,
       comment: "",
       status: "Approved",
     })
