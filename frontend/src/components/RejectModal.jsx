@@ -17,14 +17,9 @@ import { DeleteIcon } from "./DeleteIcon";
 import { IconButton } from "./IconButton";
 import BlockIcon from "@mui/icons-material/Block";
 import axios from "axios";
-import { axiosSubmitFeedback } from "../api";
+import { axiosApproveDocument, axiosSubmitFeedback } from "../api";
 
-export default function RejectModal({
-  docId,
-  receId,
-  setIsLoading,
-  setNeedRefresh,
-}) {
+export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
 
@@ -41,8 +36,8 @@ export default function RejectModal({
   };
   const handleSubmit = () => {
     setIsLoading(true);
-    console.log(receId, docId, bindings.value);
-    axiosSubmitFeedback(receId, docId, {
+    axiosApproveDocument({
+      documentId: docId,
       comment: bindings.value,
       status: "Rejected",
     })

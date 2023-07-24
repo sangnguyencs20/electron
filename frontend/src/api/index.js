@@ -72,16 +72,14 @@ export default axiosClient;
 
 export const axiosLogin = (data) => axiosClient.post("/api/auth/login", data);
 
-export const axiosSignUp = (data) => axiosClient.post("/api/auth/signup", data);
-
 export const axiosAllUser = () => axiosClient.get("/api/users");
 
 export const axiosCreateDoc = (data) =>
   axiosClient.post("/api/documents", data);
 
 export const axiosGetDoc = () => axiosClient.get("/api/documents");
-export const axiosGetMyDoc = (id) =>
-  axiosClient.get(`/api/documents/users/${id}`);
+export const axiosGetMyDoc = (page) =>
+  axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
 export const axiosSubmitMyDoc = (docId, userId) =>
   axiosClient.post(`/api/documents/submit/${docId}`, { userId });
 
@@ -93,3 +91,22 @@ export const axiosSubmitFeedback = (receiId, docId, data) =>
     data
   );
 export const axiosGetAllDocument = () => axiosClient.get(`/api/documents`);
+export const axiosGetAllDepartment = () => axiosClient.get(`/api/departments`);
+export const axiosCreateDocument = (data) =>
+  axiosClient.post(`api/documents`, data);
+export const axiosHistoryDocument = (id) =>
+  axiosClient.get(`api/documents/${id}/history`);
+export const axiosComingDocument = (page) =>
+  axiosClient.post(`api/documents/comingDocument?page=${page}&pageSize=5`);
+export const axiosApproveDocument = (data) =>
+  axiosClient.post(`api/documents/approve`, data);
+export const axiosDepartmentUser = () =>
+  axiosClient.post(`api/departments/users`);
+export const axiosAssignDocument = (data) => {
+  axiosClient.post(`api/documents/assign`, data);
+};
+export const axiosSignUp = (data) => axiosClient.post(`api/auth/signup`, data);
+export const axiosCheckPassword = (data) =>
+  axiosClient.post(`api/auth/confirm`, data);
+export const axiosPublishedDocument = (page) =>
+  axiosClient.get(`api/documents/accepted?page=${page}&pageSize=5`);

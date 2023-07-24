@@ -1,4 +1,4 @@
-import { Table, Row, Col, Tooltip } from "@nextui-org/react";
+import { Table, Row, Col, Tooltip, Pagination } from "@nextui-org/react";
 import { Modal, useModal, Button, Text } from "@nextui-org/react";
 import { IconButton } from "../../components/IconButton";
 import { EyeIcon } from "../../components/EyeIcon";
@@ -7,7 +7,12 @@ import { DeleteIcon } from "../../components/DeleteIcon";
 import { useEffect, useState } from "react";
 import MyModal from "../../components/MyModal";
 import RejectModal from "../../components/RejectModal";
-import { axiosGetReceiveDoc, axiosSubmitFeedback } from "../../api";
+import {
+  axiosApproveDocument,
+  axiosComingDocument,
+  axiosGetReceiveDoc,
+  axiosSubmitFeedback,
+} from "../../api";
 import { useSelector } from "react-redux";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
@@ -66,7 +71,7 @@ export const StateCell = ({ secretState, urgencyState }) => {
 const StatusCell = ({ receiver, userId }) => {
   return (
     <div className="grid grid-cols-1 grid-flow-row w-full justify-center items-center gap-5 px-5 mx-2">
-      <span
+      {/* <span
         className={`${
           receiver.filter((item) => item.receiverId._id === userId)[0]
             ?.status === "Pending"
@@ -95,7 +100,7 @@ const StatusCell = ({ receiver, userId }) => {
         <span className="text-gray-400 text-xs font-medium">
           {receiver.filter((item) => item.receiverId._id === userId)[0]?.time}
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -148,23 +153,25 @@ export default function Approve() {
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [needRefresh, setNeedRefresh] = useState(0);
+  const [page, setPage] = useState(1);
+
   const navigate = useNavigate();
   useEffect(() => {
-    axiosGetReceiveDoc(id)
+    setIsLoading(true);
+    axiosComingDocument(page)
       .then((res) => {
         console.log(res);
-        setTimeout(() => {
-          setDocuments(
-            res.data.map((item, idx) => {
-              return { id: idx, ...item };
-            })
-          );
-        }, 1000);
+        setDocuments(
+          res.data.map((item, idx) => {
+            return { id: idx, ...item };
+          })
+        );
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [needRefresh]);
+  }, [needRefresh, page]);
   console.log(needRefresh);
   const columns = [
     { name: "DOC DETAIL", uid: "detail" },
@@ -175,15 +182,15 @@ export default function Approve() {
     { name: "ACTIONS", uid: "actions" },
   ];
   const renderCell = (doc, columnKey) => {
-    const cellValue = doc[columnKey];
+    // const cellValue = doc.document[columnKey];
     switch (columnKey) {
       case "detail":
         return (
           <DetailCell
-            id={doc.id}
-            title={doc.title}
-            createdBy={doc.createdBy}
-            time={doc.timeSubmit ? doc.timeSubmit : "time"}
+            id={doc.document._id}
+            title={doc.document.title}
+            createdBy={doc.document.createdBy}
+            time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );
       case "status":
@@ -191,14 +198,14 @@ export default function Approve() {
       case "state":
         return (
           <StateCell
-            secretState={doc.secretState}
-            urgencyState={doc.urgencyState}
+            secretState={doc.document.secretState}
+            urgencyState={doc.document.urgencyState}
           />
         );
       case "description":
-        return <DescriptionCell description={doc.description} />;
+        return <DescriptionCell description={doc.document.description} />;
       case "file":
-        return <FileCell link={doc.fileLink} />;
+        return <FileCell link={doc.document.fileLink} />;
 
       case "actions":
         return (
@@ -208,14 +215,14 @@ export default function Approve() {
             className="w-[100px] ml-10 flex flex-nowrap gap-2"
           >
             <Col>
-              <AssignPopper />
+              <AssignPopper docId={doc.document._id} />
             </Col>
             <Col>
               <Tooltip content="Time Line">
                 <MyModal
-                  receiver={doc.receiver.map((item, idx) => {
-                    return { id: idx, ...item };
-                  })}
+                  receiver={doc.document._id}
+                  timeSubmit={doc.document.timeSubmit}
+                  isSubmit={doc.status !== "Draft"}
                 />
               </Tooltip>
             </Col>
@@ -223,8 +230,8 @@ export default function Approve() {
               <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
-                    console.log("Edit user", doc._id);
-                    handleSubmit(doc._id);
+                    console.log("Edit user", doc.document._id);
+                    handleSubmit(doc.document._id);
                   }}
                 >
                   <CheckCircleOutlineIcon className="text-green-500" />
@@ -238,8 +245,7 @@ export default function Approve() {
                 onClick={() => console.log("Delete user", doc.id)}
               >
                 <RejectModal
-                  docId={doc._id}
-                  receId={id}
+                  docId={doc.document._id}
                   setIsLoading={setIsLoading}
                   setNeedRefresh={setNeedRefresh}
                 />
@@ -253,8 +259,9 @@ export default function Approve() {
   };
   const handleSubmit = (docID) => {
     setIsLoading(true);
-    axiosSubmitFeedback(id, docID, {
-      comment: "string",
+    axiosApproveDocument({
+      document: docID,
+      comment: "",
       status: "Approved",
     })
       .then((res) => {
@@ -281,7 +288,6 @@ export default function Approve() {
             damping: 20,
           }}
         >
-          {" "}
           <Table
             aria-label="Example table with custom cells"
             sticked
@@ -325,6 +331,18 @@ export default function Approve() {
               onPageChange={(page) => console.log({ page })}
             />
           </Table>
+          <div className="flex w-full justify-end mt-10">
+            <Pagination
+              total={14}
+              siblings={1}
+              initialPage={1}
+              controls
+              onChange={(page) => {
+                console.log(page);
+                setPage(page);
+              }}
+            />
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>

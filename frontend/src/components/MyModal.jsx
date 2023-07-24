@@ -2,18 +2,17 @@ import { Modal, useModal, Button, Text, Grid, Card } from "@nextui-org/react";
 import { EyeIcon } from "./EyeIcon";
 import CustomTable from "./CustomTable";
 import TimeLineTable from "./TimeLine";
-
-export default function MyModal({ receiver }) {
+import TimelineIcon from "@mui/icons-material/Timeline";
+export default function MyModal({ receiver, timeSubmit, isSubmit }) {
   const { setVisible, bindings } = useModal();
   return (
     <div>
-      <EyeIcon
-        size={20}
-        fill="#979797"
+      <TimelineIcon
+        className={`${!isSubmit && "cursor-not-allowed opacity-30"}`}
+        disabled
         onClick={() => {
-          setVisible(true);
+          isSubmit && setVisible(true);
         }}
-        class
       />
       <Modal
         width="1000px"
@@ -28,7 +27,7 @@ export default function MyModal({ receiver }) {
           </Text>
         </Modal.Header>
         <Modal.Body css={{ bgColor: "#f3f3f3" }}>
-          <TimeLineTable receiver={receiver} />
+          <TimeLineTable receiver={receiver} timeSubmit={timeSubmit} />
         </Modal.Body>
         <Modal.Footer>
           <Button auto flat color="error" onPress={() => setVisible(false)}>

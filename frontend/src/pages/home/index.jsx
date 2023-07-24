@@ -1,23 +1,37 @@
 import { useState, useEffect } from "react";
 import DisplayDrafts from "../../components/DisplayDrafts";
 import CustomSugar from "../../components/CustomSugar";
-import { axiosGetAllDocument } from "../../api";
+import { axiosGetAllDocument, axiosPublishedDocument } from "../../api";
+import { Pagination } from "@nextui-org/react";
 
 const Home = () => {
   const [documents, setDocuments] = useState([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    axiosGetAllDocument()
+    axiosPublishedDocument(page)
       .then((res) => {
         setDocuments(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [page]);
   return (
     <div>
       {<CustomSugar customLoading={false} />}
       <DisplayDrafts documents={documents} />
+      <div className="flex w-full justify-end mt-36">
+        <Pagination
+          total={14}
+          siblings={1}
+          initialPage={1}
+          controls
+          onChange={(page) => {
+            console.log(page);
+            setPage(page);
+          }}
+        />
+      </div>
     </div>
   );
 };

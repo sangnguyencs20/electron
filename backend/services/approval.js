@@ -39,15 +39,20 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
 
 
 const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
+    console.log(userIdArray)
     if (userIdArray.length === 0) {
         throw new Error('Please select at least one user');
     }
 
     const approval = await getAnApprovalByDocumentId(documentId);
 
+
+
     if (!approval) {
         return await handlePostAnApprovalOfADocument(documentId, userIdArray);
     }
+
+
 
     for (const userId of userIdArray) {
         if (userId === approval.history[approval.history.length - 1].receiverId) {

@@ -73,8 +73,33 @@ const signup = async (req, res) => {
     }
 };
 
+const confirmPassword = async (req, res) => {
+    const id = req.userId;
+    const { password } = req.body;
+
+    try {
+        const user = await getOneUserById(id);
+        console.log(user)
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (!isPasswordMatched(password, user.password)) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        return res.status(200).json({ message: 'Password is correct' });
+    }
+    catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+}
+
 module.exports = {
     login,
     signup,
-    logout
+    logout,
+    confirmPassword
 };

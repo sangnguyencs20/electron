@@ -146,15 +146,27 @@ router.post("/", createDocument);
  *       tags: [Document]
  *       summary: Get all accepted documents
  *       description: Retrieve all documents with a status of "Accepted"
+ *       parameters:
+ *         - name: page
+ *           in: query
+ *           description: Page number for pagination (if applicable)
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *             default: 1
+ *         - name: pageSize
+ *           in: query
+ *           description: Number of items per page for pagination (if applicable)
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *             maximum: 100
+ *             default: 20
  *       responses:
  *         200:
  *           description: Successful operation
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   $ref: '#/components/schemas/Document'
  *         403:
  *           description: Unauthorized - User is not authorized to view this content
  *         500:
@@ -162,6 +174,7 @@ router.post("/", createDocument);
  *       security:
  *         - bearerAuth: []
  */
+
 
 
 router.get("/accepted", getPublishedDocuments);
@@ -281,7 +294,7 @@ router.post("/myDocument", getDocumentOfUser);
 
 /**
  * @swagger
- * /submit/{documentId}:
+ * /api/submit/{documentId}:
  *   post:
  *     summary: Submit a document
  *     tags: [Document]
@@ -321,7 +334,7 @@ router.post("/submit/:documentId", submitDocument);
 
 /**
 * @swagger
-* /documents/publish/{documentId}:
+* /api/documents/publish/{documentId}:
 *   post:
 *     summary: Publish a document
 *     tags: [Document]
@@ -346,7 +359,7 @@ router.post("/publish/:id", publishDocument);
 
 /**
  * @swagger
- * /documents/comingDocument:
+ * /api/documents/comingDocument:
  *   post:
  *     summary: Get all coming documents of an approver
  *     tags: [Document]
@@ -371,7 +384,7 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
 
 /**
  * @swagger
- * /documents/assign:
+ * /api/documents/assign:
  *   post:
  *     summary: Assign a document to an user
  *     tags: [Document]
@@ -386,12 +399,12 @@ router.post("/comingDocument", getAllDocumentsOfApprover);
  *               documentId: 
  *                 type: ObjectID
  *                 required: true
- *               userId:
+ *               userIds:
  *                 type: Array
  *                 required: true
  *             example:
  *               documentId: "64b51ac7711bf25db25a32e0"
- *               userId: ["64b51ac7711bf25db25a32e1", "64b51ac7711bf25db25a32e2"]
+ *               userIds: ["64b51ac7711bf25db25a32e1", "64b51ac7711bf25db25a32e2"]
  *     responses:
  *       200:
  *         description: Success message
@@ -401,7 +414,7 @@ router.post("/assign", assignDocumentToApprover);
 
 /**
  * @swagger
- * /documents/approve:
+ * /api/documents/approve:
  *   post:
  *     summary: Approve a document
  *     tags: [Document]

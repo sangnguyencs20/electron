@@ -10,7 +10,7 @@ import {
 import { Layout } from "./Layout";
 import { AcmeLogo } from "./AcmeLogo";
 import { ButtonBase } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearInfo } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function CustomNavbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDark = useTheme();
-
+  const username = useSelector((state) => state.userState.username);
   const handleClick = (e) => {
     console.log("clicked");
     dispatch(clearInfo());
@@ -39,62 +39,55 @@ export default function CustomNavbar() {
           </Navbar.Brand>
         </RouterLink>
         <Navbar.Content>
-          <Navbar.Item>
-            <Ring />
-          </Navbar.Item>
-          <Navbar.Item>
-            <Dropdown placement="bottom-right">
-              <Navbar.Item>
-                <Dropdown.Trigger>
-                  <Avatar
-                    bordered
-                    as="button"
-                    color="primary"
-                    size="md"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                </Dropdown.Trigger>
-              </Navbar.Item>
-              <Dropdown.Menu
-                aria-label="User menu actions"
-                color="primary"
-                onAction={(actionKey) => {
-                  if (actionKey === "logout") handleClick();
-                  if (actionKey === "profile") navigate("/profile");
-                }}
+          <Dropdown placement="bottom-right">
+            <Navbar.Item>
+              <Dropdown.Trigger>
+                <Avatar
+                  bordered
+                  as="button"
+                  color="primary"
+                  size="md"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+              </Dropdown.Trigger>
+            </Navbar.Item>
+            <Dropdown.Menu
+              aria-label="User menu actions"
+              color="primary"
+              onAction={(actionKey) => {
+                if (actionKey === "logout") handleClick();
+                if (actionKey === "profile") navigate("/profile");
+              }}
+            >
+              <Dropdown.Item key="profiles" css={{ height: "$18" }}>
+                <Text b color="inherit" css={{ d: "flex" }}>
+                  Signed in as
+                </Text>
+                <Text b color="inherit" css={{ d: "flex" }}>
+                  {username}
+                </Text>
+              </Dropdown.Item>
+              <Dropdown.Item key="profile" withDivider>
+                My Profile
+              </Dropdown.Item>
+              <Dropdown.Item key="analytics" withDivider>
+                Analytics
+              </Dropdown.Item>
+              <Dropdown.Item key="system">System</Dropdown.Item>
+              <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
+              <Dropdown.Item key="help_and_feedback" withDivider>
+                Help & Feedback
+              </Dropdown.Item>
+              <Dropdown.Item
+                key="logout"
+                withDivider
+                color="error"
+                css={{ width: "100%", textAlign: "start" }}
               >
-                <Dropdown.Item key="profiles" css={{ height: "$18" }}>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    Signed in as
-                  </Text>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    zoey@example.com
-                  </Text>
-                </Dropdown.Item>
-                <Dropdown.Item key="profile" withDivider>
-                  My Profile
-                </Dropdown.Item>
-                <Dropdown.Item key="analytics" withDivider>
-                  Analytics
-                </Dropdown.Item>
-                <Dropdown.Item key="system">System</Dropdown.Item>
-                <Dropdown.Item key="configurations">
-                  Configurations
-                </Dropdown.Item>
-                <Dropdown.Item key="help_and_feedback" withDivider>
-                  Help & Feedback
-                </Dropdown.Item>
-                <Dropdown.Item
-                  key="logout"
-                  withDivider
-                  color="error"
-                  css={{ width: "100%", textAlign: "start" }}
-                >
-                  Log Out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Navbar.Item>
+                Log Out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Navbar.Content>
       </Navbar>
     </Layout>

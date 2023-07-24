@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Stepper,
   Step,
-  Button,
+  Button as MuiButton,
   Typography,
   Select,
   Option,
@@ -19,6 +19,10 @@ import {
   Card,
   Textarea,
   Checkbox,
+  Popover,
+  Row,
+  Text,
+  Button,
 } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import AssignDropDown from "../../components/AssignDropDown";
@@ -26,8 +30,15 @@ import DropFile from "../../components/DropFile";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
-import { axiosCreateDoc } from "../../api";
+import { axiosCheckPassword, axiosCreateDocument } from "../../api";
 import { useSelector } from "react-redux";
+import { addDraft } from "../../contract";
+import {
+  checkPassword,
+  decryptPrivateKey,
+  encryptPrivateKey,
+  hashPassword,
+} from "../../utils";
 
 export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -88,43 +99,76 @@ export default function Create() {
       };
     return {
       text: "Request",
-      color: "primary",
+      color: "default",
     };
   }, [title, needFill]);
   //----page2------------------
   const [approvals, setApprovals] = React.useState([]);
   const [file, setFile] = React.useState("1313");
   //----page3-----------------handle submit
+  const {
+    value: password,
+    setValue: setPrivateKey,
+    reset: descPrivateKey,
+    bindings: passwordBindings,
+  } = useInput("");
+  const hashedPassword = useSelector((state) => state.userState.password);
+  const hashedPrivateKey = useSelector(
+    (state) => state.userState.hashedPrivateKey
+  );
   const handleSubmit = async () => {
-    setIsLoading((pre) => !pre);
-    await axiosCreateDoc({
-      title,
-      secretState: secret,
-      receiver: approvals.map((item) => {
-        return item._id;
-      }),
-      description: desc,
-      fileLink: file,
-    })
-      .then((res) => {
-        setTimeout(() => {
-          setIsLoading((pre) => !pre);
-          toast.success(`Tạo mới thành công`);
-          setActiveStep(0);
-          reset();
-          setSecret("Neutral");
-          setUrgency("Neutral");
-          setDesc("");
-          setApprovals([]);
-          setConfirm(false);
-        }, 1000);
+    setIsLoading(true);
+    await axiosCheckPassword({ password })
+      .then(async (res) => {
+        console.log(
+          "privatekey",
+          decryptPrivateKey(hashedPrivateKey, password)
+        );
+        await addDraft(
+          decryptPrivateKey(hashedPrivateKey, password),
+          form
+        ).then(async (res) => {
+          await axiosCreateDocument({
+            title: form.title,
+            receiver: form.approvals,
+            fileLink: form.fileLink,
+            description: form.description,
+          })
+            .then((res) => {
+              setTimeout(() => {
+                setIsLoading(false);
+              }, 3000);
+              toast.success(`Create: ${res.data._id}`);
+            })
+            .catch((err) => {
+              console.error(err);
+              setIsLoading(false);
+            });
+        });
       })
-      .catch((err) => {
-        console.error(err);
-        setIsLoading(false);
-      });
+
+      .catch((err) => console.error(err));
+    // await checkPassword(password, hashedPassword)
+    //   .then((res) => console.log(res))
+    //   .catch((error) => console.log(error));
+
+    // await addDraft(
+    //   `6f5272ae7556fcc599544c646cb6c26a8df106182ac1fc0213810263e3897a3e`
+    // );
   };
   const [confirm, setConfirm] = useState(false);
+  const id = useSelector((state) => state.userState.id);
+  const form = useMemo(() => {
+    return {
+      title: title,
+      secretStatus: secret,
+      urgencyStatus: urgency,
+      description: desc,
+      approvals: approvals,
+      fileLink: file,
+      owner: id,
+    };
+  }, [title, secret, desc, approvals, file]);
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
   return (
@@ -200,7 +244,7 @@ export default function Create() {
               key={"page1"}
               initial={{ opacity: 0, y: -200 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 1, y: 200 }}
+              exit={{ opacity: 0, y: 200 }}
               transition={{
                 type: "spring",
                 stiffness: 260,
@@ -211,7 +255,7 @@ export default function Create() {
               <div className="flex flex-wrap mx-3 mb-6 flex-col">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-password"
+                  htmlFor="grid-password"
                 >
                   title (* request)
                 </label>
@@ -237,7 +281,7 @@ export default function Create() {
                 <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
+                    htmlFor="grid-password"
                   >
                     status
                   </label>
@@ -278,7 +322,7 @@ export default function Create() {
               <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-city"
+                  htmlFor="grid-city"
                 >
                   Description
                 </label>
@@ -291,7 +335,7 @@ export default function Create() {
                       ? "error"
                       : desc !== ""
                       ? "success"
-                      : "primary"
+                      : "default"
                   }
                 />
               </div>
@@ -315,7 +359,7 @@ export default function Create() {
               <div className="flex flex-wrap mx-3 mb-6 flex-col z-50">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-password"
+                  htmlFor="grid-password"
                 >
                   approval (* request)
                 </label>
@@ -328,7 +372,7 @@ export default function Create() {
               <div className="mt-7 flex flex-wrap flex-col mx-3 mb-2 z-0">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  for="grid-city"
+                  htmlFor="grid-city"
                 >
                   Submit File
                 </label>
@@ -353,30 +397,90 @@ export default function Create() {
                   and I am certain that I want to submit it{" "}
                 </p>
               </div>
-              <Button
-                className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
-                variant="contained"
-                type="submit"
-                aria-labelledby="submitButtonLabel"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-                disabled={!confirm}
-              >
-                Submit
-              </Button>
+
+              <Popover shouldCloseOnBlur={true} triggerType="grid">
+                <Popover.Trigger>
+                  <MuiButton
+                    className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
+                    variant="filled"
+                    type="submit"
+                    aria-labelledby="submitButtonLabel"
+                    disabled={
+                      !confirm ||
+                      title === "" ||
+                      secret === "" ||
+                      urgency === "" ||
+                      desc === "" ||
+                      approvals.length === 0 ||
+                      file === ""
+                    }
+                  >
+                    Submit
+                  </MuiButton>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <Grid.Container
+                    css={{
+                      borderRadius: "14px",
+                      paddingBlock: "2rem",
+                      maxWidth: "330px",
+                      gap: "20px",
+                    }}
+                  >
+                    <Row justify="center" align="center">
+                      <Text b>Confirm</Text>
+                    </Row>
+                    <Row
+                      css={{
+                        paddingInline: "10%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Input
+                        {...passwordBindings}
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Password"
+                        // contentLeft={<Password fill="currentColor" />}
+                      />
+                    </Row>
+                    <Grid.Container justify="center" alignContent="center">
+                      <Button
+                        size="sm"
+                        flat
+                        color="default"
+                        css={{
+                          backgroundColor: "#CEE4FE !important",
+                          width: "80% !important",
+                          padding: "10px !important",
+                          height: "50px",
+                          borderRadius: "17px",
+                        }}
+                        onClick={(e) => {
+                          handleSubmit();
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                    </Grid.Container>
+                  </Grid.Container>
+                </Popover.Content>
+              </Popover>
             </motion.div>
           )}
         </AnimatePresence>
       </Card>
       <div className="mt-10 flex justify-between">
-        <Button onClick={handlePrev} disabled={isFirstStep}>
+        <MuiButton onClick={handlePrev} disabled={isFirstStep}>
           Prev
-        </Button>
-        <Button onClick={handleNext} disabled={isLastStep}>
+        </MuiButton>
+
+        <MuiButton onClick={handleNext} disabled={isLastStep}>
           Next
-        </Button>
+        </MuiButton>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Modal,
   Button,
@@ -13,19 +13,52 @@ import {
 import { Mail } from "./Mail";
 import { Password } from "./Password";
 import { ArrowUturnDownIcon } from "@heroicons/react/24/outline";
+import { axiosAssignDocument, axiosDepartmentUser } from "../api";
 
-export default function AssignPopper() {
+export default function AssignPopper({ docId }) {
   const [visible, setVisible] = React.useState(false);
+  const [users, setUser] = React.useState([]);
+  const [tableSelect, setTableSelect] = React.useState([]);
+  const userSelected = useMemo(() => {
+    return users
+      .filter((item) => tableSelect.includes(item.id))
+      .map((item) => item._id);
+  }, [tableSelect]);
   const handler = () => setVisible(true);
+  const handleSubmit = async () => {
+    axiosAssignDocument({ documentId: docId, userIds: userSelected });
+  };
   const closeHandler = () => {
     setVisible(false);
-    console.log("closed");
+    console.log("closed", userSelected);
+  };
+  React.useEffect(() => {
+    axiosDepartmentUser()
+      .then((res) => {
+        setUser(
+          res.data.map((item, idx) => {
+            return { id: idx, ...item };
+          })
+        );
+      })
+      .catch();
+  }, []);
+  const renderCell = (doc, columnKey) => {
+    switch (columnKey) {
+      case "name":
+        return doc.fullName;
+      case "role":
+        return doc.position;
+      case "address":
+        return doc.address;
+    }
+    return "";
   };
   return (
     <div>
       <Tooltip content="Assign">
         <ArrowUturnDownIcon
-          className="text-red-700 h-6 cursor-pointer m-1"
+          className="text-red-700 h-6 cursor-pointer m-1 rotate-180"
           onClick={handler}
         />
       </Tooltip>
@@ -51,6 +84,9 @@ export default function AssignPopper() {
         </Modal.Header>
         <Modal.Body>
           <Table
+            onSelectionChange={(e) => {
+              console.log("Selected Rows:", [...e]), setTableSelect([...e]);
+            }}
             aria-label="Example static collection table"
             css={{
               height: "auto",
@@ -59,41 +95,20 @@ export default function AssignPopper() {
             selectionMode="multiple"
           >
             <Table.Header>
-              <Table.Column>NAME</Table.Column>
-              <Table.Column>ROLE</Table.Column>
-              <Table.Column>STATUS</Table.Column>
+              <Table.Column key="name">NAME</Table.Column>
+              <Table.Column key="role">ROLE</Table.Column>
+              <Table.Column key="address">ADDRESS</Table.Column>
             </Table.Header>
-            <Table.Body>
-              <Table.Row key="1">
-                <Table.Cell>Tony Reichert</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Active</Table.Cell>
-              </Table.Row>
-              <Table.Row key="2">
-                <Table.Cell>Zoey Lang</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Paused</Table.Cell>
-              </Table.Row>
-              <Table.Row key="3">
-                <Table.Cell>Jane Fisher</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Active</Table.Cell>
-              </Table.Row>
-              <Table.Row key="4">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
-              </Table.Row>
-              <Table.Row key="5">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
-              </Table.Row>
-              <Table.Row key="6">
-                <Table.Cell>William Howard</Table.Cell>
-                <Table.Cell>Employee</Table.Cell>
-                <Table.Cell>Vacation</Table.Cell>
-              </Table.Row>
+            <Table.Body items={users} css={{ gap: "12px" }}>
+              {(item) => (
+                <Table.Row>
+                  {(columnKey) => (
+                    <Table.Cell css={{ maxWidth: "700px" }}>
+                      {renderCell(item, columnKey)}
+                    </Table.Cell>
+                  )}
+                </Table.Row>
+              )}
             </Table.Body>
             <Table.Pagination
               shadow
@@ -120,7 +135,15 @@ export default function AssignPopper() {
           </Card>
         </Modal.Body>
         <Modal.Footer>
-          <Button auto flat color="default" onPress={closeHandler}>
+          <Button
+            auto
+            flat
+            color="default"
+            onPress={async () => {
+              await handleSubmit();
+              closeHandler();
+            }}
+          >
             Assign
           </Button>
           <Button auto flat color="error" onPress={closeHandler}>
