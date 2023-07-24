@@ -26,7 +26,7 @@ export default function AssignPopper({ docId }) {
   }, [tableSelect]);
   const handler = () => setVisible(true);
   const handleSubmit = async () => {
-    axiosAssignDocument({ documentId: docId, userId: userSelected });
+    axiosAssignDocument({ documentId: docId, userIds: userSelected });
   };
   const closeHandler = () => {
     setVisible(false);

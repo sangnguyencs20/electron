@@ -72,8 +72,6 @@ export default axiosClient;
 
 export const axiosLogin = (data) => axiosClient.post("/api/auth/login", data);
 
-export const axiosSignUp = (data) => axiosClient.post("/api/auth/signup", data);
-
 export const axiosAllUser = () => axiosClient.get("/api/users");
 
 export const axiosCreateDoc = (data) =>
@@ -107,3 +105,4 @@ export const axiosDepartmentUser = () =>
 export const axiosAssignDocument = (data) => {
   axiosClient.post(`api/documents/assign`, data);
 };
+export const axiosSignUp = (data) => axiosClient.post(`api/auth/signup`, data);

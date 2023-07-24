@@ -31,8 +31,9 @@ import DropFile from "../../components/DropFile";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
-import { axiosCreateDoc, axiosGetAllDepartment } from "../../api";
+import { axiosCreateDoc, axiosGetAllDepartment, axiosSignUp } from "../../api";
 import { useSelector } from "react-redux";
+import { decryptPrivateKey, encryptPrivateKey } from "../../utils";
 
 export default function NewSignup() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -238,46 +239,50 @@ export default function NewSignup() {
 
   //----page3-----------------handle submit
   const handleSubmit = async () => {
-    // setIsLoading((pre) => !pre);
-    console.log(
-      fullName,
-      address,
-      cccd,
-      birthday,
-      phone,
-      email,
-      department,
-      role,
-      desc,
-      account,
+    setIsLoading(true);
+    const encodePrivateKey = encryptPrivateKey(
+      `${import.meta.env.VITE_REACT_PRIVATE_KEY}`,
       password
     );
-    // await axiosCreateDoc({
-    //   fullName,
-    //   secretState: secret,
-    //   receiver: approvals.map((item) => {
-    //     return item._id;
-    //   }),
-    //   description: desc,
-    //   fileLink: file,
-    // })
-    //   .then((res) => {
-    //     setTimeout(() => {
-    //       setIsLoading((pre) => !pre);
-    //       toast.success(`Tạo mới thành công`);
-    //       setActiveStep(0);
-    //       reset();
-    //       setSecret("Neutral");
-    //       setUrgency("Neutral");
-    //       setDesc("");
-    //       setApprovals([]);
-    //       setConfirm(false);
-    //     }, 1000);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     setIsLoading(false);
-    //   });
+    await axiosSignUp({
+      username: account,
+      password: password,
+      fullName: fullName,
+      ssn: cccd,
+      dateOfBirth: birthday,
+      address: address,
+      phoneNumber: phone,
+      email: email,
+      position: role,
+      role: "User",
+      department: "649958aedb17c980ea563b7a",
+      hashedPrivateKey: encodePrivateKey,
+    })
+      .then((res) => {
+        console.log(res);
+        setIsLoading(false);
+        setTimeout(() => {
+          toast.success(`Tạo mới thành công`);
+          setActiveStep(0);
+          setIsLoading(false);
+          reset();
+          cccdReset();
+          birthReset();
+          phoneReset();
+          addressReset();
+          emailReset();
+          departmentReset();
+          roleReset();
+          descReset();
+          accountReset();
+          passwordReset();
+          repasswordReset();
+          setConfirm(false);
+        }, 500);
+      })
+      .catch((err) => {
+        setIsLoading(false), toast.error(err.message);
+      });
   };
   const [confirm, setConfirm] = useState(false);
   //loading
@@ -422,14 +427,13 @@ export default function NewSignup() {
                   </label>
                   <Input
                     {...birthBindings}
-                    clearable
                     shadow={false}
                     onClearClick={reset}
                     status={birthHelper.color}
                     color={birthHelper.color}
                     helperColor={birthHelper.color}
                     helperText={birthHelper.text}
-                    type="email"
+                    type="date"
                     css={{
                       width: "95%",
                       display: "block",
