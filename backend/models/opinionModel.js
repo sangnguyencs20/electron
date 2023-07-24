@@ -15,6 +15,10 @@ const OpinionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Vui long nhap noi dung'],
     },
+    txHash: {
+        type: String,
+        // required: [true, 'Vui long nhap txHash'],
+    }
     //pdf store
 },
 {
