@@ -5,19 +5,48 @@ import {
   Pagination,
   Text,
   Textarea,
+  useInput,
 } from "@nextui-org/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import CommentBox from "./CommentBox";
 import CommentBox2nd from "./CommentBox2nd";
-import { useState } from "react";
-const CommentSection = () => {
+import { useEffect, useState } from "react";
+import { axiosGetComment, axiosPostComment } from "../api";
+const CommentSection = ({ docId }) => {
+  console.log(docId);
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {
+    console.log(comment);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    axiosPostComment({ content: comment, documentId: docId })
+      .then((res) => {
+        console.log(res),
+          setTimeout(() => {
+            setLoading(false);
+          }, 3000);
+      })
+      .catch((err) => {
+        console.error(err),
+          setTimeout(() => {
+            setLoading(false);
+          }, 3000);
+      });
   };
+  const [comments, setComments] = useState([]);
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    axiosGetComment(docId, page)
+      .then((res) => {
+        setComments(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [page, docId]);
+  const {
+    value: comment,
+    setValue: setComment,
+    reset,
+    bindings,
+  } = useInput("");
   return (
     <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 ">
       <div className="max-w-5xl mx-auto px-10 ">
@@ -28,6 +57,7 @@ const CommentSection = () => {
         </div>
         <div className="mb-6 flex flex-col items-center w-full ">
           <Textarea
+            {...bindings}
             rows="10"
             placeholder="Write a comment..."
             required
@@ -62,13 +92,26 @@ const CommentSection = () => {
             />
           </Button>
         </div>
+        {comments.map((item) => {
+          return <CommentBox item={item} />;
+        })}
         <CommentBox />
         <CommentBox />
         {/* <CommentBox2nd /> */}
         <CommentBox />
       </div>
       <div className="flex justify-end p-10 mr-[-50px]">
-        <Pagination total={20} initialPage={1} />;
+        <Pagination
+          initialPage={1}
+          total={14}
+          siblings={1}
+          controls
+          onChange={(page) => {
+            console.log(page);
+            setPage(page);
+          }}
+        />
+        ;
       </div>
     </section>
   );

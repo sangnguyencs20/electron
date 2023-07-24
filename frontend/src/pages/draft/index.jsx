@@ -145,7 +145,7 @@ const Draft = () => {
               <Tooltip content="Details">
                 <IconButton
                   onClick={() => {
-                    navigate("/draft/1");
+                    navigate(`/draft/${doc._id}`);
                   }}
                 >
                   <EyeIcon size={20} fill="#2196f3" />

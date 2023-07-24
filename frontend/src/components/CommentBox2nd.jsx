@@ -24,10 +24,10 @@ const CommentBox2nd = () => {
                 src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                 alt="Jese Leos"
               />
-              Jese Leos
+              dateTime Jese Leos
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              <time pubdate datetime="2022-02-12" title="February 12th, 2022">
+              <time pubdate dateTime="2022-02-12" title="February 12th, 2022">
                 Feb. 12, 2022
               </time>
             </p>
