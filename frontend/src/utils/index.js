@@ -71,6 +71,7 @@ export const encryptPrivateKey = (privateKey, password) => {
 };
 
 export const decryptPrivateKey = (encryptedPrivateKey, password) => {
+  console.log(encryptedPrivateKey, password);
   const key = SHA256(password).toString();
   const encryptedBytes = AES.utils.hex.toBytes(encryptedPrivateKey);
   const aesCtr = new AES.ModeOfOperation.ctr(AES.utils.hex.toBytes(key));
