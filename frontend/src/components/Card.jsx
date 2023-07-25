@@ -35,6 +35,7 @@ export default function App({
         isPressable
         css={{ mw: "330px" }}
         onMouseOver={() => setIsShow(false)}
+        className="hover:shadow-lg hover:shadow-cyan-500/50"
       >
         <Card.Header className="flex justify-between gap-2 text-center w-full">
           <Text

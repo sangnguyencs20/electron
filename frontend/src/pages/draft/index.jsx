@@ -42,6 +42,9 @@ const StyledBadge = styled("span", {
   alignItems: "center",
   alignSelf: "center",
   color: "$white",
+  width: "100px",
+  textAlign: "center",
+  paddingBlock: "10px",
   variants: {
     type: {
       Accepted: {

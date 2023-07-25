@@ -13,7 +13,7 @@ const contractAddress = `${import.meta.env.VITE_REACT_CONTRACT_ADDRESS}`;
 
 const contractABI = abi; // Thay thế bằng ABI của smart contract bạn muốn tương tác
 let contract = null;
-// Hàm tạo wallet từ private key
+
 async function createWallet(privatekey) {
   try {
     const wallet = new ethers.Wallet(privatekey, provider);
@@ -32,7 +32,6 @@ async function createWallet(privatekey) {
   }
 }
 
-// Hàm tạo connected contract từ private key
 export async function createConnectedContract(privateKey) {
   try {
     const wallet = await createWallet(privateKey, provider);
@@ -42,7 +41,6 @@ export async function createConnectedContract(privateKey) {
       wallet
     );
     contract = connectedContract;
-    // Lắng nghe sự kiện 'DraftCreate'
     const filterDraftCreate = connectedContract.filters.DraftCreate(
       null,
       null,
@@ -53,38 +51,23 @@ export async function createConnectedContract(privateKey) {
       filterDraftCreate,
       (draftId, creator, value, status, event) => {
         console.log("DraftCreate:", draftId, creator, value, status);
-        // Xử lý sự kiện 'DraftCreate' ở đây
       }
     );
-
-    // Lắng nghe sự kiện 'DraftSubmit'
     const filterDraftSubmit = connectedContract.filters.DraftSubmit(null);
     connectedContract.on(filterDraftSubmit, (draftId, event) => {
       console.log("DraftSubmit:", draftId);
-      // Xử lý sự kiện 'DraftSubmit' ở đây
     });
 
-    // Lắng nghe sự kiện 'DraftApproved'
-    const filterDraftApproved = connectedContract.filters.DraftApproved(
-      null,
-      null
-    );
+    const filterDraftApproved = connectedContract.filters.DraftApproved();
     connectedContract.on(filterDraftApproved, (id, approver, event) => {
       console.log("DraftApproved:", id, approver);
-      // Xử lý sự kiện 'DraftApproved' ở đây
     });
 
-    // Lắng nghe sự kiện 'ApproverAdded'
-    const filterApproverAdded = connectedContract.filters.ApproverAdded(
-      null,
-      null
-    );
+    const filterApproverAdded = connectedContract.filters.ApproverAdded();
     connectedContract.on(filterApproverAdded, (id, approver, event) => {
       console.log("ApproverAdded:", id, approver);
-      // Xử lý sự kiện 'ApproverAdded' ở đây
     });
 
-    // Lắng nghe sự kiện 'CommentAdded'
     const filterCommentAdded = connectedContract.filters.CommentAdded(
       null,
       null,
@@ -94,7 +77,6 @@ export async function createConnectedContract(privateKey) {
       filterCommentAdded,
       (id, commenter, commentId, event) => {
         console.log("CommentAdded:", id, commenter, commentId);
-        // Xử lý sự kiện 'CommentAdded' ở đây
       }
     );
 
@@ -112,10 +94,9 @@ export const addDraft = async (privateKey, data) => {
       contract = await createConnectedContract(
         `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
       );
+
     contract
-      .addDraft(1, 1, {
-        gasLimit: 300000,
-      })
+      .addDraft(1, 1)
       .then((res) => console.log(res))
       .catch((err) => {
         toast.error(err.toString());
