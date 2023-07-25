@@ -33,6 +33,10 @@ const Approval = new mongoose.Schema({
             }
         ]
     },
+    deadlineApprove: {
+        type: Date,
+        required: [true, 'Vui long nhap thoi han duyet'],
+    },
     isApproved: {
         type: Boolean,
         default: false,
@@ -42,10 +46,20 @@ const Approval = new mongoose.Schema({
 Approval.pre('save', async function (next) {
     const histories = this.history;
 
+    if (!histories || histories.length === 0) {
+        this.isApproved = false;
+        next();
+        return;
+    }
     // Loop through each history entry
     for (const entry of histories) {
         const logs = entry.log;
 
+        if (!logs || logs.length === 0) {
+            this.isApproved = false;
+            next();
+            return;
+        }
         // Get the last log entry for each receiver
         const lastLogEntry = logs[logs.length - 1];
 
