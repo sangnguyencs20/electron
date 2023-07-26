@@ -9,7 +9,7 @@ const {
   handleGetAllDocumentsOfApprover
 } = require("../services/documents");
 
-const { handleAssignAnUserToADocument, handleCommentAnApprovalOfADocument, getApprovalHistoryAsTimeline } = require("../services/approval");
+const { handleAssignAnUserToADocument, handleCommentAnApprovalOfADocument, getApprovalHistoryAsTimeline, getAnApprovalByDocumentId } = require("../services/approval");
 
 const { sendMail, createPayloadForSendingReceiver, createPayloadForSendingFeedback } = require("../libs/mail");
 
@@ -47,7 +47,7 @@ const createDocument = async (req, res) => {
   document.createdBy = req.userId;
   try {
     const newDocument = await createOneDocument(document);
-    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver);
+    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver, req.body.deadlineApprove);
 
     //implement something related to blockchain transaction
     const log = {
@@ -266,8 +266,15 @@ const assignDocumentToApprover = async (req, res) => {
 }
 
 const approveADocument = async (req, res) => {
+  
   const { documentId, comment, status } = req.body;
+
   try {
+    const approval = await getAnApprovalByDocumentId(documentId);
+    console.log(Date.now(), approval.deadlineApprove)
+    if(Date.now() > approval.deadlineApprove){
+      return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
+    }
     await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
     res.status(200).json({ message: "Document approved and commented successfully" });
   } catch (error) {

@@ -55,6 +55,10 @@ const UserSchema = new mongoose.Schema({
     },
     descriptrion: {
         type: String,
+    },
+    walletAddress: {
+        type: String,
+        required: [true, 'Please enter your wallet address'],
     }
 },
     {

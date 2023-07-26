@@ -13,7 +13,7 @@ import { saveInfo } from "../../state/user/userSlice";
 import { toast } from "react-toastify";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
-import { decryptPrivateKey } from "../../utils";
+import { decryptPrivateKey, encryptPrivateKey } from "../../utils";
 import { createConnectedContract } from "../../contract";
 
 const Login = () => {

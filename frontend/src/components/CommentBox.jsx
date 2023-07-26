@@ -1,12 +1,22 @@
 import { Card } from "@nextui-org/react";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-
-const CommentBox = () => {
+import { formattedDateTime } from "../utils";
+import { UserIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
+const CommentBox = ({ item }) => {
   const ref = useRef(null);
   const isInView = useInView(ref);
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, y: -200 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+      }}
       ref={ref}
       className={`relative ease-in duration-1000 ${
         isInView ? "opacity-100" : "opacity-5"
@@ -16,21 +26,17 @@ const CommentBox = () => {
         isHoverable
         isPressable
         variant="bordered"
-        className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900"
+        className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900 hover:shadow-lg hover:shadow-cyan-500/50"
       >
         <footer className="flex justify-between items-center mb-2">
-          <div className="flex items-center">
-            <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-              <img
-                className="mr-2 w-6 h-6 rounded-full"
-                src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                alt="Michael Gough"
-              />
-              Michael Gough
+          <div className="flex items-center gap-2">
+            <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white gap-1">
+              <UserIcon className="w-5" />
+              {item.createdBy.fullName}
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               <time pubdate datetime="2022-02-08" title="February 8th, 2022">
-                Feb. 8, 2022
+                {formattedDateTime(item.createdAt)}
               </time>
             </p>
           </div>
@@ -87,37 +93,10 @@ const CommentBox = () => {
           </div>
         </footer>
         <p className="text-gray-800 dark:text-gray-400">
-          Bài dự thảo về bảo vệ môi trường thành thị đề cập đến một vấn đề rất
-          quan trọng và cấp bách trong thời đại hiện nay. Tôi đã đọc bài dự thảo
-          và nhận thấy một số điểm mạnh và ý tưởng tiềm năng trong nội dung:
           <ul className="ml-3 mt-3 flex flex-col gap-2 list-disc">
-            <li className="">
-              Nhận thức về tầm quan trọng: Bài dự thảo đã làm rõ tầm quan trọng
-              của bảo vệ môi trường thành thị. Việc nhấn mạnh vấn đề này là cần
-              thiết để tạo ra sự nhận thức và sự quan tâm từ cộng đồng và các
-              bên liên quan.
-            </li>
-            <li>
-              Giới thiệu các vấn đề chính: Bài dự thảo đề cập đến các vấn đề
-              chính như ô nhiễm không khí, ô nhiễm nước, quản lý chất thải và sử
-              dụng tài nguyên. Việc xác định các vấn đề này giúp tạo ra một
-              khung nhìn tổng quan và tập trung vào những khía cạnh quan trọng
-              cần giải quyết.
-            </li>
-            <li>
-              Giải pháp và ứng dụng: Bài dự thảo đưa ra một số giải pháp và ứng
-              dụng để bảo vệ môi trường thành thị, như tăng cường quản lý rác
-              thải, thúc đẩy vận chuyển công cộng và khuyến khích sử dụng năng
-              lượng tái tạo. Các giải pháp này mang tính thiết thực và có thể
-              thực hiện được trong thực tế.
-            </li>
-            <li>
-              Hướng phát triển và hợp tác: Bài dự thảo đề xuất cần thiết để phát
-              triển kế hoạch dài hạn và tạo ra các chính sách cụ thể để thúc đẩy
-              bảo vệ môi trường thành thị. Ngoài ra, cũng nhấn mạnh tầm quan
-              trọng của hợp tác giữa chính quyền địa phương, cộng đồng và các tổ
-              chức để đạt được hiệu quả tốt nhất.
-            </li>
+            {item.content.split(". ").map((item) => (
+              <li className="">{item}</li>
+            ))}
           </ul>
         </p>
         <div className="flex items-center mt-4 space-x-4">
@@ -151,7 +130,7 @@ const CommentBox = () => {
           </button>
         </div>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

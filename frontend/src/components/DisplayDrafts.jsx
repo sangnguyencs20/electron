@@ -21,7 +21,7 @@ const DisplayDrafts = ({ documents }) => {
     <motion.div
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -200 }}
+      exit={{ opacity: 0, y: -50 }}
       transition={{
         type: "spring",
         stiffness: 260,
@@ -63,7 +63,7 @@ const DisplayDrafts = ({ documents }) => {
               )}
             >
               <motion.div
-                initial={{ opacity: 0, y: 2000 }}
+                initial={{ opacity: 0, y: 200 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -200 }}
                 transition={{
