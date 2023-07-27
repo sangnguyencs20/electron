@@ -18,6 +18,7 @@ import { axiosDocument } from "../../api";
 import { useLocation } from "react-router-dom";
 import { CustomPreloader } from "react-preloaders";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import TimeLineTable from "../../components/TimeLine";
 const DraftDetail = () => {
   const data = [
     {
@@ -120,18 +121,10 @@ const DraftDetail = () => {
                 <TabPanel
                   key={value}
                   value={value}
-                  className="flex justify-center"
+                  className="flex justify-center w-full"
                 >
-                  <div className="bg-blue-gray-50 p-4 w-full flex justify-between">
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Công ty VBC
-                    </Text>
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Chấp nhận
-                    </Text>
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Transaction code
-                    </Text>
+                  <div className="bg-blue-gray-50 p-4 w-full rounded-xl">
+                    {document && <TimeLineTable receiver={docId} />}
                   </div>
                 </TabPanel>
               );
