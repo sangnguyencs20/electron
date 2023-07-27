@@ -15,7 +15,7 @@ const getAnApprovalByDocumentId = async (documentId) => {
     return approval;
 }
 
-const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
+const handlePostAnApprovalOfADocument = async (documentId, userIdArray, deadlineApprove) => {
     if (await getAnApprovalByDocumentId(documentId)) {
         throw new Error('The approval of this document already exists');
     }
@@ -23,6 +23,7 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
     const approval = new Approval({
         documentId: documentId,
         history: [],
+        deadlineApprove: deadlineApprove,
     });
 
     for (const userId of userIdArray) {
@@ -38,8 +39,8 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
 
 
 
-const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
-    console.log(userIdArray)
+const handleAssignAnUserToADocument = async (documentId, userIdArray, deadlineApprove) => {
+    
     if (userIdArray.length === 0) {
         throw new Error('Please select at least one user');
     }
@@ -47,9 +48,8 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
     const approval = await getAnApprovalByDocumentId(documentId);
 
 
-
     if (!approval) {
-        return await handlePostAnApprovalOfADocument(documentId, userIdArray);
+        return await handlePostAnApprovalOfADocument(documentId, userIdArray, deadlineApprove);
     }
 
 
