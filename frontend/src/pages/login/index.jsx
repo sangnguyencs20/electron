@@ -71,7 +71,7 @@ const Login = () => {
         setTimeout(() => {
           navigate(location.state?.from?.pathname || "/home");
         });
-      }, 2000)
+      }, 0)
       .catch((error) => {
         // toast.error("Đăng nhập thất bại");
         setLoading(false);

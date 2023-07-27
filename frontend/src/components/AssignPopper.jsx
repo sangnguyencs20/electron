@@ -118,21 +118,6 @@ export default function AssignPopper({ docId }) {
               onPageChange={(page) => console.log({ page })}
             />
           </Table>
-          <Card css={{ mt: "10px", p: 10 }}>
-            <Grid.Container>
-              <Text b css={{ textTransform: "uppercase", color: "gray" }}>
-                To date:{" "}
-              </Text>
-              <Grid.Container gap={4}>
-                <Grid>
-                  <Input width="186px" label="Time" type="time" />
-                </Grid>
-                <Grid>
-                  <Input width="186px" label="Date" type="date" />
-                </Grid>
-              </Grid.Container>
-            </Grid.Container>
-          </Card>
         </Modal.Body>
         <Modal.Footer>
           <Button
