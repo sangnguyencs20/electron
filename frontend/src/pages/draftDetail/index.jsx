@@ -109,7 +109,6 @@ const DraftDetail = () => {
           }}
         >
           {data.map(({ value, desc }, idx) => {
-            console.log(idx);
             if (idx === 0)
               return (
                 <TabPanel key={value} value={value}>

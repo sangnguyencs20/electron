@@ -14,7 +14,6 @@ export default function AssignDropDown({ selected, setSelected }) {
   useEffect(() => {
     axiosAllUser()
       .then((res) => {
-        console.log(res);
         setPeople(
           res.data.map((data) => ({
             _id: data._id,
@@ -41,7 +40,6 @@ export default function AssignDropDown({ selected, setSelected }) {
         );
 
   const handleDelete = (id) => {
-    console.log(id, selected);
     setSelected((prevPeople) => {
       return prevPeople.filter((person) => person._id !== id);
     });

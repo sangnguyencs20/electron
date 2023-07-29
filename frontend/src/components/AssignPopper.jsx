@@ -30,7 +30,6 @@ export default function AssignPopper({ docId }) {
   };
   const closeHandler = () => {
     setVisible(false);
-    console.log("closed", userSelected);
   };
   React.useEffect(() => {
     axiosDepartmentUser()

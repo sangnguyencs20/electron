@@ -45,7 +45,6 @@ export default function NewSignup() {
   useEffect(() => {
     axiosGetAllDepartment()
       .then((res) => {
-        console.log(res);
         setDepartmentList(res.data);
       })
       .catch((err) => {
@@ -119,7 +118,6 @@ export default function NewSignup() {
     }, 3000);
   }, [needFill]);
   const handleSecret = (value) => {
-    console.log(value);
     setSecret(value);
   };
 
@@ -261,7 +259,6 @@ export default function NewSignup() {
       hashedPrivateKey: encodePrivateKey,
     })
       .then((res) => {
-        console.log(res);
         setIsLoading(false);
         setTimeout(() => {
           toast.success(`Tạo mới thành công`);

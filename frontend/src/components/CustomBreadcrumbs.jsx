@@ -4,9 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 export default function CustomBreadcrumbs() {
   const local = useLocation();
-  useEffect(() => {
-    console.log(local);
-  }, [local]);
+  useEffect(() => {}, [local]);
   const arrayLocal = local.pathname.split("/").filter((item) => item !== "");
   const len = arrayLocal.length;
   return (

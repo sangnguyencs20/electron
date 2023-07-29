@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import abi from "./abi.json";
+import electron from "./abi.json";
 import { toast } from "react-toastify";
 
 // Sử dụng provider đã tạo từ import.meta.VITE_REACT_SEPOLIA_ENDPOINT
@@ -11,7 +11,7 @@ console.log(provider);
 // Sử dụng import.meta.VITE_REACT_CONTRACT_ADDRESS để lấy contract address
 const contractAddress = `${import.meta.env.VITE_REACT_CONTRACT_ADDRESS}`;
 
-const contractABI = abi; // Thay thế bằng ABI của smart contract bạn muốn tương tác
+const contractABI = electron.abi; // Thay thế bằng ABI của smart contract bạn muốn tương tác
 let contract = null;
 
 async function createWallet(privatekey) {
@@ -88,19 +88,15 @@ export async function createConnectedContract(privateKey) {
   }
 }
 
-export const addDraft = async (privateKey, data) => {
+export const createDraft = async (data) => {
   try {
-    if (!contract)
-      contract = await createConnectedContract(
-        `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
-      );
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
 
-    contract
-      .addDraft(1, 1)
-      .then((res) => console.log(res))
-      .catch((err) => {
-        toast.error(err.toString());
-      });
+    const tx = await contract.DraftCreate();
+    console.log(tx.await(2));
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }

@@ -16,7 +16,6 @@ const DetailBox = ({ document }) => {
           text="tran van tai"
           onCopy={() => {
             setCopied(true);
-            console.log("tran van tai");
           }}
           className="w-full"
         >

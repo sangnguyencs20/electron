@@ -16,7 +16,6 @@ const DisplayDrafts = ({ documents }) => {
     Popular: documents.filter((item) => item.secretState != "High"),
     Trending: documents.filter((item) => item.urgencyState != "Low"),
   };
-  console.log(drafts, documents);
   return (
     <motion.div
       initial={{ opacity: 0, y: -50 }}
