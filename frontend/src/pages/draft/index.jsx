@@ -30,6 +30,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import MyModal from "../../components/MyModal";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+import SubmitModal from "../../components/SubmitModal";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -180,7 +181,7 @@ const Draft = () => {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
-                <IconButton
+                {/* <IconButton
                   className={`${
                     doc.status !== "Draft" && "cursor-not-allowed"
                   }`}
@@ -196,7 +197,8 @@ const Draft = () => {
                         : "text-blue-gray-200"
                     }
                   />
-                </IconButton>
+                </IconButton> */}
+                <SubmitModal doc={doc} />
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>

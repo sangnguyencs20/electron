@@ -94,9 +94,9 @@ export const createDraft = async (data) => {
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
-
-    const tx = await contract.DraftCreate();
-    console.log(tx.await(2));
+    console.log(data);
+    // const tx = await contract.DraftCreate();
+    // console.log(tx.await(2));
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }
