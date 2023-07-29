@@ -290,8 +290,6 @@ router.get("/:id", getDocumentById);
  */
 router.post("/myDocument", getDocumentOfUser);
 
-
-
 /**
  * @swagger
  * /api/submit/{documentId}:

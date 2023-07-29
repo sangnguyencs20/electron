@@ -266,8 +266,8 @@ const approveADocument = async (req, res) => {
   try {
     const approval = await getAnApprovalByDocumentId(documentId);
     const deadlineTimestamp = Date.parse(approval.deadlineApprove);
-    console.log(Date.now(), deadlineTimestamp, approval.deadlineApprove)
     const currentDay = new Date();
+    console.log(currentDay, deadlineTimestamp)
     if (currentDay > deadlineTimestamp) {
       return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
     }
