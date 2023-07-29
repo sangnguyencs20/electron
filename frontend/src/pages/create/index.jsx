@@ -46,7 +46,7 @@ export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
-
+  const userId = useSelector((state) => state.userState.id);
   const handleNext = () => {
     if (
       !isLastStep &&
@@ -70,7 +70,6 @@ export default function Create() {
     }, 3000);
   }, [needFill]);
   const handleSecret = (value) => {
-    console.log(value);
     setSecret(value);
   };
   const {
@@ -120,37 +119,53 @@ export default function Create() {
   );
   const handleSubmit = async () => {
     setIsLoading(true);
-    await axiosCheckPassword({ password })
-      .then(async (res) => {
-        await axiosCreateDocument({
-          title: form.title,
-          receiver: form.approvals,
-          fileLink: form.fileLink,
-          description: form.description,
-        })
-          .then((res) => {
-            setTimeout(() => {
-              setIsLoading(false);
-            }, 3000);
-            toast.success(`Create: ${res.data._id}`);
+
+    const myPromise = new Promise((resolve, reject) => {
+      axiosCheckPassword({ password })
+        .then(async (res) => {
+          try {
+            const createDocumentResponse = await axiosCreateDocument({
+              title: form.title,
+              receiver: form.approvals,
+              fileLink: form.fileLink,
+              description: form.description,
+            });
+
             console.log(
-              res.data,
+              createDocumentResponse.data,
               encryptLinkToBytes32(form.fileLink, password)
             );
+            setIsLoading(false);
             createDraft({
-              _id: hexToBytes20(res.data._id),
+              _id: createDocumentResponse.data.documentId,
               _content_hashed: encryptLinkToBytes32(form.fileLink, password),
               _level1Approvers: form.approvals.map(
                 (item) => item.walletAddress
               ),
+            }).then((hash) => {
+              console.log(hash);
+              resolve(hash); // You can choose to resolve with some data here if needed.
             });
-          })
-          .catch((err) => {
-            console.error(err);
+          } catch (error) {
+            console.error(error);
             setIsLoading(false);
-          });
-      })
-      .catch((err) => console.error(err));
+            reject(error); // You can choose to reject with an error here if needed.
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
+        });
+    });
+    toast.promise(myPromise, {
+      pending: "Draft is being created",
+      success: {
+        render({ data }) {
+          return `Create draft successfully:  ${data}`;
+        },
+      },
+      error: "error",
+    });
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
