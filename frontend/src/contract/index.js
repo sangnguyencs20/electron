@@ -41,44 +41,6 @@ export async function createConnectedContract(privateKey) {
       wallet
     );
     contract = connectedContract;
-    const filterDraftCreate = connectedContract.filters.DraftCreate(
-      null,
-      null,
-      null,
-      null
-    );
-    connectedContract.on(
-      filterDraftCreate,
-      (draftId, creator, value, status, event) => {
-        console.log("DraftCreate:", draftId, creator, value, status);
-      }
-    );
-    const filterDraftSubmit = connectedContract.filters.DraftSubmit(null);
-    connectedContract.on(filterDraftSubmit, (draftId, event) => {
-      console.log("DraftSubmit:", draftId);
-    });
-
-    const filterDraftApproved = connectedContract.filters.DraftApproved();
-    connectedContract.on(filterDraftApproved, (id, approver, event) => {
-      console.log("DraftApproved:", id, approver);
-    });
-
-    const filterApproverAdded = connectedContract.filters.ApproverAdded();
-    connectedContract.on(filterApproverAdded, (id, approver, event) => {
-      console.log("ApproverAdded:", id, approver);
-    });
-
-    const filterCommentAdded = connectedContract.filters.CommentAdded(
-      null,
-      null,
-      null
-    );
-    connectedContract.on(
-      filterCommentAdded,
-      (id, commenter, commentId, event) => {
-        console.log("CommentAdded:", id, commenter, commentId);
-      }
-    );
 
     console.log("contract", contract);
     return connectedContract;
@@ -95,8 +57,12 @@ export const createDraft = async (data) => {
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
     console.log(data);
-    // const tx = await contract.DraftCreate();
-    // console.log(tx.await(2));
+    const tx = await contract.createDraft(
+      data._id,
+      data._content_hashed,
+      data._level1Approvers
+    );
+    console.log(await tx.wait(2));
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }

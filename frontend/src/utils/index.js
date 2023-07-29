@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import AES from "aes-js";
 import { SHA256 } from "crypto-js";
+import { ethers } from "ethers";
 
 export const daysLeft = (deadline) => {
   const difference = new Date(deadline).getTime() - Date.now();
@@ -80,22 +81,44 @@ export const decryptPrivateKey = (encryptedPrivateKey, password) => {
   return decryptedPrivateKey;
 };
 
-export function encryptAES(inputString, key) {
-  const textBytes = AES.utils.utf8.toBytes(inputString);
-  const aesCtr = new AES.ModeOfOperation.ctr(key, new AES.Counter(5));
-  const encryptedBytes = aesCtr.encrypt(textBytes);
-  return AES.utils.hex.fromBytes(encryptedBytes);
+function adjustKeySize(key) {
+  const keyBytes = AES.utils.utf8.toBytes(key);
+  const keySize = 32;
+  const paddedKey = new Uint8Array(keySize);
+  paddedKey.set(keyBytes.slice(0, keySize));
+  return paddedKey;
 }
 
-// Hàm tính giá trị băm SHA-256 của chuỗi và chuyển đổi thành chuỗi bytes32
-export const hashToBytes32 = (inputString) => {
-  const hash = SHA256(inputString).toString();
-  const bytes32 = "0x" + hash;
-  return bytes32;
-};
+// Function to encrypt a link using AES and convert to bytes32
+export function encryptLinkToBytes32(link, key) {
+  // Convert link and key to bytes (UTF-8 encoding)
+  const linkBytes = AES.utils.utf8.toBytes(link);
 
-function objectIdToBytes12(objectId) {
-  const hexString = objectId.toHexString();
-  const bytes12String = hexString.substring(0, 24); // Lấy 12 byte đầu tiên từ hexString
-  return "0x" + bytes12String.padEnd(24, "0"); // Đảm bảo chuỗi bytes12 có đủ 24 ký tự (padding bằng 0 nếu cần)
+  // Adjust key size to 32 bytes
+  const paddedKey = adjustKeySize(key);
+
+  // Perform AES encryption
+  const aesCtr = new AES.ModeOfOperation.ctr(paddedKey, new AES.Counter(5));
+  const encryptedBytes = aesCtr.encrypt(linkBytes);
+
+  // Hash the encrypted bytes using SHA-256
+  const hash = SHA256(AES.utils.hex.fromBytes(encryptedBytes)).toString();
+
+  // Convert the hash to bytes32 (first 32 bytes of the hash)
+  const bytes32String = "0x" + hash.slice(0, 64); // 64 hex characters for 32 bytes
+  // const bytes32 = ethers.utils.hexStringToBytes(bytes32String);
+
+  return bytes32String;
+}
+
+export function hexToBytes20(hexString) {
+  const hexWithoutPrefix = hexString.startsWith("0x")
+    ? hexString.slice(2)
+    : hexString;
+  const bytes20Array = [];
+  for (let i = 0; i < 40; i += 2) {
+    const byte = parseInt(hexWithoutPrefix.substr(i, 2), 16);
+    bytes20Array.push(byte);
+  }
+  return new Uint8Array(bytes20Array);
 }

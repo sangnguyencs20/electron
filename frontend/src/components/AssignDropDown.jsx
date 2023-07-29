@@ -21,6 +21,7 @@ export default function AssignDropDown({ selected, setSelected }) {
             role: data.role,
             address: data.address,
             position: data.position,
+            walletAddress: data.walletAddress,
           }))
         );
       })

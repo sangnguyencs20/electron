@@ -36,10 +36,10 @@ import { createDraft } from "../../contract";
 import {
   checkPassword,
   decryptPrivateKey,
-  encryptAES,
+  encryptLinkToBytes32,
   encryptPrivateKey,
   hashPassword,
-  hashToBytes32,
+  hexToBytes20,
 } from "../../utils";
 
 export default function Create() {
@@ -133,12 +133,16 @@ export default function Create() {
               setIsLoading(false);
             }, 3000);
             toast.success(`Create: ${res.data._id}`);
+            console.log(
+              res.data,
+              encryptLinkToBytes32(form.fileLink, password)
+            );
             createDraft({
-              _id: res.data,
-              _content_hashed: hashToBytes32(
-                encryptAES(form.fileLink, password)
+              _id: hexToBytes20(res.data._id),
+              _content_hashed: encryptLinkToBytes32(form.fileLink, password),
+              _level1Approvers: form.approvals.map(
+                (item) => item.walletAddress
               ),
-              _level1Approvers: [],
             });
           })
           .catch((err) => {
