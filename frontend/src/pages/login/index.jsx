@@ -19,11 +19,15 @@ import { createConnectedContract } from "../../contract";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   let location = useLocation();
-  console.log(location);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-
+  console.log(
+    encryptPrivateKey(
+      "456367fb715c9c9f51584a9a67d6e6ea332cfc1d4f19396115f2ad26f724a799",
+      "123456"
+    )
+  );
   useEffect(() => {
     if (user) navigate("/home");
   }, [user]);
@@ -49,7 +53,6 @@ const Login = () => {
 
     await axiosLogin(values)
       .then((res) => {
-        console.log(res.data);
         dispatch(
           saveInfo({
             accessToken: res.data.accessToken,
@@ -64,14 +67,13 @@ const Login = () => {
           res.data.user.hashedPrivateKey,
           values.password
         );
-        console.log("login", privateKey);
         createConnectedContract(privateKey);
         toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {
           navigate(location.state?.from?.pathname || "/home");
         });
-      }, 2000)
+      }, 0)
       .catch((error) => {
         // toast.error("Đăng nhập thất bại");
         setLoading(false);

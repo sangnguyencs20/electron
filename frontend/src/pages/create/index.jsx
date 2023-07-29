@@ -32,12 +32,14 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
 import { axiosCheckPassword, axiosCreateDocument } from "../../api";
 import { useSelector } from "react-redux";
-import { addDraft } from "../../contract";
+import { createDraft } from "../../contract";
 import {
   checkPassword,
   decryptPrivateKey,
+  encryptAES,
   encryptPrivateKey,
   hashPassword,
+  hashToBytes32,
 } from "../../utils";
 
 export default function Create() {
@@ -120,41 +122,31 @@ export default function Create() {
     setIsLoading(true);
     await axiosCheckPassword({ password })
       .then(async (res) => {
-        console.log(
-          "privatekey",
-          decryptPrivateKey(hashedPrivateKey, password)
-        );
-        await addDraft(
-          decryptPrivateKey(hashedPrivateKey, password),
-          form
-        ).then(async (res) => {
-          await axiosCreateDocument({
-            title: form.title,
-            receiver: form.approvals,
-            fileLink: form.fileLink,
-            description: form.description,
-          })
-            .then((res) => {
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 3000);
-              toast.success(`Create: ${res.data._id}`);
-            })
-            .catch((err) => {
-              console.error(err);
+        await axiosCreateDocument({
+          title: form.title,
+          receiver: form.approvals,
+          fileLink: form.fileLink,
+          description: form.description,
+        })
+          .then((res) => {
+            setTimeout(() => {
               setIsLoading(false);
+            }, 3000);
+            toast.success(`Create: ${res.data._id}`);
+            createDraft({
+              _id: res.data,
+              _content_hashed: hashToBytes32(
+                encryptAES(form.fileLink, password)
+              ),
+              _level1Approvers: [],
             });
-        });
+          })
+          .catch((err) => {
+            console.error(err);
+            setIsLoading(false);
+          });
       })
-
       .catch((err) => console.error(err));
-    // await checkPassword(password, hashedPassword)
-    //   .then((res) => console.log(res))
-    //   .catch((error) => console.log(error));
-
-    // await addDraft(
-    //   `6f5272ae7556fcc599544c646cb6c26a8df106182ac1fc0213810263e3897a3e`
-    // );
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
@@ -172,7 +164,7 @@ export default function Create() {
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
   return (
-    <div className="w-full py-4 px-40">
+    <div className="w-full py-4 px-5 lg:px-40">
       {<CustomSugar customLoading={false} />}
       {isLoading && <CustomRotatingSquare />}
       <Stepper
@@ -191,7 +183,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 0 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Your title draft, status and description.
             </Typography>
@@ -208,7 +200,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 1 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Select Approval and upload file
             </Typography>
@@ -225,7 +217,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 2 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Review draft before submit
             </Typography>
@@ -277,7 +269,7 @@ export default function Create() {
                   }}
                 />
               </div>
-              <div className="flex flex-wrap mx-3 mb-6 mt-10">
+              <div className="flex  flex-wrap mx-3 mb-6 mt-10">
                 <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -285,7 +277,7 @@ export default function Create() {
                   >
                     status
                   </label>
-                  <div className="mt-5 flex gap-2">
+                  <div className="mt-5 flex flex-col md:flex-row gap-10 md:gap-2">
                     <Select
                       variant="standard"
                       label="SELECT SECRET"

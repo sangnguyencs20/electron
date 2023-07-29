@@ -61,9 +61,9 @@ axiosClient.interceptors.response.use(
         toast.error(error.data);
       }
     } else if (error.request) {
-      window.location.replace("/404");
+      // window.location.replace("/404");
     } else {
-      window.location.replace("/404");
+      // window.location.replace("/404");
     }
     throw error;
   }

@@ -14,7 +14,6 @@ export default function AssignDropDown({ selected, setSelected }) {
   useEffect(() => {
     axiosAllUser()
       .then((res) => {
-        console.log(res);
         setPeople(
           res.data.map((data) => ({
             _id: data._id,
@@ -41,7 +40,6 @@ export default function AssignDropDown({ selected, setSelected }) {
         );
 
   const handleDelete = (id) => {
-    console.log(id, selected);
     setSelected((prevPeople) => {
       return prevPeople.filter((person) => person._id !== id);
     });
@@ -166,7 +164,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                 Position
                               </span>
                             </div>
-                            <div className="flex flex-col items-start w-32">
+                            <div className="hidden md:flex flex-col items-start w-32">
                               <span
                                 className={`text-[12px] ${
                                   active ? "text-white" : "text-light-blue-200"
@@ -184,7 +182,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                 Role
                               </span>
                             </div>
-                            <div className="flex flex-col items-start w-32">
+                            <div className="hidden md:flex flex-col items-start w-32">
                               <span
                                 className={`block truncate ${
                                   selected ? "font-medium" : "font-normal"
@@ -202,7 +200,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                 Address
                               </span>
                             </div>
-                            <div className="flex flex-col items-start w-32 overflow-x-clip">
+                            <div className="hidden md:flex flex-col items-start w-32 overflow-x-clip">
                               <span
                                 className={`text-[12px] ${
                                   active ? "text-white" : "text-light-blue-200"
@@ -268,7 +266,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                           </span>
                           <span className={`text-[12px] `}>Position</span>
                         </div>
-                        <div className="flex flex-col items-start w-32">
+                        <div className="hidden md:flex flex-col items-start w-32">
                           <span
                             className={`text-[12px] $ p-1 bg-blue-gray-600 rounded-md text-white`}
                           >
@@ -276,13 +274,13 @@ export default function AssignDropDown({ selected, setSelected }) {
                           </span>
                           <span className={`text-[12px] `}>Role</span>
                         </div>
-                        <div className="flex flex-col items-start w-32">
+                        <div className="hidden md:flex flex-col items-start w-32">
                           <span className={`block truncate `}>
                             {person.address}
                           </span>
                           <span className={`text-[12px] `}>Address</span>
                         </div>
-                        <div className="flex flex-col items-start w-32 overflow-x-clip">
+                        <div className="hidden md:flex flex-col items-start w-32 overflow-x-clip">
                           <span
                             className={`text-gray-100 text-[12px]  p-1 bg-blue-gray-600 rounded-md w-full whitespace-pre-line`}
                           >

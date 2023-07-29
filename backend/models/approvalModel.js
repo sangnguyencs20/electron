@@ -35,7 +35,8 @@ const Approval = new mongoose.Schema({
     },
     deadlineApprove: {
         type: Date,
-        required: [true, 'Vui long nhap thoi han duyet'],
+        // required: [true, 'Vui long nhap thoi han duyet'],
+        default: null
     },
     isApproved: {
         type: Boolean,

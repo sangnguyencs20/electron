@@ -24,6 +24,7 @@ import CustomDatepicker from "../../components/CustomDatePicker";
 import CustomMenu from "../../components/CustomMenu";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
@@ -123,7 +124,6 @@ export const FileCell = ({ link }) => {
 };
 export default function Approve() {
   const id = useSelector((state) => state.userState.id);
-  const [isReady, setISReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [needRefresh, setNeedRefresh] = useState(0);
@@ -187,12 +187,23 @@ export default function Approve() {
           <Row
             justify="center"
             align="center"
-            className="w-[100px] ml-10 flex flex-nowrap gap-2"
+            className="w-[130px] ml-2 grid grid-cols-4 gap-1"
           >
-            <Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip content="Details">
+                <IconButton
+                  onClick={() => {
+                    navigate(`/draft/${doc.document._id}`);
+                  }}
+                >
+                  <EyeIcon size={20} fill="#2196f3" />
+                </IconButton>
+              </Tooltip>
+            </Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <AssignPopper docId={doc.document._id} />
             </Col>
-            <Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Time Line">
                 <MyModal
                   receiver={doc.document._id}
@@ -201,7 +212,7 @@ export default function Approve() {
                 />
               </Tooltip>
             </Col>
-            <Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
@@ -213,7 +224,7 @@ export default function Approve() {
                 </IconButton>
               </Tooltip>
             </Col>
-            <Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
                 content="Reject"
                 color="error"
@@ -250,7 +261,6 @@ export default function Approve() {
   };
   return (
     <div className="container">
-      <CustomSugar customLoading={!setISReady} />
       {isLoading && <CustomRotatingSquare />}
       <AnimatePresence mode="popLayout">
         <motion.div

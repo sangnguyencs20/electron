@@ -8,7 +8,6 @@ const CustomDatepicker = () => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setValue(newValue);
   };
 

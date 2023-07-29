@@ -16,7 +16,6 @@ const DetailBox = ({ document }) => {
           text="tran van tai"
           onCopy={() => {
             setCopied(true);
-            console.log("tran van tai");
           }}
           className="w-full"
         >
@@ -62,7 +61,7 @@ const DetailBox = ({ document }) => {
         <Card
           isHoverable
           variant="flat"
-          className="flex flex-col items-start w-full rounded-md p-4 bg-transparent cursor-pointe relative bg-white text-center border border-black"
+          className="flex flex-col items-start w-full rounded-md p-4 bg-transparent cursor-pointe relative bg-white text-center border border-black hover:shadow-cyan-500/50"
         >
           <p className="bg-gradient-to-tr from-cyan-500 to-blue-500 text-transparent bg-clip-text w-full font-bold uppercase">
             Author

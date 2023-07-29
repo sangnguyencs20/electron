@@ -39,14 +39,11 @@ const DropFile = ({ file, setFile }) => {
       multiselect: true,
       callbackFunction: (data) => {
         if (data.action === "cancel") {
-          console.log("User clicked cancel/close button");
         }
         if (data.action === "picked") {
           setFile(data.docs[0].downloadUrl);
           handleButtonClick();
-          console.log("User clicked cancel/close button");
         }
-        console.log(data);
       },
     });
   };
