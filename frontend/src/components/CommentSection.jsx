@@ -16,10 +16,8 @@ import { AnimatePresence } from "framer-motion";
 import CustomRotatingSquare from "./CustomRotatingSquare";
 import CustomSugar from "./CustomSugar";
 const CommentSection = ({ docId }) => {
-  console.log(docId);
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {
-    console.log(comment);
     {
       docId && setLoading(true);
       docId &&
@@ -30,7 +28,6 @@ const CommentSection = ({ docId }) => {
             "0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3",
         })
           .then((res) => {
-            console.log(res), setLoading(false);
             setIsNeed((pre) => pre + 1);
           })
           .catch((err) => {
@@ -128,7 +125,6 @@ const CommentSection = ({ docId }) => {
           siblings={1}
           controls
           onChange={(page) => {
-            console.log(page);
             setPage(page);
           }}
         />

@@ -14,12 +14,9 @@ import { axiosHistoryDocument } from "../../api";
 import { formattedDateTime } from "../../utils";
 const TimeLineTable = ({ receiver, timeSubmit }) => {
   const [history, setHistory] = useState([]);
-  console.log(history);
-  console.log(receiver);
   useEffect(() => {
     axiosHistoryDocument(receiver)
       .then((res) => {
-        console.log(res.data);
         setHistory(res.data);
       })
       .catch((err) => console.error(err));

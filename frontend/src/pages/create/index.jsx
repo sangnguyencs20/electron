@@ -32,12 +32,14 @@ import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
 import { axiosCheckPassword, axiosCreateDocument } from "../../api";
 import { useSelector } from "react-redux";
-import { addDraft } from "../../contract";
+import { createDraft } from "../../contract";
 import {
   checkPassword,
   decryptPrivateKey,
+  encryptAES,
   encryptPrivateKey,
   hashPassword,
+  hashToBytes32,
 } from "../../utils";
 
 export default function Create() {
@@ -118,43 +120,33 @@ export default function Create() {
   );
   const handleSubmit = async () => {
     setIsLoading(true);
-    await axiosCheckPassword({ password })
-      .then(async (res) => {
-        console.log(
-          "privatekey",
-          decryptPrivateKey(hashedPrivateKey, password)
-        );
-        await addDraft(
-          decryptPrivateKey(hashedPrivateKey, password),
-          form
-        ).then(async (res) => {
-          await axiosCreateDocument({
-            title: form.title,
-            receiver: form.approvals,
-            fileLink: form.fileLink,
-            description: form.description,
-          })
-            .then((res) => {
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 3000);
-              toast.success(`Create: ${res.data._id}`);
-            })
-            .catch((err) => {
-              console.error(err);
-              setIsLoading(false);
-            });
-        });
-      })
-
-      .catch((err) => console.error(err));
-    // await checkPassword(password, hashedPassword)
-    //   .then((res) => console.log(res))
-    //   .catch((error) => console.log(error));
-
-    // await addDraft(
-    //   `6f5272ae7556fcc599544c646cb6c26a8df106182ac1fc0213810263e3897a3e`
-    // );
+    // await axiosCheckPassword({ password })
+    //   .then(async (res) => {
+    //     await axiosCreateDocument({
+    //       title: form.title,
+    //       receiver: form.approvals,
+    //       fileLink: form.fileLink,
+    //       description: form.description,
+    //     })
+    //       .then((res) => {
+    //         setTimeout(() => {
+    //           setIsLoading(false);
+    //         }, 3000);
+    //         toast.success(`Create: ${res.data._id}`);
+    //         createDraft({
+    //           _id: res.data,
+    //           _content_hashed: hashToBytes32(
+    //             encryptAES(form.fileLink, password)
+    //           ),
+    //           _level1Approvers: [],
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         console.error(err);
+    //         setIsLoading(false);
+    //       });
+    //   })
+    //   .catch((err) => console.error(err));
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);

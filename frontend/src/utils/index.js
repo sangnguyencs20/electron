@@ -34,6 +34,7 @@ const options = {
   second: "numeric",
   timeZone: "UTC",
 };
+
 export const formattedDateTime = (dateTimeString) =>
   new Date(dateTimeString).toLocaleString("en-US", options);
 
@@ -50,7 +51,6 @@ export async function hashPassword(password) {
 // Hàm kiểm tra tính hợp lệ của mật khẩu
 export async function checkPassword(inputPassword, hashedPassword) {
   try {
-    console.log(inputPassword, hashedPassword);
     const isMatch = await bcrypt.compare(
       "12345",
       "$2b$10$m/QHLcWFFlWeFjhGlyrNsOzI87yVm/TJFXKA9OUGB4Mge0JEMF.Sq"
@@ -79,3 +79,23 @@ export const decryptPrivateKey = (encryptedPrivateKey, password) => {
   const decryptedPrivateKey = AES.utils.utf8.fromBytes(decryptedBytes);
   return decryptedPrivateKey;
 };
+
+export function encryptAES(inputString, key) {
+  const textBytes = AES.utils.utf8.toBytes(inputString);
+  const aesCtr = new AES.ModeOfOperation.ctr(key, new AES.Counter(5));
+  const encryptedBytes = aesCtr.encrypt(textBytes);
+  return AES.utils.hex.fromBytes(encryptedBytes);
+}
+
+// Hàm tính giá trị băm SHA-256 của chuỗi và chuyển đổi thành chuỗi bytes32
+export const hashToBytes32 = (inputString) => {
+  const hash = SHA256(inputString).toString();
+  const bytes32 = "0x" + hash;
+  return bytes32;
+};
+
+function objectIdToBytes12(objectId) {
+  const hexString = objectId.toHexString();
+  const bytes12String = hexString.substring(0, 24); // Lấy 12 byte đầu tiên từ hexString
+  return "0x" + bytes12String.padEnd(24, "0"); // Đảm bảo chuỗi bytes12 có đủ 24 ký tự (padding bằng 0 nếu cần)
+}

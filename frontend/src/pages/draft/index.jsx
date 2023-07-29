@@ -412,7 +412,6 @@ const Draft = () => {
                 initialPage={1}
                 controls
                 onChange={(page) => {
-                  console.log(page);
                   setPage(page);
                 }}
               />
