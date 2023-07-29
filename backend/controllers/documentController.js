@@ -57,7 +57,7 @@ const createDocument = async (req, res) => {
       documentId: newDocument._id,
       user: newDocument.createdBy,
       action: "CREATE",
-      transactionId: "something hashed", // this is transaction hased we will modify later
+      txHash: "something hashed", // this is transaction hased we will modify later
     };
 
     await createANewLog(log);
@@ -105,7 +105,7 @@ const updateDocumentApproval = async (req, res) => {
 
 const submitDocument = async (req, res) => {
   const { documentId } = req.params;
-  const { deadlineApprove, transactionId } = req.body;
+  const { deadlineApprove, txHash } = req.body;
   const document = await getOneDocumentById(documentId);
 
   if (!document) {
@@ -141,7 +141,7 @@ const submitDocument = async (req, res) => {
     documentId: document._id,
     user: document.createdBy._id,
     action: 'SUBMIT',
-    transactionId: transactionId
+    txHash: txHash
   }
 
   await createANewLog(log)

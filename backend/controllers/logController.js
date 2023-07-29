@@ -1,4 +1,4 @@
-const { getAllLogs, createANewLog, getAllLogsByTransactionId, getAllLogsByDocumentId, getAllLogsByOpinionId, getAllLogsByUserId } = require("../services/log")
+const { getAllLogs, createANewLog, getAllLogsBytxHash, getAllLogsByDocumentId, getAllLogsByOpinionId, getAllLogsByUserId } = require("../services/log")
 
 const getLogs = async (req, res) => {
     if (req.role == 'Citizen') {
@@ -65,12 +65,12 @@ const getLogsByOpinionId = async (req, res) => {
     }
 }
 
-const getLogsByTransactionId = async (req, res) => {
+const getLogsBytxHash = async (req, res) => {
     if (req.role == 'Citizen') {
         return res.status(403).json({ message: "You are not authorized to view this content." });
     }
     try {
-        const logs = await getAllLogsByTransactionId(req, res);
+        const logs = await getAllLogsBytxHash(req, res);
         res.status(200).json(logs);
     }
     catch (error) {
@@ -78,4 +78,4 @@ const getLogsByTransactionId = async (req, res) => {
     }
 }
 
-module.exports = { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpinionId, getLogsByTransactionId };
+module.exports = { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpinionId, getLogsBytxHash };

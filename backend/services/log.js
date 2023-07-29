@@ -26,9 +26,9 @@ const getAllLogsByOpinionId = async (opinionId) => {
     return logs;
 }
 
-const getAllLogsByTransactionId = async (transactionId) => {
-    const logs = await Log.find({ transactionId: transactionId });
+const getAllLogsBytxHash = async (txHash) => {
+    const logs = await Log.find({ txHash: txHash });
     return logs;
 }
 
-module.exports = { getAllLogs, createANewLog, getAllLogsByDocumentId, getAllLogsByUserId, getAllLogsByOpinionId, getAllLogsByTransactionId };
+module.exports = { getAllLogs, createANewLog, getAllLogsByDocumentId, getAllLogsByUserId, getAllLogsByOpinionId, getAllLogsBytxHash };
