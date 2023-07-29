@@ -48,8 +48,10 @@ const createDocument = async (req, res) => {
   document.createdBy = req.userId;
   try {
     const newDocument = await createOneDocument(document);
-    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver, req.body.deadlineApprove);
-
+    if (req.body.receiver.length == 0) {
+      throw new Error("You have to send this document to someone")
+    }
+    const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver);
     //implement something related to blockchain transaction
     const log = {
       documentId: newDocument._id,
@@ -101,26 +103,11 @@ const updateDocumentApproval = async (req, res) => {
   }
 };
 
-const getAllDocumentsOfReceiver = async (req, res) => {
-  if (req.role == 'Citizen') {
-    return res.status(403).json({ message: "You are not authorized to view this content." });
-  }
-
-  const { receiverId } = req.params;
-  try {
-
-    const documents = await handleGetAllDocumentsOfReceiver(receiverId);
-    res.status(200).json(documents);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-}
-
-
 const submitDocument = async (req, res) => {
   const { documentId } = req.params;
-
+  const { deadlineApprove, transactionId } = req.body;
   const document = await getOneDocumentById(documentId);
+
   if (!document) {
     return res.status(404).json({ message: 'Document not found' });
   }
@@ -143,18 +130,21 @@ const submitDocument = async (req, res) => {
 
   // const payload = createPayloadForSendingReceiver(emailArray, document);
   // sendMail(payload);
+  const approval = await getAllApprovals(documentId);
+  approval.deadlineApprove = deadlineApprove;
+  console.log(deadlineApprove)
+  console.log(approval)
+  await approval.save();
   await document.save();
 
   const log = {
     documentId: document._id,
     user: document.createdBy._id,
     action: 'SUBMIT',
-    transactionId: req.body.transactionId
+    transactionId: transactionId
   }
-  await createANewLog(log)
 
-  
-  console.log("Hello")
+  await createANewLog(log)
   return res.status(200).json({ message: 'Document submitted successfully' });
 }
 
@@ -298,6 +288,7 @@ const approveADocument = async (req, res) => {
 
 const getApprovalHistoryOfDocument = async (req, res) => {
   const { documentId } = req.params;
+
   try {
     const approval = await handleGetApprovalOfADocument(documentId);
     if (!approval) {
@@ -319,7 +310,6 @@ module.exports = {
   getDocumentById,
   getDocumentOfUser,
   updateDocumentApproval,
-  getAllDocumentsOfReceiver,
   deleteDocument,
   publishDocument,
   sendDocumentToApprover,

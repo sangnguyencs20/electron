@@ -380,8 +380,6 @@ router.post("/publish/:id", publishDocument);
  */
 router.post("/comingDocument", getAllDocumentsOfApprover);
 
-
-
 /**
  * @swagger
  * /api/documents/assign:

@@ -12,6 +12,7 @@ const getAllDocuments = async (page, pageSize) => {
 }
 
 const createOneDocument = async (document) => {
+    console.log(document)
     const newDocument = new Document(document);
     await newDocument.save();
     return newDocument;
