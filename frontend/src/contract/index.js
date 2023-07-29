@@ -95,12 +95,10 @@ export const addDraft = async (privateKey, data) => {
         `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
       );
 
-    contract
+    const tx = await contract
       .addDraft(1, 1)
-      .then((res) => console.log(res))
-      .catch((err) => {
-        toast.error(err.toString());
-      });
+
+    console.log("dada", await tx.wait(2))
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }

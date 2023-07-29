@@ -16,6 +16,7 @@ const { sendMail, createPayloadForSendingReceiver, createPayloadForSendingFeedba
 const { createANewLog } = require("../services/log");
 
 const { getAllApprovals, checkIfDocumentIsAllApproved } = require("../services/approval");
+const { default: mongoose } = require("mongoose");
 
 const getDocuments = async (req, res) => {
   const { page, pageSize } = req.query; // Parse page and pageSize from the request query
@@ -118,6 +119,7 @@ const getAllDocumentsOfReceiver = async (req, res) => {
 
 const submitDocument = async (req, res) => {
   const { documentId } = req.params;
+
   const document = await getOneDocumentById(documentId);
   if (!document) {
     return res.status(404).json({ message: 'Document not found' });
@@ -142,6 +144,17 @@ const submitDocument = async (req, res) => {
   // const payload = createPayloadForSendingReceiver(emailArray, document);
   // sendMail(payload);
   await document.save();
+
+  const log = {
+    documentId: document._id,
+    user: document.createdBy._id,
+    action: 'SUBMIT',
+    transactionId: req.body.transactionId
+  }
+  await createANewLog(log)
+
+  
+  console.log("Hello")
   return res.status(200).json({ message: 'Document submitted successfully' });
 }
 
@@ -266,13 +279,13 @@ const assignDocumentToApprover = async (req, res) => {
 }
 
 const approveADocument = async (req, res) => {
-  
+
   const { documentId, comment, status } = req.body;
 
   try {
     const approval = await getAnApprovalByDocumentId(documentId);
     console.log(Date.now(), approval.deadlineApprove)
-    if(Date.now() > approval.deadlineApprove){
+    if (Date.now() > approval.deadlineApprove) {
       return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
     }
     await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
