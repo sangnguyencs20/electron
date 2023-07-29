@@ -36,8 +36,8 @@ const Sidebar = () => {
   console.log(isActive);
 
   return (
-    <div className="flex justify-between items-center flex-col sticky h-[85vh]">
-      <div className="bg-blue-100 flex-1 flex flex-col justify-between items-center md:ring-1 md:ring-blue-50 md:hover:ring-slate-400 rounded-[20px] w-[76px] py-4 shadow-xl">
+    <div className="flex justify-between items-center flex-col sticky h-fit md:h-[85vh]">
+      <div className=" px-3 bg-blue-100 flex-1 flex flex-row md:flex-col justify-between items-center md:ring-1 md:ring-blue-50 md:hover:ring-slate-400 rounded-[20px] md:w-[76px] py-4 shadow-xl">
         <motion.div
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
@@ -47,7 +47,7 @@ const Sidebar = () => {
             stiffness: 260,
             damping: 20,
           }}
-          className="flex flex-col justify-center items-center gap-3"
+          className="flex flex-row md:flex-col justify-center items-center gap-3"
         >
           {navlinks.map((link) => (
             <Icon

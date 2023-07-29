@@ -28,6 +28,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import StatusPopper from "../../components/StatusPopper";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import MyModal from "../../components/MyModal";
+import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -47,17 +49,21 @@ const StyledBadge = styled("span", {
   paddingBlock: "10px",
   variants: {
     type: {
-      Accepted: {
+      Approved: {
         bg: "$successLight",
         color: "$successLightContrast",
       },
       Submitted: {
-        bg: "$errorLight",
-        color: "$errorLightContrast",
+        bg: "$cyan500",
+        color: "$cyan200",
       },
       Draft: {
         bg: "$warningLight",
         color: "$warningLightContrast",
+      },
+      Rejected: {
+        bg: "$errorLight",
+        color: "$errorLightContrast",
       },
     },
   },
@@ -74,9 +80,9 @@ const Draft = () => {
     All: myDocuments,
     Draft: myDocuments.filter((item) => item.status == "Draft"),
     Submitted: myDocuments.filter((item) => item.status == "Submitted"),
-    Accepted: myDocuments.filter((item) => item.status == "Accepted"),
+    Approved: myDocuments.filter((item) => item.status == "Approved"),
+    Rejected: myDocuments.filter((item) => item.status == "Rejected"),
   };
-  const [isReady, setISReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
   const [showText, setShowText] = useState(false);
@@ -121,7 +127,7 @@ const Draft = () => {
             b
             size={14}
             css={{ tt: "capitalize" }}
-            className="flex w-[300px] whitespace-pre-line"
+            className="flex md:w-[300px] whitespace-pre-line"
           >
             {cellValue}
           </Text>
@@ -129,7 +135,11 @@ const Draft = () => {
       case "description":
         return <DescriptionCell description={doc.description} />;
       case "status":
-        return <StyledBadge type={doc.status}>{cellValue}</StyledBadge>;
+        return (
+          <div className="w-full flex justify-center">
+            <StyledBadge type={doc.status}>{cellValue}</StyledBadge>
+          </div>
+        );
       case "state":
         return (
           <StateCell
@@ -147,7 +157,7 @@ const Draft = () => {
             className="w-[130px] ml-2 grid grid-cols-4 gap-1"
           >
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Details">
+              <Tooltip content="Details" color={"primary"}>
                 <IconButton
                   onClick={() => {
                     navigate(`/draft/${doc._id}`);
@@ -159,7 +169,7 @@ const Draft = () => {
             </Col>
 
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Status">
+              <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
                     receiver={doc._id}
@@ -208,6 +218,44 @@ const Draft = () => {
                 </IconButton>
               </Tooltip>
             </Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip
+                content="Publish"
+                color="success"
+                placement="bottomEnd"
+                onClick={() => console.log("Delete Draft", doc.id)}
+                isDisabled={doc.status !== "Approved"}
+              >
+                <IconButton
+                  className={`${
+                    doc.status === "Approved"
+                      ? "text-green-500"
+                      : "text-blue-gray-200"
+                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                >
+                  <PublishRoundedIcon />
+                </IconButton>
+              </Tooltip>
+            </Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip
+                content="Finish"
+                color="primary"
+                placement="bottomStart"
+                onClick={() => console.log("Delete Draft", doc.id)}
+                isDisabled={doc.status !== "Approved"}
+              >
+                <IconButton
+                  className={` ${
+                    doc.status === "Approved"
+                      ? "text-blue-600"
+                      : "text-blue-gray-200"
+                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                >
+                  <DoneAllRoundedIcon />
+                </IconButton>
+              </Tooltip>
+            </Col>
           </Row>
         );
       default:
@@ -231,7 +279,6 @@ const Draft = () => {
   };
   return (
     <div className="w-full px-2 sm:px-0">
-      <CustomSugar customLoading={!setISReady} />
       {isLoading && <CustomRotatingSquare />}
       <motion.div
         initial={{ opacity: 0, y: -200 }}
@@ -324,7 +371,11 @@ const Draft = () => {
                     {(column) => (
                       <Table.Column
                         key={column.uid}
-                        align={column.uid === "state" ? "center" : "start"}
+                        align={
+                          column.uid === "state" || column.uid === "status"
+                            ? "center"
+                            : "start"
+                        }
                         className={"rounded-none bg-blue-gray-50"}
                       >
                         {column.name}

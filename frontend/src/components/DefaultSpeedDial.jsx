@@ -23,7 +23,7 @@ export default function DefaultSpeedDial() {
   };
 
   return (
-    <div className="fixed  w-full right-20 bottom-20">
+    <div className="fixed w-full right-20 bottom-20">
       <div className="absolute bottom-0 right-0">
         <SpeedDial>
           <SpeedDialHandler>
@@ -31,7 +31,7 @@ export default function DefaultSpeedDial() {
               <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
             </IconButton>
           </SpeedDialHandler>
-          <SpeedDialContent>
+          <SpeedDialContent className="bg-blue-gray-50 rounded-full">
             <Link to="/draft/create">
               <SpeedDialAction className="relative">
                 <Square3Stack3DIcon className="h-5 w-18" />

@@ -16,6 +16,9 @@ import CommentSection from "../../components/CommentSection";
 import DetailBox from "../../components/DetailBox";
 import { axiosDocument } from "../../api";
 import { useLocation } from "react-router-dom";
+import { CustomPreloader } from "react-preloaders";
+import CustomRotatingSquare from "../../components/CustomRotatingSquare";
+import TimeLineTable from "../../components/TimeLine";
 const DraftDetail = () => {
   const data = [
     {
@@ -45,13 +48,22 @@ const DraftDetail = () => {
   ];
   const docId = useLocation().pathname.split("/")[2];
   const [document, setDocument] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     axiosDocument(docId)
-      .then((res) => setDocument(res.data))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        setDocument(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   }, [docId]);
   return (
     <div className="flex flex-col gap-10 ">
+      {isLoading && <CustomRotatingSquare />}
       <div>
         <div className="w-full flex justify-start">
           <div className="max-w-2xl whitespace-pre-line mt-5">
@@ -70,22 +82,22 @@ const DraftDetail = () => {
       </div>
 
       <Tabs value="dashboard">
-        <TabsHeader>
+        <TabsHeader
+          className="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
+          indicatorProps={{
+            className:
+              "bg-transparent border-b-2 border-blue-500 shadow-none rounded-none",
+          }}
+        >
           {data.map(({ label, value, icon }) => (
             <Tab
               key={value}
               value={value}
               disabled={label === "Comments" && !document.isPublished}
             >
-              <Text
-                className="flex items-center gap-2"
-                b
-                css={{
-                  color: "black",
-                }}
-              >
+              <h1 className="block font-sans text-xl font-semibold leading-tight tracking-normal text-black antialiased uppercase">
                 {label}
-              </Text>
+              </h1>
             </Tab>
           ))}
         </TabsHeader>
@@ -109,18 +121,10 @@ const DraftDetail = () => {
                 <TabPanel
                   key={value}
                   value={value}
-                  className="flex justify-center"
+                  className="flex justify-center w-full"
                 >
-                  <div className="bg-blue-gray-50 p-4 w-full flex justify-between">
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Công ty VBC
-                    </Text>
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Chấp nhận
-                    </Text>
-                    <Text className="max-w-[500px] text-[#2f4d6f] font-sans">
-                      Transaction code
-                    </Text>
+                  <div className="bg-blue-gray-50 p-4 w-full rounded-xl">
+                    {document && <TimeLineTable receiver={docId} />}
                   </div>
                 </TabPanel>
               );
