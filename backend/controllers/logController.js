@@ -18,7 +18,13 @@ const createLog = async (req, res) => {
         return res.status(403).json({ message: "You are not authorized to view this content." });
     }
     try {
-        await createANewLog(req, res);
+        const log = {
+            user: req.userId,
+            documentId: req.body.documentId,
+            txHash: req.body.txHash,
+            action: req.body.action
+        }
+        await createANewLog(log);
         res.status(201).json({ message: "Log created successfully" });
     }
     catch (error) {
