@@ -17,7 +17,6 @@ const getToken = async () => {
     //   store.dispatch(logOut());
     //   return;
     // }
-    console.log(storeData.userState.accessToken);
     return storeData.userState.accessToken;
   } else {
     return "";
@@ -33,7 +32,6 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   let token = await getToken();
-  console.log(`Bearer ${token}`);
   if (token) {
     config.headers = {
       Authorization: `Bearer ${token}`,
@@ -115,3 +113,4 @@ export const axiosGetComment = (docId, page) =>
   axiosClient.get(`api/opinions/${docId}?page=${page}&pageSize=5`);
 export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);
+export const axiosPostLog = (data) => axiosClient.post(`api/logs/`, data);

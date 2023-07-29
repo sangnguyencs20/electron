@@ -122,3 +122,13 @@ export function hexToBytes20(hexString) {
   }
   return new Uint8Array(bytes20Array);
 }
+
+export const convertDateToSolidityTimestamp = (date) => {
+  // Step 1: Get the timestamp from the Date object in JavaScript
+  const timestamp = new Date(date).getTime(); // This will give the timestamp in milliseconds
+
+  // Step 2: Convert the timestamp to seconds (Solidity uses Unix timestamps in seconds)
+  const timestampInSeconds = Math.floor(timestamp / 1000);
+
+  return timestampInSeconds;
+};

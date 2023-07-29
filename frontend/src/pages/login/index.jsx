@@ -22,12 +22,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  console.log(
-    encryptPrivateKey(
-      "456367fb715c9c9f51584a9a67d6e6ea332cfc1d4f19396115f2ad26f724a799",
-      "123456"
-    )
-  );
+
   useEffect(() => {
     if (user) navigate("/home");
   }, [user]);
