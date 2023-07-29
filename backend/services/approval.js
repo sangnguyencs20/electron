@@ -2,7 +2,7 @@ const Approval = require('../models/approvalModel');
 const { getOneDocumentById } = require('./documents');
 
 const getAllApprovals = async (documentId) => {
-    return await Approval.find({ documentId: documentId }).populate('documentId');
+    return await Approval.findOne({ documentId: documentId }).populate('documentId');
 }
 
 const checkIfDocumentIsAllApproved = async (documentId) => {
@@ -15,7 +15,7 @@ const getAnApprovalByDocumentId = async (documentId) => {
     return approval;
 }
 
-const handlePostAnApprovalOfADocument = async (documentId, userIdArray, deadlineApprove) => {
+const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
     if (await getAnApprovalByDocumentId(documentId)) {
         throw new Error('The approval of this document already exists');
     }
@@ -23,7 +23,6 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray, deadline
     const approval = new Approval({
         documentId: documentId,
         history: [],
-        deadlineApprove: deadlineApprove,
     });
 
     for (const userId of userIdArray) {
@@ -39,7 +38,7 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray, deadline
 
 
 
-const handleAssignAnUserToADocument = async (documentId, userIdArray, deadlineApprove) => {
+const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
     
     if (userIdArray.length === 0) {
         throw new Error('Please select at least one user');
@@ -49,7 +48,7 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray, deadlineAp
 
 
     if (!approval) {
-        return await handlePostAnApprovalOfADocument(documentId, userIdArray, deadlineApprove);
+        return await handlePostAnApprovalOfADocument(documentId, userIdArray);
     }
 
 

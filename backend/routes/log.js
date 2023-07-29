@@ -32,6 +32,7 @@ const { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpini
  */
 
 router.get("/", getLogs);
+
 router.post("/", createLog);
 
 /**

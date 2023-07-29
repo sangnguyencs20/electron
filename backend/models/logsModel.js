@@ -21,7 +21,7 @@ const LogSchema = new mongoose.Schema({
     },
     transactionId: {
         type: String,
-        required: [true, 'Transaction has to have a transaction id (get on Blockchain)'],
+        required: [true, 'Transaction has to have a transaction hash (get on Blockchain)'],
     },
 },
     {
