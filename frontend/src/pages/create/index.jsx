@@ -172,7 +172,7 @@ export default function Create() {
   //loading
   const [isLoading, setIsLoading] = React.useState(false);
   return (
-    <div className="w-full py-4 px-40">
+    <div className="w-full py-4 px-5 lg:px-40">
       {<CustomSugar customLoading={false} />}
       {isLoading && <CustomRotatingSquare />}
       <Stepper
@@ -191,7 +191,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 0 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Your title draft, status and description.
             </Typography>
@@ -208,7 +208,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 1 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Select Approval and upload file
             </Typography>
@@ -225,7 +225,7 @@ export default function Create() {
             </Typography>
             <Typography
               color={activeStep === 2 ? "blue" : "gray"}
-              className="font-normal"
+              className="font-normal hidden md:block"
             >
               Review draft before submit
             </Typography>
@@ -277,7 +277,7 @@ export default function Create() {
                   }}
                 />
               </div>
-              <div className="flex flex-wrap mx-3 mb-6 mt-10">
+              <div className="flex  flex-wrap mx-3 mb-6 mt-10">
                 <div className="w-full px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -285,7 +285,7 @@ export default function Create() {
                   >
                     status
                   </label>
-                  <div className="mt-5 flex gap-2">
+                  <div className="mt-5 flex flex-col md:flex-row gap-10 md:gap-2">
                     <Select
                       variant="standard"
                       label="SELECT SECRET"

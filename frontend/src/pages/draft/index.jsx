@@ -127,7 +127,7 @@ const Draft = () => {
             b
             size={14}
             css={{ tt: "capitalize" }}
-            className="flex w-[300px] whitespace-pre-line"
+            className="flex md:w-[300px] whitespace-pre-line"
           >
             {cellValue}
           </Text>
