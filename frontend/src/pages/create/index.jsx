@@ -120,33 +120,33 @@ export default function Create() {
   );
   const handleSubmit = async () => {
     setIsLoading(true);
-    // await axiosCheckPassword({ password })
-    //   .then(async (res) => {
-    //     await axiosCreateDocument({
-    //       title: form.title,
-    //       receiver: form.approvals,
-    //       fileLink: form.fileLink,
-    //       description: form.description,
-    //     })
-    //       .then((res) => {
-    //         setTimeout(() => {
-    //           setIsLoading(false);
-    //         }, 3000);
-    //         toast.success(`Create: ${res.data._id}`);
-    //         createDraft({
-    //           _id: res.data,
-    //           _content_hashed: hashToBytes32(
-    //             encryptAES(form.fileLink, password)
-    //           ),
-    //           _level1Approvers: [],
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         console.error(err);
-    //         setIsLoading(false);
-    //       });
-    //   })
-    //   .catch((err) => console.error(err));
+    await axiosCheckPassword({ password })
+      .then(async (res) => {
+        await axiosCreateDocument({
+          title: form.title,
+          receiver: form.approvals,
+          fileLink: form.fileLink,
+          description: form.description,
+        })
+          .then((res) => {
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 3000);
+            toast.success(`Create: ${res.data._id}`);
+            createDraft({
+              _id: res.data,
+              _content_hashed: hashToBytes32(
+                encryptAES(form.fileLink, password)
+              ),
+              _level1Approvers: [],
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => console.error(err));
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
