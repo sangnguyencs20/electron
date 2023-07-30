@@ -1,11 +1,11 @@
 // import { ethers } from "ethers";
-import abi from "./abi.json";
-
-// const provider = new ethers.providers.JsonRpcProvider(process.env.BLOCKCHAIN_ENDPOINT)
+const abi = require("./abi.json");
+const { ethers, JsonRpcProvider } = require('ethers');
+const provider = new JsonRpcProvider(process.env.BLOCKCHAIN_ENDPOINT)
 
 console.log(provider);
 
-// const contractAddress = process.env.CONTRACT_ADDRESS;
+const contractAddress = process.env.CONTRACT_ADDRESS;
 
 console.log(contractAddress);
 

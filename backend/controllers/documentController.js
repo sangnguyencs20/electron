@@ -261,7 +261,7 @@ const assignDocumentToApprover = async (req, res) => {
 
 const approveADocument = async (req, res) => {
 
-  const { documentId, comment, status } = req.body;
+  const { documentId, comment, status, txHash } = req.body;
 
   try {
     const approval = await getAnApprovalByDocumentId(documentId);
@@ -271,7 +271,7 @@ const approveADocument = async (req, res) => {
     if (currentDay > deadlineTimestamp) {
       return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
     }
-    await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
+    await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status, txHash);
     res.status(200).json({ message: "Document approved and commented successfully" });
   } catch (error) {
     console.log(error);

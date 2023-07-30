@@ -50,7 +50,7 @@ const {
  *               items:
  *                 type: object
  *                 properties:
- *                   title:
+ *                   title:0
  *                     type: string
  *                     description: The title of the document
  *                   createdBy:
