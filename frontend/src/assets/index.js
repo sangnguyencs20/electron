@@ -13,8 +13,10 @@ import money from "./money.svg";
 import loader from "./loader.svg";
 import thirdweb from "./thirdweb.png";
 import tick from "./tick.svg";
+import VBC from "./VBC.svg";
 import Download from "./download.jsx";
 export {
+  VBC,
   tick,
   tagType,
   createCampaign,
