@@ -284,11 +284,13 @@ const getApprovalHistoryOfDocument = async (req, res) => {
 
   try {
     const approval = await handleGetApprovalOfADocument(documentId);
+    
     if (!approval) {
       return res.status(404).json({ message: 'Document not found' });
     }
 
     const timeline = await getApprovalHistoryAsTimeline(approval._id);
+    
     res.status(200).json(timeline);
   } catch (error) {
     res.status(500).json({ message: error.message });
