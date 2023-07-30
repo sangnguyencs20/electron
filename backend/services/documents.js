@@ -76,7 +76,7 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
     .populate("documentId");
 
   const filteredDocuments = documents?.filter((doc) => 
-    doc?.documentId?.status !== "Draft";
+    doc?.documentId?.status !== "Draft"
   );
 
   const latestLogs = filteredDocuments.map((doc) => {
