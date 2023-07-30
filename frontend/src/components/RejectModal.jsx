@@ -18,6 +18,9 @@ import { IconButton } from "./IconButton";
 import BlockIcon from "@mui/icons-material/Block";
 import axios from "axios";
 import { axiosApproveDocument, axiosSubmitFeedback } from "../api";
+import { encryptLinkToBytes32 } from "../utils";
+import { decideDraft } from "../contract";
+import { toast } from "react-toastify";
 
 export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
   const [visible, setVisible] = React.useState(false);
@@ -35,22 +38,44 @@ export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
     console.log("closed");
   };
   const handleSubmit = () => {
-    setIsLoading(true);
-    axiosApproveDocument({
-      documentId: docId,
-      comment: bindings.value,
-      status: "Rejected",
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setNeedRefresh((pre) => pre + 1);
-      })
-      .catch((err) => {
-        setNeedRefresh((pre) => pre + 1);
-        setIsLoading(false);
+    const myPromise = new Promise((resolve, reject) => {
+      console.log(docId, encryptLinkToBytes32(controlledValue, "123456"), true);
+      decideDraft({
+        _id: docId,
+        decide: true,
+        comment_hashed: encryptLinkToBytes32(controlledValue, "123456"),
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        axiosApproveDocument({
+          documentId: docId,
+          comment: controlledValue,
+          status: "Rejected",
+          txHash: hash,
+        }).then((res) => {
+          setIsLoading(false);
+          console.log(res);
+          resolve(hash);
+          setNeedRefresh((pre) => pre + 1);
+        });
       });
-  };
+    });
 
+    toast.promise(myPromise, {
+      pending: "Draft is being decided",
+      success: {
+        render({ data }) {
+          return `Decide draft successfully:  ${data}`;
+        },
+      },
+      error: {
+        render({ data }) {
+          return `Decide draft successfully:  ${data}`;
+        },
+      },
+    });
+  };
   return (
     <div>
       <IconButton>

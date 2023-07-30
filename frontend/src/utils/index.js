@@ -132,3 +132,8 @@ export const convertDateToSolidityTimestamp = (date) => {
 
   return timestampInSeconds;
 };
+export const uint8ArrayToHexString = (uint8Array) => {
+  return Array.from(uint8Array, (byte) =>
+    ("0" + byte.toString(16)).slice(-2)
+  ).join("");
+};
