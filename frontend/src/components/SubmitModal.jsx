@@ -14,7 +14,7 @@ import { submitDraft } from "../contract";
 import { convertDateToSolidityTimestamp } from "../utils";
 import { toast } from "react-toastify";
 import { axiosSubmitMyDoc } from "../api";
-export default function SubmitModal({ doc }) {
+export default function SubmitModal({ doc, setNeedRefresh }) {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
   const { value: time, setValue: setTime, reset, bindings } = useInput("");
@@ -30,14 +30,23 @@ export default function SubmitModal({ doc }) {
       }).then((hash) => {
         console.log(hash);
         resolve(hash);
-        // axiosSubmitMyDoc(doc._id,)
+
+        axiosSubmitMyDoc(doc._id, {
+          documentId: doc._id,
+          deadlineApprove: new Date(time),
+          txHash: hash,
+        }).then((res) => {
+          console.log(res);
+          resolve(hash);
+          setNeedRefresh((pre) => pre + 1);
+        });
       });
     });
     toast.promise(myPromise, {
-      pending: "Draft is being created",
+      pending: "Draft is being submitted",
       success: {
         render({ data }) {
-          return `Create draft successfully:  ${data}`;
+          return `Submit draft successfully:  ${data}`;
         },
       },
       error: "error",

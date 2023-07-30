@@ -198,7 +198,7 @@ const Draft = () => {
                     }
                   />
                 </IconButton> */}
-                <SubmitModal doc={doc} />
+                <SubmitModal doc={doc} setNeedRefresh={setNeedRefresh} />
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>

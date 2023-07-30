@@ -30,7 +30,11 @@ import DropFile from "../../components/DropFile";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
-import { axiosCheckPassword, axiosCreateDocument } from "../../api";
+import {
+  axiosCheckPassword,
+  axiosCreateDocument,
+  axiosPostLog,
+} from "../../api";
 import { useSelector } from "react-redux";
 import { createDraft } from "../../contract";
 import {
@@ -144,7 +148,15 @@ export default function Create() {
               ),
             }).then((hash) => {
               console.log(hash);
-              resolve(hash); // You can choose to resolve with some data here if needed.
+              axiosPostLog({
+                documentId: createDocumentResponse.data.documentId,
+                action: "CREATE",
+                txHash: hash,
+              }).then((res) => {
+                console.log(res);
+                resolve(hash);
+              });
+              // resolve(hash); // You can choose to resolve with some data here if needed.
             });
           } catch (error) {
             console.error(error);

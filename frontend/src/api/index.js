@@ -78,8 +78,8 @@ export const axiosCreateDoc = (data) =>
 export const axiosGetDoc = () => axiosClient.get("/api/documents");
 export const axiosGetMyDoc = (page) =>
   axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
-export const axiosSubmitMyDoc = (docId, userId) =>
-  axiosClient.post(`/api/documents/submit/${docId}`, { userId });
+export const axiosSubmitMyDoc = (docId, data) =>
+  axiosClient.post(`/api/documents/submit/${docId}`, data);
 
 export const axiosGetReceiveDoc = (receiId) =>
   axiosClient.get(`/api/documents/receiver/${receiId}`);
