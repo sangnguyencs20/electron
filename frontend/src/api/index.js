@@ -114,3 +114,5 @@ export const axiosGetComment = (docId, page) =>
 export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);
 export const axiosPostLog = (data) => axiosClient.post(`api/logs/`, data);
+export const axiosPostPublishDocument = (docId) =>
+  axiosClient.post(`api/documents/publish/${docId}`);

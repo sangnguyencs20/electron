@@ -17,7 +17,12 @@ import { useNavigate } from "react-router-dom";
 import { DescriptionCell, FileCell, StateCell } from "../approve";
 import DefaultSpeedDial from "../../components/DefaultSpeedDial";
 import { useEffect, useState } from "react";
-import { axiosGetDoc, axiosGetMyDoc, axiosSubmitMyDoc } from "../../api";
+import {
+  axiosGetDoc,
+  axiosGetMyDoc,
+  axiosPostPublishDocument,
+  axiosSubmitMyDoc,
+} from "../../api";
 import { useSelector } from "react-redux";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
@@ -92,6 +97,7 @@ const Draft = () => {
   const id = useSelector((state) => state.userState.id);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
     setIsLoading(true);
     axiosGetMyDoc(page)
@@ -282,17 +288,14 @@ const Draft = () => {
         console.log(hash);
         resolve(hash);
         setIsLoading(false);
-        // axiosApproveDocument({
-        //   documentId: docID,
-        //   comment: "",
-        //   status: "Approved",
-        //   txHash: hash,
-        // }).then((res) => {
-        //   setIsLoading(false);
-        //   console.log(res);
-        //   resolve(hash);
-        //   setNeedRefresh((pre) => pre + 1);
-        // });
+        axiosPostPublishDocument(docId)
+          .then((res) => {
+            setIsLoading(false);
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          })
+          .catch((err) => console.error(err));
       });
     });
 
