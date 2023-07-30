@@ -17,7 +17,12 @@ import { useNavigate } from "react-router-dom";
 import { DescriptionCell, FileCell, StateCell } from "../approve";
 import DefaultSpeedDial from "../../components/DefaultSpeedDial";
 import { useEffect, useState } from "react";
-import { axiosGetDoc, axiosGetMyDoc, axiosSubmitMyDoc } from "../../api";
+import {
+  axiosGetDoc,
+  axiosGetMyDoc,
+  axiosPostPublishDocument,
+  axiosSubmitMyDoc,
+} from "../../api";
 import { useSelector } from "react-redux";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
@@ -31,6 +36,9 @@ import MyModal from "../../components/MyModal";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import SubmitModal from "../../components/SubmitModal";
+import { hexToBytes20 } from "../../utils";
+import { publish } from "../../contract";
+import { toast } from "react-toastify";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -76,7 +84,6 @@ const StyledBadge = styled("span", {
 const Draft = () => {
   const navigate = useNavigate();
   const [myDocuments, setMyDocuments] = useState([]);
-
   const dosObj = {
     All: myDocuments,
     Draft: myDocuments.filter((item) => item.status == "Draft"),
@@ -90,6 +97,7 @@ const Draft = () => {
   const id = useSelector((state) => state.userState.id);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
     setIsLoading(true);
     axiosGetMyDoc(page)
@@ -173,6 +181,7 @@ const Draft = () => {
               <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
+                    timeSubmit={doc.timeSubmit}
                     receiver={doc._id}
                     isSubmit={doc.status !== "Draft"}
                   />
@@ -225,7 +234,9 @@ const Draft = () => {
                 content="Publish"
                 color="success"
                 placement="bottomEnd"
-                onClick={() => console.log("Delete Draft", doc.id)}
+                onClick={() => {
+                  handlePublish(doc._id);
+                }}
                 isDisabled={doc.status !== "Approved"}
               >
                 <IconButton
@@ -244,7 +255,10 @@ const Draft = () => {
                 content="Finish"
                 color="primary"
                 placement="bottomStart"
-                onClick={() => console.log("Delete Draft", doc.id)}
+                onClick={() => {
+                  console.log("Finish Draft", doc.id);
+                  handleFinish(doc.id);
+                }}
                 isDisabled={doc.status !== "Approved"}
               >
                 <IconButton
@@ -265,19 +279,76 @@ const Draft = () => {
     }
   };
 
-  const handleSubmit = (docId) => {
-    setIsLoading(true);
-    axiosSubmitMyDoc(docId, id)
-      .then((res) => {
-        setNeedRefresh((pre) => pre + 1);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 3000);
-      })
-      .catch((err) => {
+  const handlePublish = (docId) => {
+    const myPromise = new Promise((resolve, reject) => {
+      publish({
+        _id: docId,
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
         setIsLoading(false);
-        console.error(err);
+        axiosPostPublishDocument(docId)
+          .then((res) => {
+            setIsLoading(false);
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          })
+          .catch((err) => console.error(err));
       });
+    });
+
+    toast.promise(myPromise, {
+      pending: "Draft is being published",
+      success: {
+        render({ data }) {
+          return `Publish draft successfully:  ${data}`;
+        },
+      },
+      error: {
+        render({ data }) {
+          return `Publish draft error:  ${data}`;
+        },
+      },
+    });
+  };
+  const handleFinish = (docId) => {
+    const myPromise = new Promise((resolve, reject) => {
+      finish({
+        _id: docId,
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        setIsLoading(false);
+        // axiosApproveDocument({
+        //   documentId: docID,
+        //   comment: "",
+        //   status: "Approved",
+        //   txHash: hash,
+        // }).then((res) => {
+        //   setIsLoading(false);
+        //   console.log(res);
+        //   resolve(hash);
+        //   setNeedRefresh((pre) => pre + 1);
+        // });
+      });
+    });
+
+    toast.promise(myPromise, {
+      pending: "Draft is being finished",
+      success: {
+        render({ data }) {
+          return `Finish draft successfully:  ${data}`;
+        },
+      },
+      error: {
+        render({ data }) {
+          return `Finish draft error:  ${data}`;
+        },
+      },
+    });
   };
   return (
     <div className="w-full px-2 sm:px-0">

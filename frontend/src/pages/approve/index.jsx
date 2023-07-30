@@ -30,15 +30,19 @@ import { decideDraft } from "../../contract";
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
-      <div className="col-span-1 justify-end">
-        <p className="font-bold text-sm text-gray-800">{id}</p>
+      <div className="col-span-1 justify-end hidden xl:flex flex-col">
+        <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line  break-all w-full overflow-hidden">
+          {id}
+        </p>
         <p className="text-gray-400 text-xs">Id</p>
       </div>
-      <div className="col-span-1">
+      <div className="col-span-1  hidden xl:flex flex-col">
         <p className="font-bold text-sm text-gray-800 whitespace-pre-line break-all">
           {createdBy}
         </p>
-        <p className="text-gray-400 text-xs">Created By</p>
+        <p className="text-gray-400 text-xs hidden lg:flex flex-col">
+          Created By
+        </p>
       </div>
       <div className="col-span-1">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
@@ -46,8 +50,8 @@ const DetailCell = ({ id, title, createdBy, time }) => {
         </p>
         <p className="text-gray-400 text-xs ">Title</p>
       </div>
-      <div className="col-span-1">
-        <p className="font-bold text-sm text-gray-800">
+      <div className="col-span-1 hidden xl:flex flex-col">
+        <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
           {formattedDateTime(time)}
         </p>
         <p className="text-gray-400 text-xs">Time</p>
@@ -86,7 +90,7 @@ export const DescriptionCell = ({ description }) => {
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <div className="col-span-2 mr-2">
-          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] whitespace-pre-line ">
+          <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
             {description}
           </p>
           <p className="text-gray-400 text-xs">Description</p>
@@ -246,40 +250,40 @@ export default function Approve() {
     }
   };
   const handleSubmit = async (docID) => {
-    setIsLoading(true);
     const myPromise = new Promise((resolve, reject) => {
       console.log(docID, encryptLinkToBytes32("", "123456"), true);
       decideDraft({
         _id: docID,
-        comment_hashed: encryptLinkToBytes32("", "123456"),
         decide: true,
+        comment_hashed: encryptLinkToBytes32("", "123456"),
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        axiosApproveDocument({
+          documentId: docID,
+          comment: "",
+          status: "Approved",
+          txHash: hash,
+        }).then((res) => {
+          setIsLoading(false);
+          console.log(res);
+          resolve(hash);
+          setNeedRefresh((pre) => pre + 1);
+        });
       });
-      // .then((hash) => {
-      //   console.log(hash);
-      //   resolve(hash);
-
-      //   // axiosSubmitMyDoc(doc._id, {
-      //   //   documentId: doc._id,
-      //   //   deadlineApprove: new Date(time),
-      //   //   txHash: hash,
-      //   // }).then((res) => {
-      //   //   console.log(res);
-      //   //   resolve(hash);
-      //   //   setNeedRefresh((pre) => pre + 1);
-      //   // });
-      // });
     });
 
     toast.promise(myPromise, {
-      pending: "Draft is being submitted",
+      pending: "Draft is being decided",
       success: {
         render({ data }) {
-          return `Submit draft successfully:  ${data}`;
+          return `Decide draft successfully:  ${data}`;
         },
       },
       error: {
         render({ data }) {
-          return `Submit draft successfully:  ${data}`;
+          return `Decide draft successfully:  ${data}`;
         },
       },
     });

@@ -14,19 +14,54 @@ import { Mail } from "./Mail";
 import { Password } from "./Password";
 import { ArrowUturnDownIcon } from "@heroicons/react/24/outline";
 import { axiosAssignDocument, axiosDepartmentUser } from "../api";
+import { assignLevel2Approver } from "../contract";
+import { toast } from "react-toastify";
 
 export default function AssignPopper({ docId }) {
   const [visible, setVisible] = React.useState(false);
   const [users, setUser] = React.useState([]);
   const [tableSelect, setTableSelect] = React.useState([]);
   const userSelected = useMemo(() => {
-    return users
-      .filter((item) => tableSelect.includes(item.id))
-      .map((item) => item._id);
+    return users.filter((item) => tableSelect.includes(item.id));
   }, [tableSelect]);
   const handler = () => setVisible(true);
   const handleSubmit = async () => {
-    axiosAssignDocument({ documentId: docId, userIds: userSelected });
+    const myPromise = new Promise((resolve, reject) => {
+      console.log(docId);
+      assignLevel2Approver({
+        _id: docId,
+        level2Approvers: userSelected.map((item) => item.walletAddress),
+      }).then((hash) => {
+        // setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        axiosAssignDocument({
+          documentId: docId,
+          userIds: userSelected.map((item) => item._id),
+          txHash: hash,
+        }).then((res) => {
+          setIsLoading(false);
+          console.log(res);
+          resolve(hash);
+          setNeedRefresh((pre) => pre + 1);
+        });
+      });
+    });
+
+    toast.promise(myPromise, {
+      pending: "Draft is being assigned",
+      success: {
+        render({ data }) {
+          return `Assign draft successfully:  ${data}`;
+        },
+      },
+      error: {
+        render({ data }) {
+          return `Assign draft error:  ${data}`;
+        },
+      },
+    });
+    // axiosAssignDocument({ documentId: docId, userIds: userSelected });
   };
   const closeHandler = () => {
     setVisible(false);

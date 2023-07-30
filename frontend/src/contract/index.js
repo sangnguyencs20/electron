@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import electron from "./electron.json";
 import { toast } from "react-toastify";
-import { hexToBytes20 } from "../utils";
+import { hexToBytes20, uint8ArrayToHexString } from "../utils";
 
 // Sử dụng provider đã tạo từ import.meta.VITE_REACT_SEPOLIA_ENDPOINT
 const provider = new ethers.JsonRpcProvider(
@@ -18,14 +18,6 @@ let contract = null;
 async function createWallet(privatekey) {
   try {
     const wallet = new ethers.Wallet(privatekey, provider);
-    console.log(
-      "Địa chỉ ví:",
-      wallet.address,
-      privatekey,
-      wallet.privateKey,
-      provider,
-      contractAddress
-    );
     return wallet;
   } catch (error) {
     console.error("Lỗi khi tạo wallet:", error);
@@ -43,7 +35,6 @@ export async function createConnectedContract(privateKey) {
     );
     contract = connectedContract;
 
-    console.log("contract", contract);
     return connectedContract;
   } catch (error) {
     console.error("Lỗi khi tạo connected contract:", error);
@@ -53,11 +44,7 @@ export async function createConnectedContract(privateKey) {
 
 export const createDraft = async (data) => {
   try {
-    // if (!contract)
-    //   contract = await createConnectedContract(
-    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
-    //   );
-    console.log(data);
+    console.log("create id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
     const tx = await contract.createDraft(
       hexToBytes20(data._id),
       data._content_hashed,
@@ -78,6 +65,7 @@ export const submitDraft = async (data) => {
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
     console.log(data);
+    console.log("submit id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
     const tx = await contract.submitDraft(
       hexToBytes20(data._id),
       data._deadlineApprove
@@ -97,16 +85,20 @@ export const decideDraft = async (data) => {
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
-    console.log(data, hexToBytes20(data._id), data.decide, data.comment_hashed);
+    console.log(data);
+    console.log("decide id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    // const gasLimit = 300000; // Thay đổi giá trị gas limit tùy ý
     const tx = await contract.decideDraft(
       hexToBytes20(data._id),
       data.decide,
       data.comment_hashed
+      // { gasLimit } // Thêm thông số gasLimit vào options
     );
-    // const res = await tx.wait(2);
-    // console.log(res);
 
-    // return res.hash;
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
   }
@@ -119,7 +111,8 @@ export const assignLevel2Approver = async (data) => {
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
     console.log(data);
-    const tx = await contract.decideDraft(
+    console.log("assign id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    const tx = await contract.assignLevel2Approver(
       hexToBytes20(data._id),
       data.level2Approvers
     );
@@ -128,7 +121,7 @@ export const assignLevel2Approver = async (data) => {
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    console.error("Lỗi khi gọi hàm assignLevel2Approver:", error, contract);
   }
 };
 
