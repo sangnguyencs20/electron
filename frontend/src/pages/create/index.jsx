@@ -210,13 +210,13 @@ export default function Create() {
               variant="h6"
               color={activeStep === 0 ? "blue" : "blue-gray"}
             >
-              Draft Details
+              Chi tiết dự thảo
             </Typography>
             <Typography
               color={activeStep === 0 ? "blue" : "gray"}
               className="font-normal hidden md:block"
             >
-              Your title draft, status and description.
+              Điền chi tiết thông tin cần thiết
             </Typography>
           </div>
         </Step>

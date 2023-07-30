@@ -173,6 +173,7 @@ const Draft = () => {
               <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
+                    timeSubmit={doc.timeSubmit}
                     receiver={doc._id}
                     isSubmit={doc.status !== "Draft"}
                   />

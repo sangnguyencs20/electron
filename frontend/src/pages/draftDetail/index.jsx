@@ -123,7 +123,12 @@ const DraftDetail = () => {
                   className="flex justify-center w-full"
                 >
                   <div className="bg-blue-gray-50 p-4 w-full rounded-xl">
-                    {document && <TimeLineTable receiver={docId} />}
+                    {document && (
+                      <TimeLineTable
+                        receiver={docId}
+                        timeSubmit={document.timeSubmit}
+                      />
+                    )}
                   </div>
                 </TabPanel>
               );
