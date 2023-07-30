@@ -47,19 +47,23 @@ const CommentSection = ({ docId }) => {
           });
       });
     });
-    toast.promise(myPromise, {
-      pending: "Draft is being commented",
-      success: {
-        render({ data }) {
-          return `Comment draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being commented",
+        success: {
+          render({ data }) {
+            return `Comment draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Comment draft error:  ${data}`;
+          },
         },
       },
-      error: {
-        render({ data }) {
-          return `Comment draft error:  ${data}`;
-        },
-      },
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
     // {
     //   docId && setLoading(true);
     //   docId &&

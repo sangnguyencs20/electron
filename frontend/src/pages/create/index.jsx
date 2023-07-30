@@ -154,7 +154,7 @@ export default function Create() {
                 txHash: hash,
               }).then((res) => {
                 console.log(res);
-                resolve(hash);
+                resolve(res.data.message + " " + "hash: " + hash);
               });
               // resolve(hash); // You can choose to resolve with some data here if needed.
             });
@@ -169,15 +169,19 @@ export default function Create() {
           reject(err);
         });
     });
-    toast.promise(myPromise, {
-      pending: "Draft is being created",
-      success: {
-        render({ data }) {
-          return `Create draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being created",
+        success: {
+          render({ data }) {
+            return `Create draft successfully:  ${data}`;
+          },
         },
+        error: "error",
       },
-      error: "error",
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
