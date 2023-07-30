@@ -74,10 +74,10 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
     .select("documentId history")
     .populate("documentId");
-  console.log(documents);
-  const filteredDocuments = documents.filter(
-    (doc) => doc.documentId.status !== "Draft"
-  );
+
+  const filteredDocuments = documents?.filter((doc) => {
+    doc?.documentId?.status !== "Draft";
+  });
 
   const latestLogs = filteredDocuments.map((doc) => {
     const latestLog = doc.history.sort((a, b) => {
