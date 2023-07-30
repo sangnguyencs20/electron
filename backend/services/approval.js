@@ -71,7 +71,7 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
 
 
 
-const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, status) => {
+const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, status, txHash) => {
     const approval = await getAnApprovalByDocumentId(documentId);
 
     // Check if userId exists in receiverId within the approval history
@@ -87,6 +87,7 @@ const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, s
         userId: userId,
         comment: comment,
         status: status,
+        txHash: txHash,
     });
 
     await approval.save();
@@ -104,12 +105,13 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
         const log = historyItem.log;
 
         const timelineEvents = log.map((event) => {
-            const { status, time, comment } = event;
+            const { status, time, comment, txHash } = event;
             return {
                 receiver,
                 status,
                 time,
                 comment,
+                txHash
             };
         });
 
