@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import electron from "./abi.json";
+import electron from "./electron.json";
 import { toast } from "react-toastify";
 import { hexToBytes20 } from "../utils";
 
@@ -97,19 +97,18 @@ export const decideDraft = async (data) => {
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
-    console.log(data);
+    console.log(data, hexToBytes20(data._id), data.decide, data.comment_hashed);
     const tx = await contract.decideDraft(
       hexToBytes20(data._id),
       data.decide,
-      data.comment_hashed,
-      data._deadlineApprove
+      data.comment_hashed
     );
-    const res = await tx.wait(2);
-    console.log(res);
+    // const res = await tx.wait(2);
+    // console.log(res);
 
-    return res.hash;
+    // return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
   }
 };
 

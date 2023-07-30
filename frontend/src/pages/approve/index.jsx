@@ -18,12 +18,14 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Download } from "../../assets";
-import { formattedDateTime } from "../../utils";
+import { encryptLinkToBytes32, formattedDateTime } from "../../utils";
 import AssignPopper from "../../components/AssignPopper";
 import CustomDatepicker from "../../components/CustomDatePicker";
 import CustomMenu from "../../components/CustomMenu";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { decideDraft } from "../../contract";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -243,21 +245,57 @@ export default function Approve() {
         return cellValue;
     }
   };
-  const handleSubmit = (docID) => {
+  const handleSubmit = async (docID) => {
     setIsLoading(true);
-    axiosApproveDocument({
-      documentId: docID,
-      comment: "",
-      status: "Approved",
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setNeedRefresh((pre) => pre + 1);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
+    const myPromise = new Promise((resolve, reject) => {
+      console.log(docID, encryptLinkToBytes32("", "123456"), true);
+      decideDraft({
+        _id: docID,
+        comment_hashed: encryptLinkToBytes32("", "123456"),
+        decide: true,
       });
+      // .then((hash) => {
+      //   console.log(hash);
+      //   resolve(hash);
+
+      //   // axiosSubmitMyDoc(doc._id, {
+      //   //   documentId: doc._id,
+      //   //   deadlineApprove: new Date(time),
+      //   //   txHash: hash,
+      //   // }).then((res) => {
+      //   //   console.log(res);
+      //   //   resolve(hash);
+      //   //   setNeedRefresh((pre) => pre + 1);
+      //   // });
+      // });
+    });
+
+    toast.promise(myPromise, {
+      pending: "Draft is being submitted",
+      success: {
+        render({ data }) {
+          return `Submit draft successfully:  ${data}`;
+        },
+      },
+      error: {
+        render({ data }) {
+          return `Submit draft successfully:  ${data}`;
+        },
+      },
+    });
+    // axiosApproveDocument({
+    //   documentId: docID,
+    //   comment: "",
+    //   status: "Approved",
+    // })
+    //   .then((res) => {
+    //     setIsLoading(false);
+    //     setNeedRefresh((pre) => pre + 1);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoading(false);
+    //     console.error(err);
+    //   });
   };
   return (
     <div className="container">
