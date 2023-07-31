@@ -19,7 +19,7 @@ const LogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Opinion',
     },
-    transactionId: {
+    txHash: {
         type: String,
         required: [true, 'Transaction has to have a transaction hash (get on Blockchain)'],
     },

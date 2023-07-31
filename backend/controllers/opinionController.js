@@ -30,7 +30,7 @@ const createOpinion = async (req, res) => {
       documentId: newOpinion.documentId,
       user: newOpinion.createdBy,
       action: "CREATE",
-      transactionId: "something hashed",
+      txHash: "something hashed",
     };
     await createANewLog(log);
     await newOpinion.save();

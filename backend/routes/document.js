@@ -175,8 +175,6 @@ router.post("/", createDocument);
  *         - bearerAuth: []
  */
 
-
-
 router.get("/accepted", getPublishedDocuments);
 
 /**
@@ -289,8 +287,6 @@ router.get("/:id", getDocumentById);
  *         description: Internal server error
  */
 router.post("/myDocument", getDocumentOfUser);
-
-
 
 /**
  * @swagger

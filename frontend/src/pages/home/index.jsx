@@ -22,7 +22,7 @@ const Home = () => {
     <div>
       {<CustomSugar customLoading={false} />}
       <DisplayDrafts documents={documents} />
-      <div className="flex w-full justify-end mt-36">
+      <div className="flex w-full justify-end mt-12 md:mt-36">
         <Pagination
           total={totalPages}
           siblings={1}

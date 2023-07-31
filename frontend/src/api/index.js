@@ -17,7 +17,6 @@ const getToken = async () => {
     //   store.dispatch(logOut());
     //   return;
     // }
-    console.log(storeData.userState.accessToken);
     return storeData.userState.accessToken;
   } else {
     return "";
@@ -33,7 +32,6 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   let token = await getToken();
-  console.log(`Bearer ${token}`);
   if (token) {
     config.headers = {
       Authorization: `Bearer ${token}`,
@@ -45,7 +43,7 @@ axiosClient.interceptors.request.use(async (config) => {
 
 axiosClient.interceptors.response.use(
   (response) => {
-    toast.success(response.data.message);
+    // toast.success(response.data.message);
     if (response && response.data) {
       return response;
     }
@@ -80,8 +78,8 @@ export const axiosCreateDoc = (data) =>
 export const axiosGetDoc = () => axiosClient.get("/api/documents");
 export const axiosGetMyDoc = (page) =>
   axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
-export const axiosSubmitMyDoc = (docId, userId) =>
-  axiosClient.post(`/api/documents/submit/${docId}`, { userId });
+export const axiosSubmitMyDoc = (docId, data) =>
+  axiosClient.post(`/api/documents/submit/${docId}`, data);
 
 export const axiosGetReceiveDoc = (receiId) =>
   axiosClient.get(`/api/documents/receiver/${receiId}`);
@@ -115,3 +113,6 @@ export const axiosGetComment = (docId, page) =>
   axiosClient.get(`api/opinions/${docId}?page=${page}&pageSize=5`);
 export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);
+export const axiosPostLog = (data) => axiosClient.post(`api/logs/`, data);
+export const axiosPostPublishDocument = (docId) =>
+  axiosClient.post(`api/documents/publish/${docId}`);

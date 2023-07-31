@@ -21,6 +21,7 @@ export default function AssignDropDown({ selected, setSelected }) {
             role: data.role,
             address: data.address,
             position: data.position,
+            walletAddress: data.walletAddress,
           }))
         );
       })
@@ -200,24 +201,6 @@ export default function AssignDropDown({ selected, setSelected }) {
                                 Address
                               </span>
                             </div>
-                            <div className="hidden md:flex flex-col items-start w-32 overflow-x-clip">
-                              <span
-                                className={`text-[12px] ${
-                                  active ? "text-white" : "text-light-blue-200"
-                                } p-1 bg-blue-gray-600 rounded-md w-full whitespace-pre-line`}
-                              >
-                                {person._id}
-                              </span>
-                              <span
-                                className={`text-[12px] ${
-                                  active
-                                    ? "text-gray-700"
-                                    : "text-gray-blue-500"
-                                }`}
-                              >
-                                Id
-                              </span>
-                            </div>
                           </motion.div>
                         </AnimatePresence>
                       )}
@@ -264,7 +247,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                           >
                             {person.position}
                           </span>
-                          <span className={`text-[12px] `}>Position</span>
+                          <span className={`text-[12px] `}>Vị trí</span>
                         </div>
                         <div className="hidden md:flex flex-col items-start w-32">
                           <span

@@ -2,7 +2,11 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const hashPassword = require("../utils/helperAuth");
 const getAllUsers = async (req, res) => {
-  return await User.find().populate("department").select("_id username fullName role department");
+  return await User.find()
+    .populate("department")
+    .select(
+      "_id username fullName role department position address walletAddress"
+    );
 };
 
 const createOneUser = async (user) => {

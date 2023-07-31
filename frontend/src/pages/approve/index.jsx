@@ -18,37 +18,43 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Download } from "../../assets";
-import { formattedDateTime } from "../../utils";
+import { encryptLinkToBytes32, formattedDateTime } from "../../utils";
 import AssignPopper from "../../components/AssignPopper";
 import CustomDatepicker from "../../components/CustomDatePicker";
 import CustomMenu from "../../components/CustomMenu";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { decideDraft } from "../../contract";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
-      <div className="col-span-1 justify-end">
-        <p className="font-bold text-sm text-gray-800">{id}</p>
+      <div className="col-span-1 justify-end hidden xl:flex flex-col">
+        <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line  break-all w-full overflow-hidden">
+          {id}
+        </p>
         <p className="text-gray-400 text-xs">Id</p>
       </div>
-      <div className="col-span-1">
+      <div className="col-span-1  hidden xl:flex flex-col">
         <p className="font-bold text-sm text-gray-800 whitespace-pre-line break-all">
           {createdBy}
         </p>
-        <p className="text-gray-400 text-xs">Created By</p>
+        <p className="text-gray-400 text-xs hidden lg:flex flex-col">
+          Người tạo
+        </p>
       </div>
       <div className="col-span-1">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
           {title}
         </p>
-        <p className="text-gray-400 text-xs ">Title</p>
+        <p className="text-gray-400 text-xs ">Tiêu đề</p>
       </div>
-      <div className="col-span-1">
-        <p className="font-bold text-sm text-gray-800">
+      <div className="col-span-1 hidden xl:flex flex-col">
+        <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
           {formattedDateTime(time)}
         </p>
-        <p className="text-gray-400 text-xs">Time</p>
+        <p className="text-gray-400 text-xs">Ngày tạo</p>
       </div>
     </div>
   );
@@ -60,11 +66,11 @@ export const StateCell = ({ secretState, urgencyState }) => {
       <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl justify-center w-[250px]">
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
           <p className="font-bold text-sm text-gray-800">{secretState}</p>
-          <p className="text-gray-500 text-xs">Secret State</p>
+          <p className="text-gray-500 text-xs">Độ Mật</p>
         </div>
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
           <p className="font-bold text-sm text-gray-800">{urgencyState}</p>
-          <p className="text-gray-500 text-xs">Urgency State</p>
+          <p className="text-gray-500 text-xs">Độ khẩn</p>
         </div>
       </div>
     </div>
@@ -75,7 +81,7 @@ const StatusCell = ({ status }) => {
   return (
     <div className="col-span-1 flex flex-col items-center bg-deep-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
       <p className="font-bold text-sm text-gray-900">{status}</p>
-      <p className="text-gray-500 text-xs">Current Status</p>
+      <p className="text-gray-500 text-xs">Hiện tại</p>
     </div>
   );
 };
@@ -84,10 +90,10 @@ export const DescriptionCell = ({ description }) => {
     <div className="grid grid-cols-1 grid-flow-row max-w-[200px] justify-center items-center min-w-[150px] ml-5">
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <div className="col-span-2 mr-2">
-          <p className="font-bold text-sm text-gray-800 line-clamp-4 max-h-[5.5rem] whitespace-pre-line ">
+          <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
             {description}
           </p>
-          <p className="text-gray-400 text-xs">Description</p>
+          <p className="text-gray-400 text-xs">Mô tả chi tiết</p>
         </div>
       </div>
     </div>
@@ -149,12 +155,12 @@ export default function Approve() {
   }, [needRefresh, page]);
   console.log(needRefresh);
   const columns = [
-    { name: "DOC DETAIL", uid: "detail" },
-    { name: "CURRENT STATUS", uid: "status" },
-    { name: "STATE", uid: "state" },
-    { name: "DESCRIPTION", uid: "description" },
-    { name: "FILE", uid: "file" },
-    { name: "ACTIONS", uid: "actions" },
+    { name: "TỔNG QUÁT", uid: "detail" },
+    { name: "TÌNH TRẠNG", uid: "status" },
+    { name: "ĐỘ KHẨN", uid: "state" },
+    { name: "MÔ TẢ", uid: "description" },
+    { name: "TỆP", uid: "file" },
+    { name: "HÀNH ĐỘNG", uid: "actions" },
   ];
   const renderCell = (doc, columnKey) => {
     // const cellValue = doc.document[columnKey];
@@ -164,7 +170,7 @@ export default function Approve() {
           <DetailCell
             id={doc.document._id}
             title={doc.document.title}
-            createdBy={doc.document.createdBy}
+            createdBy={doc.document.createdBy.fullName}
             time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );
@@ -243,21 +249,61 @@ export default function Approve() {
         return cellValue;
     }
   };
-  const handleSubmit = (docID) => {
-    setIsLoading(true);
-    axiosApproveDocument({
-      documentId: docID,
-      comment: "",
-      status: "Approved",
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setNeedRefresh((pre) => pre + 1);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
+  const handleSubmit = async (docID) => {
+    const myPromise = new Promise((resolve, reject) => {
+      console.log(docID, encryptLinkToBytes32("", "123456"), true);
+      decideDraft({
+        _id: docID,
+        decide: true,
+        comment_hashed: encryptLinkToBytes32("", "123456"),
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        axiosApproveDocument({
+          documentId: docID,
+          comment: "",
+          status: "Approved",
+          txHash: hash,
+        }).then((res) => {
+          setIsLoading(false);
+          console.log(res);
+          resolve(hash);
+          setNeedRefresh((pre) => pre + 1);
+        });
       });
+    });
+
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being decided",
+        success: {
+          render({ data }) {
+            return `Decide draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Decide draft successfully:  ${data}`;
+          },
+        },
+      },
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
+    // axiosApproveDocument({
+    //   documentId: docID,
+    //   comment: "",
+    //   status: "Approved",
+    // })
+    //   .then((res) => {
+    //     setIsLoading(false);
+    //     setNeedRefresh((pre) => pre + 1);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoading(false);
+    //     console.error(err);
+    //   });
   };
   return (
     <div className="container">

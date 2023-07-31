@@ -37,7 +37,7 @@ const DetailBox = ({ document }) => {
                   show ? "underline " : ""
                 }`}
               >
-                Title
+                Tiêu đề
               </Text>
               <p
                 className={`ease-in-out duration-500 text-base leading-8 w-full  `}
@@ -64,7 +64,7 @@ const DetailBox = ({ document }) => {
           className="flex flex-col items-start w-full rounded-md p-4 bg-transparent cursor-pointe relative bg-white text-center border border-black hover:shadow-cyan-500/50"
         >
           <p className="bg-gradient-to-tr from-cyan-500 to-blue-500 text-transparent bg-clip-text w-full font-bold uppercase">
-            Author
+            Người tạo dự thảo
           </p>
           <p className="w-full leading-8 ">{document?.createdBy?.fullName}</p>
         </Card>
@@ -73,7 +73,7 @@ const DetailBox = ({ document }) => {
 
       <Card isHoverable className="flex flex-col items-start w-full p-4">
         <p className="bg-gradient-to-tr from-cyan-500 to-blue-500 text-transparent bg-clip-text font-bold uppercase">
-          Description
+          Mô tả chi tiết cho dự thảo
         </p>
         <ul className="list-disc ml-12 mt-5 flex flex-col gap-5 pr-5">
           {document?.description?.split(". ").map((item) => {

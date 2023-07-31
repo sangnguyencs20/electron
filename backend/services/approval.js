@@ -7,7 +7,7 @@ const getAllApprovals = async (documentId) => {
 
 const checkIfDocumentIsAllApproved = async (documentId) => {
     const approvals = await getAllApprovals(documentId);
-    return approvals.every((approval) => approval.isApproved);
+    return approvals.isApproved;
 }
 
 const getAnApprovalByDocumentId = async (documentId) => {
@@ -51,8 +51,6 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
         return await handlePostAnApprovalOfADocument(documentId, userIdArray);
     }
 
-
-
     for (const userId of userIdArray) {
         if (userId === approval.history[approval.history.length - 1].receiverId) {
             throw new Error('This user is already assigned to this document');
@@ -71,7 +69,7 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
 
 
 
-const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, status) => {
+const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, status, txHash) => {
     const approval = await getAnApprovalByDocumentId(documentId);
 
     // Check if userId exists in receiverId within the approval history
@@ -87,6 +85,7 @@ const handleCommentAnApprovalOfADocument = async (documentId, userId, comment, s
         userId: userId,
         comment: comment,
         status: status,
+        txHash: txHash,
     });
 
     await approval.save();
@@ -104,12 +103,13 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
         const log = historyItem.log;
 
         const timelineEvents = log.map((event) => {
-            const { status, time, comment } = event;
+            const { status, time, comment, txHash } = event;
             return {
                 receiver,
                 status,
                 time,
                 comment,
+                txHash
             };
         });
 

@@ -27,6 +27,10 @@ const Approval = new mongoose.Schema({
                         comment: {
                             type: String,
                             default: '',
+                        },
+                        txHash: {
+                            type: String,
+                            required: [true, 'Vui long nhap txHash'],
                         }
                     }
                 ]

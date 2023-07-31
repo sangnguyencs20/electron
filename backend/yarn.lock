@@ -416,7 +416,7 @@ etag@~1.8.1:
   resolved "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-ethers@^6.6.6:
+ethers@^6.6.4:
   version "6.6.6"
   resolved "https://registry.npmjs.org/ethers/-/ethers-6.6.6.tgz"
   integrity sha512-u3WbQn9bzreuLRGHJx/ZlrRSLYiiIu5FLGcR9VChu5D4+udINfNJZl+Y1DVgKlU6o7i3y31ATxs5HYrKogyvlA==

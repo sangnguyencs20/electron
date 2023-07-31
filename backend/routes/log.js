@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpinionId, getLogsByTransactionId } = require("../controllers/logController");
+const { getLogs, createLog, getLogsByDocumentId, getLogsByUserId, getLogsByOpinionId, getLogsBytxHash } = require("../controllers/logController");
 /**
  * @swagger
  * tags:
@@ -103,13 +103,13 @@ router.get("/opinion/:opinionId", getLogsByOpinionId);
 
 /**
  * @swagger
- * /api/logs/transaction/{transactionId}:
+ * /api/logs/transaction/{txHash}:
  *   get:
  *     summary: Get all logs by transaction ID
  *     tags: [Logs]
  *     parameters:
  *       - in: path
- *         name: transactionId
+ *         name: txHash
  *         required: true
  *         schema:
  *           type: string
@@ -121,7 +121,7 @@ router.get("/opinion/:opinionId", getLogsByOpinionId);
  *         description: Internal server error
  */
 
-router.get("/transaction/:transactionId", getLogsByTransactionId);
+router.get("/transaction/:txHash", getLogsBytxHash);
 
 
 module.exports = router;

@@ -30,23 +30,27 @@ import DropFile from "../../components/DropFile";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { toast } from "react-toastify";
-import { axiosCheckPassword, axiosCreateDocument } from "../../api";
+import {
+  axiosCheckPassword,
+  axiosCreateDocument,
+  axiosPostLog,
+} from "../../api";
 import { useSelector } from "react-redux";
 import { createDraft } from "../../contract";
 import {
   checkPassword,
   decryptPrivateKey,
-  encryptAES,
+  encryptLinkToBytes32,
   encryptPrivateKey,
   hashPassword,
-  hashToBytes32,
+  hexToBytes20,
 } from "../../utils";
 
 export default function Create() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
-
+  const userId = useSelector((state) => state.userState.id);
   const handleNext = () => {
     if (
       !isLastStep &&
@@ -70,7 +74,6 @@ export default function Create() {
     }, 3000);
   }, [needFill]);
   const handleSecret = (value) => {
-    console.log(value);
     setSecret(value);
   };
   const {
@@ -119,34 +122,65 @@ export default function Create() {
     (state) => state.userState.hashedPrivateKey
   );
   const handleSubmit = async () => {
-    setIsLoading(true);
-    await axiosCheckPassword({ password })
-      .then(async (res) => {
-        await axiosCreateDocument({
-          title: form.title,
-          receiver: form.approvals,
-          fileLink: form.fileLink,
-          description: form.description,
-        })
-          .then((res) => {
-            setTimeout(() => {
-              setIsLoading(false);
-            }, 3000);
-            toast.success(`Create: ${res.data._id}`);
-            createDraft({
-              _id: res.data,
-              _content_hashed: hashToBytes32(
-                encryptAES(form.fileLink, password)
-              ),
-              _level1Approvers: [],
+    const myPromise = new Promise((resolve, reject) => {
+      axiosCheckPassword({ password })
+        .then(async (res) => {
+          try {
+            setIsLoading(true);
+            const createDocumentResponse = await axiosCreateDocument({
+              title: form.title,
+              receiver: form.approvals,
+              fileLink: form.fileLink,
+              description: form.description,
             });
-          })
-          .catch((err) => {
-            console.error(err);
+
+            console.log(
+              createDocumentResponse.data,
+              encryptLinkToBytes32(form.fileLink, password)
+            );
             setIsLoading(false);
-          });
-      })
-      .catch((err) => console.error(err));
+            createDraft({
+              _id: createDocumentResponse.data.documentId,
+              _content_hashed: encryptLinkToBytes32(form.fileLink, password),
+              _level1Approvers: form.approvals.map(
+                (item) => item.walletAddress
+              ),
+            }).then((hash) => {
+              console.log(hash);
+              axiosPostLog({
+                documentId: createDocumentResponse.data.documentId,
+                action: "CREATE",
+                txHash: hash,
+              }).then((res) => {
+                console.log(res);
+                resolve(res.data.message + " " + "hash: " + hash);
+              });
+              // resolve(hash); // You can choose to resolve with some data here if needed.
+            });
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+            reject(error); // You can choose to reject with an error here if needed.
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
+        });
+    });
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being created",
+        success: {
+          render({ data }) {
+            return `Create draft successfully:  ${data}`;
+          },
+        },
+        error: "error",
+      },
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
   };
   const [confirm, setConfirm] = useState(false);
   const id = useSelector((state) => state.userState.id);
@@ -174,18 +208,21 @@ export default function Create() {
       >
         <Step onClick={() => setActiveStep(0)}>
           <UserIcon className="h-5 w-5" />
-          <div className="absolute -bottom-[4.5rem] w-max text-center">
+          <div className="absolute -bottom-[4.5rem] w-max text-center translate-x-4">
             <Typography
               variant="h6"
               color={activeStep === 0 ? "blue" : "blue-gray"}
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 0 && "hidden lg:flex"
+              }`}
             >
-              Draft Details
+              Chi tiết dự thảo
             </Typography>
             <Typography
               color={activeStep === 0 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className="text-sm leading-[21px] font-normal hidden md:block"
             >
-              Your title draft, status and description.
+              Điền chi tiết thông tin cần thiết
             </Typography>
           </div>
         </Step>
@@ -195,14 +232,19 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 1 ? "blue" : "blue-gray"}
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 1 && "hidden lg:flex"
+              }`}
             >
-              Approval -- File
+              Người kiểm duyệt và văn bản
             </Typography>
             <Typography
               color={activeStep === 1 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className={`text-sm leading-[21px] font-normal hidden md:block ${
+                activeStep !== 1 && "hidden lg:flex"
+              }`}
             >
-              Select Approval and upload file
+              Chọn người kiểm duyệt và nộp văn bản đính kèm
             </Typography>
           </div>
         </Step>
@@ -212,14 +254,19 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 2 ? "blue" : "blue-gray"}
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 2 && "hidden lg:flex"
+              }`}
             >
-              Summary
+              Xem xét lại
             </Typography>
             <Typography
               color={activeStep === 2 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className={`text-sm leading-[21px] font-normal hidden md:block ${
+                activeStep !== 2 && "hidden lg:flex"
+              }`}
             >
-              Review draft before submit
+              Hoàn thiện thủ tục trước khi nộp
             </Typography>
           </div>
         </Step>
@@ -249,7 +296,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-password"
                 >
-                  title (* request)
+                  Tiêu đề (* Bắt buộc)
                 </label>
                 <Input
                   {...bindings}
@@ -275,12 +322,12 @@ export default function Create() {
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    status
+                    Mức độ khẩn của văn bản
                   </label>
                   <div className="mt-5 flex flex-col md:flex-row gap-10 md:gap-2">
                     <Select
                       variant="standard"
-                      label="SELECT SECRET"
+                      label="ĐỘ BÍ MẬT"
                       value={secret}
                       color="blue-gray"
                       error={secret === "" && needFill == true}
@@ -295,7 +342,7 @@ export default function Create() {
                     </Select>
                     <Select
                       variant="standard"
-                      label="SELECT URGENCY"
+                      label="ĐỘ KHẨN CẤP"
                       value={urgency}
                       color="blue-gray"
                       error={urgency === "" && needFill == true}
@@ -316,7 +363,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-city"
                 >
-                  Description
+                  Mô tả chi tiết về văn bản
                 </label>
                 <Textarea
                   {...descBindings}
@@ -353,7 +400,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-password"
                 >
-                  approval (* request)
+                  Người kiểm duyệt (* bắt buộc)
                 </label>
                 <AssignDropDown
                   selected={approvals}
@@ -366,7 +413,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-city"
                 >
-                  Submit File
+                  Nộp văn bản
                 </label>
                 <DropFile file={file} setFile={setFile} />
               </div>
@@ -381,7 +428,7 @@ export default function Create() {
                     setConfirm((pre) => !pre);
                   }}
                 />
-                <p className="text-sm text-gray-700 max-w-sm">
+                <p className="text-sm text-gray-700 max-w-xs md:max-w-sm pr-2">
                   I confirm that I have read and understood{" "}
                   <span className="underline text-blue-600 cursor-pointer">
                     the terms and conditions of the application
@@ -393,7 +440,7 @@ export default function Create() {
               <Popover shouldCloseOnBlur={true} triggerType="grid">
                 <Popover.Trigger>
                   <MuiButton
-                    className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
+                    className="text-white bg-blue-500 w-40 h-16 text-md md:text-lg rounded-xl block m-auto"
                     variant="filled"
                     type="submit"
                     aria-labelledby="submitButtonLabel"
@@ -407,7 +454,7 @@ export default function Create() {
                       file === ""
                     }
                   >
-                    Submit
+                    Nộp
                   </MuiButton>
                 </Popover.Trigger>
                 <Popover.Content>
@@ -420,7 +467,7 @@ export default function Create() {
                     }}
                   >
                     <Row justify="center" align="center">
-                      <Text b>Confirm</Text>
+                      <Text b>Xác nhận</Text>
                     </Row>
                     <Row
                       css={{
@@ -430,6 +477,7 @@ export default function Create() {
                       }}
                     >
                       <Input
+                        type="password"
                         {...passwordBindings}
                         bordered
                         fullWidth
@@ -467,11 +515,11 @@ export default function Create() {
       </Card>
       <div className="mt-10 flex justify-between">
         <MuiButton onClick={handlePrev} disabled={isFirstStep}>
-          Prev
+          Trước
         </MuiButton>
 
         <MuiButton onClick={handleNext} disabled={isLastStep}>
-          Next
+          Sau
         </MuiButton>
       </div>
     </div>

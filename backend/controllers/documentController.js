@@ -46,6 +46,7 @@ const createDocument = async (req, res) => {
   }
   const document = req.body;
   document.createdBy = req.userId;
+  
   try {
     const newDocument = await createOneDocument(document);
     if (req.body.receiver.length == 0) {
@@ -53,14 +54,6 @@ const createDocument = async (req, res) => {
     }
     const newApproval = await handleAssignAnUserToADocument(newDocument._id, req.body.receiver);
     //implement something related to blockchain transaction
-    const log = {
-      documentId: newDocument._id,
-      user: newDocument.createdBy,
-      action: "CREATE",
-      transactionId: "something hashed", // this is transaction hased we will modify later
-    };
-
-    await createANewLog(log);
     res.status(201).json(newApproval);
   } catch (error) {
     res.status(409).json({ message: error.message });
@@ -105,7 +98,7 @@ const updateDocumentApproval = async (req, res) => {
 
 const submitDocument = async (req, res) => {
   const { documentId } = req.params;
-  const { deadlineApprove, transactionId } = req.body;
+  const { deadlineApprove, txHash } = req.body;
   const document = await getOneDocumentById(documentId);
 
   if (!document) {
@@ -132,8 +125,6 @@ const submitDocument = async (req, res) => {
   // sendMail(payload);
   const approval = await getAllApprovals(documentId);
   approval.deadlineApprove = deadlineApprove;
-  console.log(deadlineApprove)
-  console.log(approval)
   await approval.save();
   await document.save();
 
@@ -141,7 +132,7 @@ const submitDocument = async (req, res) => {
     documentId: document._id,
     user: document.createdBy._id,
     action: 'SUBMIT',
-    transactionId: transactionId
+    txHash: txHash
   }
 
   await createANewLog(log)
@@ -270,15 +261,17 @@ const assignDocumentToApprover = async (req, res) => {
 
 const approveADocument = async (req, res) => {
 
-  const { documentId, comment, status } = req.body;
+  const { documentId, comment, status, txHash } = req.body;
 
   try {
     const approval = await getAnApprovalByDocumentId(documentId);
-    console.log(Date.now(), approval.deadlineApprove)
-    if (Date.now() > approval.deadlineApprove) {
+    const deadlineTimestamp = Date.parse(approval.deadlineApprove);
+    const currentDay = new Date();
+    console.log(currentDay, deadlineTimestamp)
+    if (currentDay > deadlineTimestamp) {
       return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
     }
-    await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status);
+    await handleCommentAnApprovalOfADocument(documentId, req.userId, comment, status, txHash);
     res.status(200).json({ message: "Document approved and commented successfully" });
   } catch (error) {
     console.log(error);
@@ -291,11 +284,13 @@ const getApprovalHistoryOfDocument = async (req, res) => {
 
   try {
     const approval = await handleGetApprovalOfADocument(documentId);
+    
     if (!approval) {
       return res.status(404).json({ message: 'Document not found' });
     }
 
     const timeline = await getApprovalHistoryAsTimeline(approval._id);
+    
     res.status(200).json(timeline);
   } catch (error) {
     res.status(500).json({ message: error.message });

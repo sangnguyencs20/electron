@@ -3545,6 +3545,11 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-type-animation@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-type-animation/-/react-type-animation-3.1.0.tgz#7bc3d5e73d8f4677a7808365beaa12f0fee3e033"
+  integrity sha512-Ju74SpUFpSINqlGU8UeFAF+AnAn0nZcc8MB0Ho6QvRkh8uDKkOzAiMD3l9xEmkbKXnSYsljfVgIDM/zwqEImpQ==
+
 react-vertical-timeline-component@^3.6.0:
   version "3.6.0"
   resolved "https://registry.npmjs.org/react-vertical-timeline-component/-/react-vertical-timeline-component-3.6.0.tgz"
@@ -3553,6 +3558,13 @@ react-vertical-timeline-component@^3.6.0:
     classnames "^2.2.6"
     prop-types "^15.7.2"
     react-intersection-observer "^8.26.2"
+
+react-wavify@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/react-wavify/-/react-wavify-1.8.3.tgz#5e78862920ff4205a5564bbc5a29cfd186b10b1d"
+  integrity sha512-SmlzjtHm6s7cs1618k63ieMkRhVg+BKbcq3SyTGJ48oRcuxgr5zPdywBnK3J4EzbpPX0dCu4PA04G80KSyDkxg==
+  dependencies:
+    prop-types "^15.8.1"
 
 react@^16.8.6:
   version "16.14.0"

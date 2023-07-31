@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
-import electron from "./abi.json";
+import electron from "./electron.json";
 import { toast } from "react-toastify";
+import { hexToBytes20, uint8ArrayToHexString } from "../utils";
 
 // Sử dụng provider đã tạo từ import.meta.VITE_REACT_SEPOLIA_ENDPOINT
 const provider = new ethers.JsonRpcProvider(
@@ -17,14 +18,6 @@ let contract = null;
 async function createWallet(privatekey) {
   try {
     const wallet = new ethers.Wallet(privatekey, provider);
-    console.log(
-      "Địa chỉ ví:",
-      wallet.address,
-      privatekey,
-      wallet.privateKey,
-      provider,
-      contractAddress
-    );
     return wallet;
   } catch (error) {
     console.error("Lỗi khi tạo wallet:", error);
@@ -41,46 +34,7 @@ export async function createConnectedContract(privateKey) {
       wallet
     );
     contract = connectedContract;
-    const filterDraftCreate = connectedContract.filters.DraftCreate(
-      null,
-      null,
-      null,
-      null
-    );
-    connectedContract.on(
-      filterDraftCreate,
-      (draftId, creator, value, status, event) => {
-        console.log("DraftCreate:", draftId, creator, value, status);
-      }
-    );
-    const filterDraftSubmit = connectedContract.filters.DraftSubmit(null);
-    connectedContract.on(filterDraftSubmit, (draftId, event) => {
-      console.log("DraftSubmit:", draftId);
-    });
 
-    const filterDraftApproved = connectedContract.filters.DraftApproved();
-    connectedContract.on(filterDraftApproved, (id, approver, event) => {
-      console.log("DraftApproved:", id, approver);
-    });
-
-    const filterApproverAdded = connectedContract.filters.ApproverAdded();
-    connectedContract.on(filterApproverAdded, (id, approver, event) => {
-      console.log("ApproverAdded:", id, approver);
-    });
-
-    const filterCommentAdded = connectedContract.filters.CommentAdded(
-      null,
-      null,
-      null
-    );
-    connectedContract.on(
-      filterCommentAdded,
-      (id, commenter, commentId, event) => {
-        console.log("CommentAdded:", id, commenter, commentId);
-      }
-    );
-
-    console.log("contract", contract);
     return connectedContract;
   } catch (error) {
     console.error("Lỗi khi tạo connected contract:", error);
@@ -90,13 +44,119 @@ export async function createConnectedContract(privateKey) {
 
 export const createDraft = async (data) => {
   try {
+    console.log("create id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    const tx = await contract.createDraft(
+      hexToBytes20(data._id),
+      data._content_hashed,
+      data._level1Approvers
+    );
+    const res = await tx.wait(2);
+    console.log(res);
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+  }
+};
+
+export const submitDraft = async (data) => {
+  try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
     console.log(data);
-    // const tx = await contract.DraftCreate();
-    // console.log(tx.await(2));
+    console.log("submit id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    const tx = await contract.submitDraft(
+      hexToBytes20(data._id),
+      data._deadlineApprove
+    );
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+  }
+};
+
+export const decideDraft = async (data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    console.log(data);
+    console.log("decide id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    // const gasLimit = 300000; // Thay đổi giá trị gas limit tùy ý
+    const tx = await contract.decideDraft(
+      hexToBytes20(data._id),
+      data.decide,
+      data.comment_hashed
+      // { gasLimit } // Thêm thông số gasLimit vào options
+    );
+
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
+  }
+};
+
+export const assignLevel2Approver = async (data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    console.log(data);
+    console.log("assign id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
+    const tx = await contract.assignLevel2Approver(
+      hexToBytes20(data._id),
+      data.level2Approvers
+    );
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm assignLevel2Approver:", error, contract);
+  }
+};
+
+export const publish = async (data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    console.log(data);
+    const tx = await contract.publish(hexToBytes20(data._id));
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+  }
+};
+
+export const comment = async (data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    console.log(data);
+    const tx = await contract.comment(
+      hexToBytes20(data._id),
+      data._contentHashed
+    );
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
   }

@@ -15,20 +15,29 @@ import { axiosGetComment, axiosPostComment } from "../api";
 import { AnimatePresence } from "framer-motion";
 import CustomRotatingSquare from "./CustomRotatingSquare";
 import CustomSugar from "./CustomSugar";
+import { toast } from "react-toastify";
 const CommentSection = ({ docId }) => {
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {
-    {
-      docId && setLoading(true);
-      docId &&
+    const myPromise = new Promise((resolve, reject) => {
+      comment({
+        _id: docId,
+        _contentHashed: encryptLinkToBytes32(comment, "123456"),
+      }).then((hash) => {
+        setIsLoading(true);
+        console.log(hash);
+        resolve(hash);
+        setIsLoading(false);
         axiosPostComment({
-          content: comment,
           documentId: docId,
-          txHashed:
-            "0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3",
+          content: comment,
+          txHash: hash,
         })
           .then((res) => {
+            setIsLoading(false);
+            console.log(res);
             setIsNeed((pre) => pre + 1);
+            resolve(hash);
           })
           .catch((err) => {
             console.error(err),
@@ -36,7 +45,44 @@ const CommentSection = ({ docId }) => {
                 setLoading(false);
               }, 3000);
           });
-    }
+      });
+    });
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being commented",
+        success: {
+          render({ data }) {
+            return `Comment draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Comment draft error:  ${data}`;
+          },
+        },
+      },
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
+    // {
+    //   docId && setLoading(true);
+    //   docId &&
+    //     axiosPostComment({
+    //       content: comment,
+    //       documentId: docId,
+    //       txHashed:
+    //         "0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3",
+    //     })
+    //       .then((res) => {
+    //         setIsNeed((pre) => pre + 1);
+    //       })
+    //       .catch((err) => {
+    //         console.error(err),
+    //           setTimeout(() => {
+    //             setLoading(false);
+    //           }, 3000);
+    //       });
+    // }
   };
   const [comments, setComments] = useState([]);
   const [page, setPage] = useState(1);
