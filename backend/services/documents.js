@@ -70,6 +70,52 @@ const handleGetApprovalOfADocument = async (documentId) => {
   return await Approval.findOne({ documentId: documentId });
 };
 
+// const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
+//   const documents = await Approval.find({ "history.receiverId": approverId })
+//     .select("documentId history")
+//     .populate({
+//       path: "documentId",
+//       populate: {
+//         path: "createdBy",
+//         select: "fullName"
+//       },
+//     })
+//     .sort({ createdAt: -1 });
+//   const filteredDocuments = documents?.filter((doc) =>
+//     doc?.documentId?.status !== "Draft"
+//   );
+
+//   const latestLogs = filteredDocuments.map((doc) => {
+//     const latestLog = doc.history.sort((a, b) => {
+//       return new Date(b.time) - new Date(a.time);
+//     })[0];
+
+//     console.log(latestLog)
+
+
+//     return {
+//       document: doc.documentId,
+//       currentStatus:
+//         latestLog.log.length == 0
+//           ? "Pending"
+//           : latestLog.log[latestLog.log.length - 1].status,
+//     };
+//   });
+
+//   // Calculate the starting index and the ending index of the current page
+//   const startIndex = (page - 1) * pageSize;
+//   const endIndex = startIndex + parseInt(pageSize);
+//   // Return the documents for the current page
+//   console.log(
+//     "There are " + latestLogs.slice(startIndex, endIndex).length + " documents"
+//   );
+
+//   return {
+//     totalPages: Math.ceil(latestLogs.length / pageSize),
+//     allDocuments: latestLogs.slice(startIndex, endIndex),
+//   };
+// };
+
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
     .select("documentId history")
@@ -77,25 +123,30 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
       path: "documentId",
       populate: {
         path: "createdBy",
-        select: "fullName", // Assuming the user's name is stored in the 'name' field
+        select: "fullName"
       },
     })
     .sort({ createdAt: -1 });
-  console.log(documents)
+
   const filteredDocuments = documents?.filter((doc) =>
     doc?.documentId?.status !== "Draft"
   );
 
   const latestLogs = filteredDocuments.map((doc) => {
-    const latestLog = doc.history.sort((a, b) => {
-      return new Date(b.time) - new Date(a.time);
-    })[0];
+    const receiverLog = doc.history.find((log) => log.receiverId.toString() === approverId);
+    console.log(receiverLog);
+    if(receiverLog.log.length === 0) {
+      currentStatus = "Pending";
+    }
+    else {
+      currentStatus = receiverLog.log[receiverLog.log.length - 1].status;
+    }
+
+    console.log(currentStatus)
+
     return {
       document: doc.documentId,
-      currentStatus:
-        latestLog.log.length == 0
-          ? "Pending"
-          : latestLog.log[latestLog.log.length - 1].status,
+      currentStatus,
     };
   });
 
@@ -112,6 +163,7 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
     allDocuments: latestLogs.slice(startIndex, endIndex),
   };
 };
+
 
 module.exports = {
   handleGetAllDocumentsOfApprover,
