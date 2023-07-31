@@ -39,12 +39,16 @@ export default function AssignPopper({ docId }) {
           documentId: docId,
           userIds: userSelected.map((item) => item._id),
           txHash: hash,
-        }).then((res) => {
-          setIsLoading(false);
-          console.log(res);
-          resolve(hash);
-          setNeedRefresh((pre) => pre + 1);
-        });
+        })
+          .then((res) => {
+            setIsLoading(false);
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     });
 

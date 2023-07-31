@@ -35,11 +35,15 @@ export default function SubmitModal({ doc, setNeedRefresh }) {
           documentId: doc._id,
           deadlineApprove: new Date(time),
           txHash: hash,
-        }).then((res) => {
-          console.log(res);
-          resolve(hash);
-          setNeedRefresh((pre) => pre + 1);
-        });
+        })
+          .then((res) => {
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     });
     toast.promise(

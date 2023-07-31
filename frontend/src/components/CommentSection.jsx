@@ -44,6 +44,9 @@ const CommentSection = ({ docId }) => {
               setTimeout(() => {
                 setLoading(false);
               }, 3000);
+          })
+          .catch((err) => {
+            reject(err);
           });
       });
     });

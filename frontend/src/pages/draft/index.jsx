@@ -39,6 +39,7 @@ import SubmitModal from "../../components/SubmitModal";
 import { hexToBytes20 } from "../../utils";
 import { publish } from "../../contract";
 import { toast } from "react-toastify";
+import CommentModal from "../../components/CommentModal";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -190,23 +191,6 @@ const Draft = () => {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
-                {/* <IconButton
-                  className={`${
-                    doc.status !== "Draft" && "cursor-not-allowed"
-                  }`}
-                  onClick={() => {
-                    handleSubmit(doc._id);
-                  }}
-                >
-                  <ForwardToInboxOutlinedIcon
-                    color="#ff9900"
-                    className={
-                      doc.status === "Draft"
-                        ? "text-[#ff9900]"
-                        : "text-blue-gray-200"
-                    }
-                  />
-                </IconButton> */}
                 <SubmitModal doc={doc} setNeedRefresh={setNeedRefresh} />
               </Tooltip>
             </Col>
@@ -257,7 +241,7 @@ const Draft = () => {
                 placement="bottomStart"
                 onClick={() => {
                   console.log("Finish Draft", doc.id);
-                  handleFinish(doc.id);
+                  handleFinish(doc._id);
                 }}
                 isDisabled={doc.status !== "Approved"}
               >
@@ -272,6 +256,15 @@ const Draft = () => {
                 </IconButton>
               </Tooltip>
             </Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip
+                content="Comment"
+                color="primary"
+                placement="bottomStart"
+              >
+                <CommentModal docId={doc._id} />
+              </Tooltip>
+            </Col>
           </Row>
         );
       default:
@@ -283,20 +276,24 @@ const Draft = () => {
     const myPromise = new Promise((resolve, reject) => {
       publish({
         _id: docId,
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        axiosPostPublishDocument(docId)
-          .then((res) => {
-            setIsLoading(false);
-            console.log(res);
-            resolve(hash);
-            setNeedRefresh((pre) => pre + 1);
-          })
-          .catch((err) => console.error(err));
-      });
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          axiosPostPublishDocument(docId)
+            .then((res) => {
+              setIsLoading(false);
+              console.log(res);
+              resolve(hash);
+              setNeedRefresh((pre) => pre + 1);
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
 
     toast.promise(
@@ -321,23 +318,27 @@ const Draft = () => {
     const myPromise = new Promise((resolve, reject) => {
       finish({
         _id: docId,
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        // axiosApproveDocument({
-        //   documentId: docID,
-        //   comment: "",
-        //   status: "Approved",
-        //   txHash: hash,
-        // }).then((res) => {
-        //   setIsLoading(false);
-        //   console.log(res);
-        //   resolve(hash);
-        //   setNeedRefresh((pre) => pre + 1);
-        // });
-      });
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          // axiosApproveDocument({
+          //   documentId: docID,
+          //   comment: "",
+          //   status: "Approved",
+          //   txHash: hash,
+          // }).then((res) => {
+          //   setIsLoading(false);
+          //   console.log(res);
+          //   resolve(hash);
+          //   setNeedRefresh((pre) => pre + 1);
+          // });
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
 
     toast.promise(

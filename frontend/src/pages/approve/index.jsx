@@ -256,22 +256,26 @@ export default function Approve() {
         _id: docID,
         decide: true,
         comment_hashed: encryptLinkToBytes32("", "123456"),
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        axiosApproveDocument({
-          documentId: docID,
-          comment: "",
-          status: "Approved",
-          txHash: hash,
-        }).then((res) => {
-          setIsLoading(false);
-          console.log(res);
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
           resolve(hash);
-          setNeedRefresh((pre) => pre + 1);
+          axiosApproveDocument({
+            documentId: docID,
+            comment: "",
+            status: "Approved",
+            txHash: hash,
+          }).then((res) => {
+            setIsLoading(false);
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          });
+        })
+        .catch((err) => {
+          reject(err);
         });
-      });
     });
 
     toast.promise(
@@ -280,12 +284,12 @@ export default function Approve() {
         pending: "Draft is being decided",
         success: {
           render({ data }) {
-            return `Decide draft successfully:  ${data}`;
+            return `Decide draft:  ${data}`;
           },
         },
         error: {
           render({ data }) {
-            return `Decide draft successfully:  ${data}`;
+            return `Decide draft:  ${data}`;
           },
         },
       },
