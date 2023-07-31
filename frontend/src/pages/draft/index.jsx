@@ -119,12 +119,12 @@ const Draft = () => {
   }, [needRefresh, page]);
 
   const columns = [
-    { name: "TITLE", uid: "title" },
-    { name: "STATUS", uid: "status" },
-    { name: "STATE", uid: "state" },
-    { name: "DESCRIPTION", uid: "description" },
-    { name: "FILE", uid: "files" },
-    { name: "ACTIONS", uid: "actions" },
+    { name: "TIÊU ĐỀ", uid: "title" },
+    { name: "MỨC ĐỘ", uid: "status" },
+    { name: "TRẠNG THÁI", uid: "state" },
+    { name: "MÔ TẢ", uid: "description" },
+    { name: "TỆP", uid: "files" },
+    { name: "HÀNH ĐỘNG", uid: "actions" },
   ];
 
   const renderCell = (doc, columnKey) => {
@@ -452,11 +452,7 @@ const Draft = () => {
                     {(column) => (
                       <Table.Column
                         key={column.uid}
-                        align={
-                          column.uid === "state" || column.uid === "status"
-                            ? "center"
-                            : "start"
-                        }
+                        align={column.uid === "title" ? "start" : "center"}
                         className={"rounded-none bg-blue-gray-50"}
                       >
                         {column.name}

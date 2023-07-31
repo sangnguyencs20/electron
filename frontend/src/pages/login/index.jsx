@@ -102,7 +102,7 @@ const Login = () => {
                 wrapper="span"
                 speed={50}
                 // style={{ fontSize: "2em", display: "inline-block" }}
-                repeat={Infinity}
+                repeat={1}
               />
               <span className="block uppercase text-7xl font-medium py-4 -ml-10 mb-20 text-blue-500">
                 Electron
