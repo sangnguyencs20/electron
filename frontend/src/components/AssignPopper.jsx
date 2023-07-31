@@ -48,19 +48,23 @@ export default function AssignPopper({ docId }) {
       });
     });
 
-    toast.promise(myPromise, {
-      pending: "Draft is being assigned",
-      success: {
-        render({ data }) {
-          return `Assign draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being assigned",
+        success: {
+          render({ data }) {
+            return `Assign draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Assign draft error:  ${data}`;
+          },
         },
       },
-      error: {
-        render({ data }) {
-          return `Assign draft error:  ${data}`;
-        },
-      },
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
     // axiosAssignDocument({ documentId: docId, userIds: userSelected });
   };
   const closeHandler = () => {

@@ -42,15 +42,19 @@ export default function SubmitModal({ doc, setNeedRefresh }) {
         });
       });
     });
-    toast.promise(myPromise, {
-      pending: "Draft is being submitted",
-      success: {
-        render({ data }) {
-          return `Submit draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being submitted",
+        success: {
+          render({ data }) {
+            return `Submit draft successfully:  ${data}`;
+          },
         },
+        error: "error",
       },
-      error: "error",
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
   };
   return (
     <div>

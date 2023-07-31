@@ -299,19 +299,23 @@ const Draft = () => {
       });
     });
 
-    toast.promise(myPromise, {
-      pending: "Draft is being published",
-      success: {
-        render({ data }) {
-          return `Publish draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being published",
+        success: {
+          render({ data }) {
+            return `Publish draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Publish draft error:  ${data}`;
+          },
         },
       },
-      error: {
-        render({ data }) {
-          return `Publish draft error:  ${data}`;
-        },
-      },
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
   };
   const handleFinish = (docId) => {
     const myPromise = new Promise((resolve, reject) => {
@@ -336,19 +340,23 @@ const Draft = () => {
       });
     });
 
-    toast.promise(myPromise, {
-      pending: "Draft is being finished",
-      success: {
-        render({ data }) {
-          return `Finish draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being finished",
+        success: {
+          render({ data }) {
+            return `Finish draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Finish draft error:  ${data}`;
+          },
         },
       },
-      error: {
-        render({ data }) {
-          return `Finish draft error:  ${data}`;
-        },
-      },
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
   };
   return (
     <div className="w-full px-2 sm:px-0">

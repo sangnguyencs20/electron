@@ -43,7 +43,7 @@ axiosClient.interceptors.request.use(async (config) => {
 
 axiosClient.interceptors.response.use(
   (response) => {
-    toast.success(response.data.message);
+    // toast.success(response.data.message);
     if (response && response.data) {
       return response;
     }
