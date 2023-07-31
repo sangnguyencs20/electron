@@ -105,7 +105,9 @@ const CommentBox = ({ item }) => {
             className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400"
             onClick={() => {
               window.open(
-                "https://explorer.vbchain.vn/agd/tx/0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3",
+                `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                  item.txHash
+                }`,
                 "_blank"
               );
             }}

@@ -16,39 +16,45 @@ import { AnimatePresence } from "framer-motion";
 import CustomRotatingSquare from "./CustomRotatingSquare";
 import CustomSugar from "./CustomSugar";
 import { toast } from "react-toastify";
+import { encryptLinkToBytes32 } from "../utils";
+import { SCcomment } from "../contract";
 const CommentSection = ({ docId }) => {
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {
     const myPromise = new Promise((resolve, reject) => {
-      comment({
+      SCcomment({
         _id: docId,
         _contentHashed: encryptLinkToBytes32(comment, "123456"),
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        axiosPostComment({
-          documentId: docId,
-          content: comment,
-          txHash: hash,
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          axiosPostComment({
+            documentId: docId,
+            content: comment,
+            txHash: hash,
+          })
+            .then((res) => {
+              setIsLoading(false);
+              console.log(res);
+              setIsNeed((pre) => pre + 1);
+              resolve(hash);
+            })
+            .catch((err) => {
+              console.error(err),
+                setTimeout(() => {
+                  setLoading(false);
+                }, 3000);
+            })
+            .catch((err) => {
+              reject(err);
+            });
         })
-          .then((res) => {
-            setIsLoading(false);
-            console.log(res);
-            setIsNeed((pre) => pre + 1);
-            resolve(hash);
-          })
-          .catch((err) => {
-            console.error(err),
-              setTimeout(() => {
-                setLoading(false);
-              }, 3000);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
+        .catch((err) => {
+          reject(err.message);
+        });
     });
     toast.promise(
       myPromise,
@@ -124,7 +130,7 @@ const CommentSection = ({ docId }) => {
             Discussion
           </h2>
         </div>
-        <div className="mb-6 flex flex-col items-center w-full ">
+        <div className="mb-6 flex flex-col items-center w-full min-w-[800px]">
           <Textarea
             {...bindings}
             rows="10"

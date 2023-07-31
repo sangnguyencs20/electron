@@ -55,7 +55,7 @@ export const createDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.reason.message);
+    throw Error(error.reason);
   }
 };
 
@@ -103,7 +103,7 @@ export const decideDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm decideDraft:", error.reason, contract);
-    throw Error(error.reason.message);
+    throw Error(error.reason);
   }
 };
 
@@ -147,7 +147,7 @@ export const publish = async (data) => {
   }
 };
 
-export const comment = async (data) => {
+export const SCcomment = async (data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
@@ -164,6 +164,6 @@ export const comment = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.message);
+    throw Error(error.reason);
   }
 };

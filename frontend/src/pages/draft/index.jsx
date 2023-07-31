@@ -75,6 +75,14 @@ const StyledBadge = styled("span", {
         bg: "$errorLight",
         color: "$errorLightContrast",
       },
+      Published: {
+        bg: "$errorLight",
+        color: "$errorLightContrast",
+      },
+      Finished: {
+        bg: "$errorLight",
+        color: "$errorLightContrast",
+      },
     },
   },
   defaultVariants: {
@@ -261,8 +269,11 @@ const Draft = () => {
                 content="Comment"
                 color="primary"
                 placement="bottomStart"
+                isDisabled={
+                  doc.status !== "Published" && doc.status !== "Finished"
+                }
               >
-                <CommentModal docId={doc._id} />
+                <CommentModal docId={doc._id} type={doc.status} />
               </Tooltip>
             </Col>
           </Row>
