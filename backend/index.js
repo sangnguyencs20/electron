@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
 });
 
 const routes = require("./routes");
+const { checkApprove } = require("./blockchain/contract");
 
 app.use("/api", routes);
 app.use(
@@ -42,13 +43,12 @@ app.use(
 );
 
 
-const ApprovalModel = mongoose.model('Approval'); // Replace 'Approval' with your actual model name
+const ApprovalModel = mongoose.model('Approval');
 
 async function updateApprovalStatus() {
   try {
     const currentDate = new Date();
     const approvals = await ApprovalModel.find({ isApproved: false, deadlineApprove: { $lte: currentDate } });
-    console.log("There are " + approvals.length + " approvals")
     for (const approval of approvals) {
       let allApproved = true;
 
@@ -61,20 +61,21 @@ async function updateApprovalStatus() {
 
       if (allApproved) {
         approval.isApproved = true;
+        checkApprove(approval.documentId.toString());
       } else {
         approval.isApproved = false;
+        checkApprove(approval.documentId.toString());
       }
 
       await approval.save();
     }
-
     console.log("Running approval status update...done");
   } catch (error) {
     console.error('Error while updating approval status:', error);
   }
 }
 
-const job = schedule.scheduleJob('0 0/30 * * * *', async () => {
+const job = schedule.scheduleJob('*/5 * * * * *', async () => {
   console.log('Running approval status update...');
   await updateApprovalStatus();
 });
