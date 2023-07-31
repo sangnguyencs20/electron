@@ -46,7 +46,7 @@ const createDocument = async (req, res) => {
   }
   const document = req.body;
   document.createdBy = req.userId;
-  
+
   try {
     const newDocument = await createOneDocument(document);
     if (req.body.receiver.length == 0) {
@@ -113,11 +113,11 @@ const submitDocument = async (req, res) => {
     return res.status(401).json({ message: 'You can only submit draft document' });
   }
 
-  if(!deadlineApprove) {
+  if (!deadlineApprove) {
     return res.status(401).json({ message: 'You have to set deadline for this document' });
   }
 
-  if(!txHash) {
+  if (!txHash) {
     return res.status(401).json({ message: 'You have to submit transaction hash' });
   }
 
@@ -184,7 +184,7 @@ const publishDocument = async (req, res) => {
         .json({ error: "You are not authorized to publish this document" });
     }
 
-    if(txHash == null || txHash == undefined || txHash == ""){
+    if (txHash == null || txHash == undefined || txHash == "") {
       return res.status(401).json({ error: "You have to provide a transaction hash" });
     }
 
@@ -193,12 +193,12 @@ const publishDocument = async (req, res) => {
       document.timePublished = new Date();
       document.status = "Published";
       document.publishTxHash = txHash;
+      await document.save();
     }
     else {
       return res.status(401).json({ error: "You can only publish a document when all the feedbacks are approved" });
     }
 
-    await document.save();
     res.json({ message: "Document published successfully" });
   }
   catch (error) {
@@ -279,7 +279,6 @@ const approveADocument = async (req, res) => {
     const approval = await getAnApprovalByDocumentId(documentId);
     const deadlineTimestamp = Date.parse(approval.deadlineApprove);
     const currentDay = new Date();
-    console.log(currentDay, deadlineTimestamp)
     if (currentDay > deadlineTimestamp) {
       return res.status(401).json({ message: 'Không thể đánh giá dự thảo vì đã quá hạn!' });
     }
@@ -296,13 +295,13 @@ const getApprovalHistoryOfDocument = async (req, res) => {
 
   try {
     const approval = await handleGetApprovalOfADocument(documentId);
-    
+
     if (!approval) {
       return res.status(404).json({ message: 'Document not found' });
     }
 
     const timeline = await getApprovalHistoryAsTimeline(approval._id);
-    
+
     res.status(200).json(timeline);
   } catch (error) {
     res.status(500).json({ message: error.message });

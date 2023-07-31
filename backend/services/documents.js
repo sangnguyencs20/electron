@@ -135,7 +135,14 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const latestLogs = filteredDocuments.map((doc) => {
     const receiverLog = doc.history.find((log) => log.receiverId.toString() === approverId);
     console.log(receiverLog);
-    const currentStatus = (receiverLog !== []) ? receiverLog?.log[receiverLog.log.length - 1]?.status : "Pending";
+    if(receiverLog.log.length === 0) {
+      currentStatus = "Pending";
+    }
+    else {
+      currentStatus = receiverLog.log[receiverLog.log.length - 1].status;
+    }
+
+    console.log(currentStatus)
 
     return {
       document: doc.documentId,

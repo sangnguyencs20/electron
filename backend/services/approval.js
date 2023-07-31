@@ -7,6 +7,7 @@ const getAllApprovals = async (documentId) => {
 
 const checkIfDocumentIsAllApproved = async (documentId) => {
     const approvals = await getAllApprovals(documentId);
+    console.log(approvals.isApproved)
     return approvals.isApproved;
 }
 
