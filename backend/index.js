@@ -44,7 +44,7 @@ app.use(
 
 
 const ApprovalModel = mongoose.model('Approval');
-
+const DocumentModel = mongoose.model('Document');
 async function updateApprovalStatus() {
   try {
     const currentDate = new Date();
@@ -59,14 +59,17 @@ async function updateApprovalStatus() {
         }
       }
 
+      const document = await DocumentModel.findById(approval.documentId);
       if (allApproved) {
         approval.isApproved = true;
+        document.status = "Approved"
         checkApprove(approval.documentId.toString());
       } else {
         approval.isApproved = false;
+        document.status = "Rejected"
         checkApprove(approval.documentId.toString());
       }
-
+      await document.save();
       await approval.save();
     }
     console.log("Running approval status update...done");
@@ -75,7 +78,7 @@ async function updateApprovalStatus() {
   }
 }
 
-const job = schedule.scheduleJob('30 * * * *', async () => {
+const job = schedule.scheduleJob('*/5 * * * * *', async () => {
   console.log('Running approval status update...');
   await updateApprovalStatus();
 });
