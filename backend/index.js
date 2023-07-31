@@ -43,7 +43,7 @@ app.use(
 );
 
 const ApprovalModel = mongoose.model("Approval");
-
+const DocumentModel = mongoose.model("Document");
 async function updateApprovalStatus() {
   try {
     const currentDate = new Date();
@@ -83,7 +83,7 @@ async function updateApprovalStatus() {
   }
 }
 
-const job = schedule.scheduleJob("30 * * * *", async () => {
+const job = schedule.scheduleJob("/*30 * * * *", async () => {
   console.log("Running approval status update...");
   await updateApprovalStatus();
 });

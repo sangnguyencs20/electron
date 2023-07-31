@@ -48,39 +48,6 @@ const Approval = new mongoose.Schema({
     }
 })
 
-Approval.pre('save', async function (next) {
-    const histories = this.history;
-
-    if (!histories || histories.length === 0) {
-        this.isApproved = false;
-        next();
-        return;
-    }
-    // Loop through each history entry
-    for (const entry of histories) {
-        const logs = entry.log;
-
-        if (!logs || logs.length === 0) {
-            this.isApproved = false;
-            next();
-            return;
-        }
-        // Get the last log entry for each receiver
-        const lastLogEntry = logs[logs.length - 1];
-
-        // Check if the last status for the receiver is not "Approved", then stop checking and set isApproved to false
-        if (lastLogEntry.status !== 'Approved') {
-            this.isApproved = false;
-            next();
-            return;
-        }
-    }
-
-    // If all the last statuses for each receiver are "Approved", set isApproved to true
-    this.isApproved = true;
-    next();
-});
-
 
 
 module.exports = mongoose.model('Approval', Approval);
