@@ -412,7 +412,7 @@ const Draft = () => {
           </Button>
         </div>
         <Tab.Group vertical>
-          <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+          <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1 overflow-x-scroll">
             {Object.keys(dosObj).map((category) => (
               <Tab
                 key={category}
@@ -445,8 +445,12 @@ const Draft = () => {
                   striped={true}
                   lined
                   headerLined
-                  css={{ height: "auto", minWidth: "100%" }}
-                  className="bg-white"
+                  css={{
+                    height: "auto",
+                    minWidth: "100%",
+                    overflowX: "scroll",
+                  }}
+                  className="bg-white overflow-x-scroll"
                 >
                   <Table.Header columns={columns}>
                     {(column) => (

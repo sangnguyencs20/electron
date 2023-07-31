@@ -209,11 +209,13 @@ export default function Create() {
       >
         <Step onClick={() => setActiveStep(0)}>
           <UserIcon className="h-5 w-5" />
-          <div className="absolute -bottom-[4.5rem] w-max text-center">
+          <div className="absolute -bottom-[4.5rem] w-max text-center translate-x-4">
             <Typography
               variant="h6"
               color={activeStep === 0 ? "blue" : "blue-gray"}
-              className="text-md leading-[21px] font-semibold"
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 0 && "hidden lg:flex"
+              }`}
             >
               Chi tiết dự thảo
             </Typography>
@@ -231,13 +233,17 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 1 ? "blue" : "blue-gray"}
-              className="text-md leading-[21px] font-semibold"
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 1 && "hidden lg:flex"
+              }`}
             >
               Người kiểm duyệt và văn bản
             </Typography>
             <Typography
               color={activeStep === 1 ? "blue" : "gray"}
-              className="text-sm leading-[21px] font-normal hidden md:block"
+              className={`text-sm leading-[21px] font-normal hidden md:block ${
+                activeStep !== 1 && "hidden lg:flex"
+              }`}
             >
               Chọn người kiểm duyệt và nộp văn bản đính kèm
             </Typography>
@@ -249,13 +255,17 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 2 ? "blue" : "blue-gray"}
-              className="text-md leading-[21px] font-semibold"
+              className={`text-md leading-[21px] font-semibold ${
+                activeStep !== 2 && "hidden lg:flex"
+              }`}
             >
               Xem xét lại
             </Typography>
             <Typography
               color={activeStep === 2 ? "blue" : "gray"}
-              className="text-sm leading-[21px] font-normal hidden md:block"
+              className={`text-sm leading-[21px] font-normal hidden md:block ${
+                activeStep !== 2 && "hidden lg:flex"
+              }`}
             >
               Hoàn thiện thủ tục trước khi nộp
             </Typography>
@@ -419,7 +429,7 @@ export default function Create() {
                     setConfirm((pre) => !pre);
                   }}
                 />
-                <p className="text-sm text-gray-700 max-w-sm">
+                <p className="text-sm text-gray-700 max-w-xs md:max-w-sm pr-2">
                   I confirm that I have read and understood{" "}
                   <span className="underline text-blue-600 cursor-pointer">
                     the terms and conditions of the application
@@ -431,7 +441,7 @@ export default function Create() {
               <Popover shouldCloseOnBlur={true} triggerType="grid">
                 <Popover.Trigger>
                   <MuiButton
-                    className="text-white bg-blue-500 w-40 h-16 text-lg rounded-xl block m-auto"
+                    className="text-white bg-blue-500 w-40 h-16 text-md md:text-lg rounded-xl block m-auto"
                     variant="filled"
                     type="submit"
                     aria-labelledby="submitButtonLabel"

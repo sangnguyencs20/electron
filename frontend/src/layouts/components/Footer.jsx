@@ -15,8 +15,8 @@ const Footer = () => {
           points: 3,
         }}
       ></Wave>
-      <div className="flex justify-center bg-[#3B71CA] text-white pb-20">
-        <footer className="relative z-10 p-4">
+      <div className="flex justify-center bg-[#3B71CA] text-white pb-5 lg:pb-20">
+        <footer className="relative z-10 lg:p-4">
           <div className="container">
             <div className="flex flex-wrap gap-10 justify-between">
               <div className="w-full px-4 sm:w-2/3 lg:w-3/12">
