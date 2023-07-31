@@ -51,7 +51,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 </p>
               </VerticalTimelineElement>
             );
-          else {
+          else if (item.status === "Rejected") {
             return (
               <VerticalTimelineElement
                 className="vertical-timeline-element--education"
@@ -81,14 +81,32 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 </p>
               </VerticalTimelineElement>
             );
+          } else if (item.status === "Submitted") {
+            return (
+              <VerticalTimelineElement
+                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Submit"}
+                icon={<ChevronDoubleUpIcon />}
+              />
+            );
+          } else if (item.status === "Published") {
+            return (
+              <VerticalTimelineElement
+                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Published"}
+                icon={<ChevronDoubleUpIcon />}
+              />
+            );
+          } else if (item.status === "Finished") {
+            return (
+              <VerticalTimelineElement
+                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Finished"}
+                icon={<ChevronDoubleUpIcon />}
+              />
+            );
           }
         })}
-
-        <VerticalTimelineElement
-          iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-          date={formattedDateTime(timeSubmit) + " - Submit"}
-          icon={<ChevronDoubleUpIcon />}
-        />
       </VerticalTimeline>
     </div>
   );
