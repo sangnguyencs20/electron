@@ -38,7 +38,6 @@ const LoginModal = ({
             .then((hash) => {
               // setIsLoading(true);
               console.log(hash);
-              resolve(hash);
               axiosFunction({ ...axiosData, txHash: hash }).then((res) => {
                 // setIsLoading(false);
                 console.log(res);

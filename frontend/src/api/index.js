@@ -80,7 +80,7 @@ export const axiosGetMyDoc = (page) =>
   axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
 export const axiosSubmitMyDoc = (data) =>
   axiosClient.post(`/api/documents/submit/${data.documentId}`, {
-    deadlineApprove: data.deadlineApprove,
+    deadlineApprove: data.deadlineApprove, txHash:data.txHash
   });
 
 export const axiosGetReceiveDoc = (receiId) =>
