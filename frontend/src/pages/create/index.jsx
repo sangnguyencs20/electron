@@ -134,7 +134,7 @@ export default function Create() {
               description: form.description,
             });
             setIsLoading(false);
-            createDraft({
+            createDraft(decryptPrivateKey(hashedPrivateKey, password), {
               _id: createDocumentResponse.data.documentId,
               _content_hashed: encryptLinkToBytes32(form.fileLink, password),
               _level1Approvers: form.approvals.map(

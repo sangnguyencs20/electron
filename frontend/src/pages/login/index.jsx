@@ -61,11 +61,7 @@ const Login = () => {
             username: res.data.user.username,
           })
         );
-        const privateKey = decryptPrivateKey(
-          res.data.user.hashedPrivateKey,
-          values.password
-        );
-        createConnectedContract(privateKey);
+
         toast.success("Đăng nhập thành công");
         setLoading(false);
         setTimeout(() => {
