@@ -36,11 +36,11 @@ const LoginModal = ({
           toast.success(res.data.message);
           scFunction(scData)
             .then((hash) => {
-              setIsLoading(true);
+              // setIsLoading(true);
               console.log(hash);
               resolve(hash);
               axiosFunction({ ...axiosData, txHash: hash }).then((res) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 console.log(res);
                 resolve(hash);
                 //   setNeedRefresh((pre) => pre + 1);
