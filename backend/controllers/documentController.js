@@ -113,17 +113,20 @@ const submitDocument = async (req, res) => {
     return res.status(401).json({ message: 'You can only submit draft document' });
   }
 
+  if(!deadlineApprove) {
+    return res.status(401).json({ message: 'You have to set deadline for this document' });
+  }
+
+  if(!txHash) {
+    return res.status(401).json({ message: 'You have to submit transaction hash' });
+  }
+
   document.status = 'Submitted';
   document.timeSubmit = new Date();
+  document.submitTxHash = txHash;
 
-  // const receivers = document.receiver;
-  // const emailArray = receivers.map(receivers => receivers.receiverId.email);
-
-
-
-  // const payload = createPayloadForSendingReceiver(emailArray, document);
-  // sendMail(payload);
   const approval = await getAllApprovals(documentId);
+
   approval.deadlineApprove = deadlineApprove;
   await approval.save();
   await document.save();
@@ -167,6 +170,8 @@ const deleteDocument = async (req, res) => {
 
 const publishDocument = async (req, res) => {
   const { id } = req.params;
+  const txHash = req.body.txHash;
+  console.log(txHash)
   try {
     const document = await getOneDocumentById(id);
     if (!document) {
@@ -179,8 +184,15 @@ const publishDocument = async (req, res) => {
         .json({ error: "You are not authorized to publish this document" });
     }
 
+    if(txHash == null || txHash == undefined || txHash == ""){
+      return res.status(401).json({ error: "You have to provide a transaction hash" });
+    }
+
     if (checkIfDocumentIsAllApproved(id)) {
       document.isPublished = true;
+      document.timePublished = new Date();
+      document.status = "Published";
+      document.publishTxHash = txHash;
     }
     else {
       return res.status(401).json({ error: "You can only publish a document when all the feedbacks are approved" });
@@ -297,6 +309,33 @@ const getApprovalHistoryOfDocument = async (req, res) => {
   }
 };
 
+
+const finishDocument = async (req, res) => {
+  const { documentId } = req.params;
+  const txHash = req.body.txHash;
+  try {
+    const document = await getOneDocumentById(documentId);
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+    if (document.createdBy._id.toString() !== req.userId) {
+      return res.status(401).json({ message: 'You are not authorized to finish this document' });
+    }
+    if (document.status !== 'Published') {
+      return res.status(401).json({ message: 'You can only finish a published document' });
+    }
+
+    document.status = 'Finished';
+    document.timeFinished = new Date();
+    document.finishTxHash = txHash;
+    await document.save();
+    res.status(200).json({ message: 'Document finished successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
 module.exports = {
   submitDocument,
   getPublishedDocuments,
@@ -311,5 +350,6 @@ module.exports = {
   getAllDocumentsOfApprover,
   assignDocumentToApprover,
   approveADocument,
-  getApprovalHistoryOfDocument
+  getApprovalHistoryOfDocument,
+  finishDocument
 };

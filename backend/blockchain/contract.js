@@ -1,10 +1,10 @@
-require("dotenv").config();
 const abi = require("./abi.json");
 const { ethers, JsonRpcProvider } = require("ethers");
-const provider = new JsonRpcProvider(
-  "https://ethereum-sepolia.blockpi.network/v1/rpc/public"
-);
-const contractAddress = "0xeB804165Ef49bED808535BEBcB8B08290b95Ed91";
+require("dotenv").config();
+
+const provider = new JsonRpcProvider(process.env.BLOCKCHAIN_ENDPOINT);
+
+const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const contractABI = abi;
 
@@ -32,11 +32,11 @@ function hexToBytes20(hexString) {
 async function checkApprove(documentId) {
   try {
     const bytes20Value = hexToBytes20(documentId);
-    const result = await contract.checkApprove(bytes20Value);
-
-    console.log(result);
+    const tx = await contract.checkApprove(bytes20Value);
+    const res = await tx.wait(2);
+    console.log(res.hash);
   } catch (error) {
-    console.log(error);
+    console.log("Lỗi khi gọi hàm checkApprove:", error, contract);
   }
 }
 
