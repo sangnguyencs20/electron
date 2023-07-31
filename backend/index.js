@@ -75,7 +75,7 @@ async function updateApprovalStatus() {
   }
 }
 
-const job = schedule.scheduleJob('*/5 * * * * *', async () => {
+const job = schedule.scheduleJob('30 * * * *', async () => {
   console.log('Running approval status update...');
   await updateApprovalStatus();
 });
