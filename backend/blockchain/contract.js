@@ -28,10 +28,14 @@ function hexToBytes20(hexString) {
 }
 
 async function checkApprove(documentId) {
-    const bytes20Value = hexToBytes20(documentId);
-    const result = await contract.checkApprove(bytes20Value);
-    console.log(result);
+    try {
+        const bytes20Value = hexToBytes20(documentId);
+        const result = await contract.checkApprove(bytes20Value);
+        console.log(result);
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 
-
-checkApprove(documentId);
+module.exports = { checkApprove };
