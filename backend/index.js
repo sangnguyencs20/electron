@@ -79,5 +79,3 @@ const job = schedule.scheduleJob('30 * * * *', async () => {
   console.log('Running approval status update...');
   await updateApprovalStatus();
 });
-
-
