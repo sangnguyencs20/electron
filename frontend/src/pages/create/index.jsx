@@ -122,12 +122,11 @@ export default function Create() {
     (state) => state.userState.hashedPrivateKey
   );
   const handleSubmit = async () => {
-    setIsLoading(true);
-
     const myPromise = new Promise((resolve, reject) => {
       axiosCheckPassword({ password })
         .then(async (res) => {
           try {
+            setIsLoading(true);
             const createDocumentResponse = await axiosCreateDocument({
               title: form.title,
               receiver: form.approvals,
@@ -478,6 +477,7 @@ export default function Create() {
                       }}
                     >
                       <Input
+                        type="password"
                         {...passwordBindings}
                         bordered
                         fullWidth

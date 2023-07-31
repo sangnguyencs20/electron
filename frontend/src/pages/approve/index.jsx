@@ -170,7 +170,7 @@ export default function Approve() {
           <DetailCell
             id={doc.document._id}
             title={doc.document.title}
-            createdBy={doc.document.createdBy}
+            createdBy={doc.document.createdBy.fullName}
             time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );

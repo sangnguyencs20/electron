@@ -94,7 +94,7 @@ export default function SubmitModal({ doc, setNeedRefresh }) {
             color="primary"
             size="lg"
             placeholder="Time"
-            type="date"
+            type="datetime-local"
             // contentLeft={<Mail fill="currentColor" />}
           />
         </Modal.Body>
