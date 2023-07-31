@@ -126,18 +126,12 @@ export default function Create() {
       axiosCheckPassword({ password })
         .then(async (res) => {
           try {
-            setIsLoading(true);
             const createDocumentResponse = await axiosCreateDocument({
               title: form.title,
               receiver: form.approvals,
               fileLink: form.fileLink,
               description: form.description,
             });
-
-            console.log(
-              createDocumentResponse.data,
-              encryptLinkToBytes32(form.fileLink, password)
-            );
             setIsLoading(false);
             createDraft({
               _id: createDocumentResponse.data.documentId,
@@ -147,14 +141,21 @@ export default function Create() {
               ),
             }).then((hash) => {
               console.log(hash);
+              setIsLoading(true);
               axiosPostLog({
                 documentId: createDocumentResponse.data.documentId,
                 action: "CREATE",
                 txHash: hash,
-              }).then((res) => {
-                console.log(res);
-                resolve(res.data.message + " " + "hash: " + hash);
-              });
+              })
+                .then((res) => {
+                  console.log(res);
+                  setIsLoading(false);
+                  resolve(res.data.message + " " + "hash: " + hash);
+                })
+                .catch((err) => {
+                  setIsLoading(false);
+                  reject(err.message);
+                });
               // resolve(hash); // You can choose to resolve with some data here if needed.
             });
           } catch (error) {
