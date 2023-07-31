@@ -10,6 +10,8 @@ import {
 import { toast } from "react-toastify";
 import { axiosCheckPassword } from "../api";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { decryptPrivateKey } from "../utils";
 
 const LoginModal = ({
   children,
@@ -18,9 +20,13 @@ const LoginModal = ({
   axiosFunction,
   axiosData,
   closeHandler = () => {},
+  setIsLoading = () => {},
+  setNeedRefresh = () => {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const hashedPrivateKey = useSelector(
+    (state) => state.userState.hashedPrivateKey
+  );
   const {
     value: password,
     setValue: setPrivateKey,
@@ -33,17 +39,23 @@ const LoginModal = ({
     const myPromise = new Promise((resolve, reject) => {
       axiosCheckPassword({ password })
         .then((res) => {
+          // console.log();
           toast.success(res.data.message);
-          scFunction(scData)
+          scFunction(decryptPrivateKey(hashedPrivateKey, password), scData)
             .then((hash) => {
-              // setIsLoading(true);
+              setIsLoading(true);
               console.log(hash);
-              axiosFunction({ ...axiosData, txHash: hash }).then((res) => {
-                // setIsLoading(false);
-                console.log(res);
-                resolve(hash);
-                //   setNeedRefresh((pre) => pre + 1);
-              });
+              axiosFunction({ ...axiosData, txHash: hash })
+                .then((res) => {
+                  setIsLoading(false);
+                  console.log(res);
+                  setNeedRefresh((pre) => pre + 1);
+                  resolve(hash);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
             })
             .catch((err) => {
               reject(err);

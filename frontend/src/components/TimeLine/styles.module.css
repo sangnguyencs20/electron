@@ -8,10 +8,49 @@
     text-align: center;
 }
 
+.txHash {
+    /* display: inline-block; */
+    margin-top: 10px;
+    padding: 10px;
+    max-width: 300px;
+    overflow: hidden;
+    word-break: break-all;
+    background: rgb(67, 126, 221);
+    color: white;
+    border-radius: 10px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.txHash span:hover {
+    text-decoration: underline;
+    /* Apply underline when hovering over the <span> */
+}
+
 .statusReject {
     display: inline-block;
     padding: 10px;
     background: rgb(222, 19, 100);
+    color: white;
+    border-radius: 10px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.statusSubmitted {
+    display: inline-block;
+    padding: 10px;
+    background: rgba(26, 50, 29, 0.431);
+    color: white;
+    border-radius: 10px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.statusPublished {
+    display: inline-block;
+    padding: 10px;
+    background: rgba(26, 50, 29, 0.431);
     color: white;
     border-radius: 10px;
     min-width: 80px;

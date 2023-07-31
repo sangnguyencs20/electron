@@ -136,6 +136,8 @@ export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
               // txHash: hash,
             }}
             closeHandler={closeHandler}
+            setIsLoading={setIsLoading}
+            setNeedRefresh={setNeedRefresh}
           >
             <Button
               auto

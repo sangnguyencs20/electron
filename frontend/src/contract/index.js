@@ -42,7 +42,7 @@ export async function createConnectedContract(privateKey) {
   }
 }
 
-export const createDraft = async (data) => {
+export const createDraft = async (privatekey, data) => {
   try {
     console.log("create id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
     const tx = await contract.createDraft(
@@ -59,7 +59,7 @@ export const createDraft = async (data) => {
   }
 };
 
-export const submitDraft = async (data) => {
+export const submitDraft = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
@@ -81,7 +81,7 @@ export const submitDraft = async (data) => {
   }
 };
 
-export const decideDraft = async (data) => {
+export const decideDraft = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
@@ -110,7 +110,7 @@ export const decideDraft = async (data) => {
   }
 };
 
-export const assignLevel2Approver = async (data) => {
+export const assignLevel2Approver = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
@@ -132,7 +132,7 @@ export const assignLevel2Approver = async (data) => {
   }
 };
 
-export const publish = async (data) => {
+export const publish = async (privateKey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
@@ -167,14 +167,15 @@ export const finish = async (data) => {
   }
 };
 
-export const SCcomment = async (data) => {
+export const SCcomment = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
     console.log(data);
-    const tx = await contract.comment(
+    const tx = await electron.comment(
       hexToBytes20(data._id),
       data._contentHashed
     );

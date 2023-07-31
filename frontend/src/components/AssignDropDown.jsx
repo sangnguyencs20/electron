@@ -7,22 +7,25 @@ import {
 } from "@heroicons/react/20/solid";
 import { axiosAllUser } from "../api";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSelector } from "react-redux";
 export default function AssignDropDown({ selected, setSelected }) {
   const [query, setQuery] = useState("");
   const [people, setPeople] = useState([]);
-
+  const id = useSelector((state) => state.userState.id);
   useEffect(() => {
     axiosAllUser()
       .then((res) => {
         setPeople(
-          res.data.map((data) => ({
-            _id: data._id,
-            name: data.fullName,
-            role: data.role,
-            address: data.address,
-            position: data.position,
-            walletAddress: data.walletAddress,
-          }))
+          res.data
+            .filter((item) => item._id !== id)
+            .map((data) => ({
+              _id: data._id,
+              name: data.fullName,
+              role: data.role,
+              address: data.address,
+              position: data.position,
+              walletAddress: data.walletAddress,
+            }))
         );
       })
       .catch((error) => {

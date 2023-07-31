@@ -80,7 +80,8 @@ export const axiosGetMyDoc = (page) =>
   axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
 export const axiosSubmitMyDoc = (data) =>
   axiosClient.post(`/api/documents/submit/${data.documentId}`, {
-    deadlineApprove: data.deadlineApprove, txHash:data.txHash
+    deadlineApprove: data.deadlineApprove,
+    txHash: data.txHash,
   });
 
 export const axiosGetReceiveDoc = (receiId) =>
@@ -102,9 +103,8 @@ export const axiosApproveDocument = (data) =>
   axiosClient.post(`api/documents/approve`, data);
 export const axiosDepartmentUser = () =>
   axiosClient.post(`api/departments/users`);
-export const axiosAssignDocument = (data) => {
+export const axiosAssignDocument = (data) =>
   axiosClient.post(`api/documents/assign`, data);
-};
 export const axiosSignUp = (data) => axiosClient.post(`api/auth/signup`, data);
 export const axiosCheckPassword = (data) =>
   axiosClient.post(`api/auth/confirm`, data);
@@ -117,6 +117,10 @@ export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);
 export const axiosPostLog = (data) => axiosClient.post(`api/logs/`, data);
 export const axiosPostPublishDocument = (data) =>
-  axiosClient.post(`api/documents/publish/${data.docId}`);
+  axiosClient.post(`api/documents/publish/${data.docId}`, {
+    txHash: data.txHash,
+  });
 export const axiosPostFinishDocument = (data) =>
-  axiosClient.post(`api/documents/finish/${data.docId}`);
+  axiosClient.post(`api/documents/finish/${data.docId}`, {
+    txHash: data.txHash,
+  });

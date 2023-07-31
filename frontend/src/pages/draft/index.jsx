@@ -197,13 +197,18 @@ const Draft = () => {
                     timeSubmit={doc.timeSubmit}
                     receiver={doc._id}
                     isSubmit={doc.status !== "Draft"}
+                    setNeedRefresh={setNeedRefresh}
                   />
                 </IconButton>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
-                <SubmitModal doc={doc} setNeedRefresh={setNeedRefresh} />
+                <SubmitModal
+                  doc={doc}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
+                />
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
@@ -239,6 +244,8 @@ const Draft = () => {
                   }}
                   axiosFunction={axiosPostPublishDocument}
                   axiosData={{ docId: doc._id }}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
                 >
                   <IconButton
                     className={`${
@@ -269,6 +276,8 @@ const Draft = () => {
                   }}
                   axiosFunction={axiosPostFinishDocument}
                   axiosData={{ docId: doc._id }}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
                 >
                   <IconButton
                     className={` ${
@@ -388,6 +397,7 @@ const Draft = () => {
       { position: toast.POSITION.BOTTOM_RIGHT }
     );
   };
+
   return (
     <div className="w-full px-2 sm:px-0">
       {isLoading && <CustomRotatingSquare />}
@@ -504,15 +514,6 @@ const Draft = () => {
                       </Table.Row>
                     )}
                   </Table.Body>
-                  {/* <Table.Pagination
-                    shadow
-                    noMargin
-                    align="center"
-                    rowsPerPage={10}
-                    onPageChange={(page) => {
-                      setPage(page);
-                    }}
-                  /> */}
                 </Table>
               </Tab.Panel>
             ))}

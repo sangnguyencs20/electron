@@ -25,7 +25,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
     <div>
       <VerticalTimeline>
         {history?.map((item) => {
-          if (item.status === "Approved")
+          if (item.receiver && item.status === "Approved")
             return (
               <VerticalTimelineElement
                 className="vertical-timeline-element--work"
@@ -49,9 +49,26 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 <p>
                   Status: <span className={styles.status}>{item.status}</span>
                 </p>
+
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
               </VerticalTimelineElement>
             );
-          else if (item.status === "Rejected") {
+          else if (item.receiver && item.status === "Rejected") {
             return (
               <VerticalTimelineElement
                 className="vertical-timeline-element--education"
@@ -79,6 +96,22 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                   Reasson:
                   <span className={styles.content}> {item.comment}</span>
                 </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
               </VerticalTimelineElement>
             );
           } else if (item.status === "Submitted") {
@@ -87,7 +120,85 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
                 date={formattedDateTime(item.time) + " - Submit"}
                 icon={<ChevronDoubleUpIcon />}
-              />
+              >
+                <p>
+                  Status:{" "}
+                  <span className={styles.statusSubmitted}>{item.status}</span>
+                </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
+              </VerticalTimelineElement>
+            );
+          } else if (item.status === "Approved") {
+            return (
+              <VerticalTimelineElement
+                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Submit"}
+                icon={<ChevronDoubleUpIcon />}
+              >
+                <p>
+                  Status: <span className={styles.status}>{item.status}</span>
+                </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
+              </VerticalTimelineElement>
+            );
+          } else if (item.status === "Rejected") {
+            return (
+              <VerticalTimelineElement
+                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Submit"}
+                icon={<ChevronDoubleUpIcon />}
+              >
+                <p>
+                  Status:{" "}
+                  <span className={styles.statusRejected}>{item.status}</span>
+                </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
+              </VerticalTimelineElement>
             );
           } else if (item.status === "Published") {
             return (
@@ -95,7 +206,28 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
                 date={formattedDateTime(item.time) + " - Published"}
                 icon={<ChevronDoubleUpIcon />}
-              />
+              >
+                <p>
+                  Status:{" "}
+                  <span className={styles.statusPublished}>{item.status}</span>
+                </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
+              </VerticalTimelineElement>
             );
           } else if (item.status === "Finished") {
             return (
@@ -103,7 +235,29 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                 iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
                 date={formattedDateTime(item.time) + " - Finished"}
                 icon={<ChevronDoubleUpIcon />}
-              />
+              >
+                {" "}
+                <p>
+                  Status:{" "}
+                  <span className={styles.statusFinished}>{item.status}</span>
+                </p>
+                <p>
+                  txHash:{" "}
+                  <div
+                    className={styles.txHash}
+                    onClick={() => {
+                      window.open(
+                        `${import.meta.env.VITE_REACT_SEPOLIA_EXPLORER}/tx/${
+                          item.txHash
+                        }`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <span>{item.txHash}</span>
+                  </div>
+                </p>
+              </VerticalTimelineElement>
             );
           }
         })}

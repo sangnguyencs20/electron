@@ -15,7 +15,7 @@ import { convertDateToSolidityTimestamp } from "../utils";
 import { toast } from "react-toastify";
 import { axiosSubmitMyDoc } from "../api";
 import LoginModal from "./LoginModal";
-export default function SubmitModal({ doc, setNeedRefresh }) {
+export default function SubmitModal({ doc, setIsLoading, setNeedRefresh }) {
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
   const { value: time, setValue: setTime, reset, bindings } = useInput("");
@@ -118,6 +118,9 @@ export default function SubmitModal({ doc, setNeedRefresh }) {
               documentId: doc._id,
               deadlineApprove: new Date(time),
             }}
+            closeHandler={closeHandler}
+            setIsLoading={setIsLoading}
+            setNeedRefresh={setNeedRefresh}
           >
             <Button
               size="sm"

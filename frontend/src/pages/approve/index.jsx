@@ -234,6 +234,8 @@ export default function Approve() {
                     comment: "",
                     status: "Approved",
                   }}
+                  setIsLoading={setIsLoading}
+                  setNeedRefresh={setNeedRefresh}
                 >
                   <IconButton>
                     <CheckCircleOutlineIcon className="text-green-500" />
