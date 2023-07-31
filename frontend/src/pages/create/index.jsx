@@ -213,12 +213,13 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 0 ? "blue" : "blue-gray"}
+              className="text-md leading-[21px] font-semibold"
             >
               Chi tiết dự thảo
             </Typography>
             <Typography
               color={activeStep === 0 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className="text-sm leading-[21px] font-normal hidden md:block"
             >
               Điền chi tiết thông tin cần thiết
             </Typography>
@@ -230,14 +231,15 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 1 ? "blue" : "blue-gray"}
+              className="text-md leading-[21px] font-semibold"
             >
-              Approval -- File
+              Người kiểm duyệt và văn bản
             </Typography>
             <Typography
               color={activeStep === 1 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className="text-sm leading-[21px] font-normal hidden md:block"
             >
-              Select Approval and upload file
+              Chọn người kiểm duyệt và nộp văn bản đính kèm
             </Typography>
           </div>
         </Step>
@@ -247,14 +249,15 @@ export default function Create() {
             <Typography
               variant="h6"
               color={activeStep === 2 ? "blue" : "blue-gray"}
+              className="text-md leading-[21px] font-semibold"
             >
-              Summary
+              Xem xét lại
             </Typography>
             <Typography
               color={activeStep === 2 ? "blue" : "gray"}
-              className="font-normal hidden md:block"
+              className="text-sm leading-[21px] font-normal hidden md:block"
             >
-              Review draft before submit
+              Hoàn thiện thủ tục trước khi nộp
             </Typography>
           </div>
         </Step>
@@ -284,7 +287,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-password"
                 >
-                  title (* request)
+                  Tiêu đề (* Bắt buộc)
                 </label>
                 <Input
                   {...bindings}
@@ -310,12 +313,12 @@ export default function Create() {
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    status
+                    Mức độ khẩn của văn bản
                   </label>
                   <div className="mt-5 flex flex-col md:flex-row gap-10 md:gap-2">
                     <Select
                       variant="standard"
-                      label="SELECT SECRET"
+                      label="ĐỘ BÍ MẬT"
                       value={secret}
                       color="blue-gray"
                       error={secret === "" && needFill == true}
@@ -330,7 +333,7 @@ export default function Create() {
                     </Select>
                     <Select
                       variant="standard"
-                      label="SELECT URGENCY"
+                      label="ĐỘ KHẨN CẤP"
                       value={urgency}
                       color="blue-gray"
                       error={urgency === "" && needFill == true}
@@ -351,7 +354,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-city"
                 >
-                  Description
+                  Mô tả chi tiết về văn bản
                 </label>
                 <Textarea
                   {...descBindings}
@@ -388,7 +391,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-password"
                 >
-                  approval (* request)
+                  Người kiểm duyệt (* bắt buộc)
                 </label>
                 <AssignDropDown
                   selected={approvals}
@@ -401,7 +404,7 @@ export default function Create() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-city"
                 >
-                  Submit File
+                  Nộp văn bản
                 </label>
                 <DropFile file={file} setFile={setFile} />
               </div>
@@ -442,7 +445,7 @@ export default function Create() {
                       file === ""
                     }
                   >
-                    Submit
+                    Nộp
                   </MuiButton>
                 </Popover.Trigger>
                 <Popover.Content>
@@ -455,7 +458,7 @@ export default function Create() {
                     }}
                   >
                     <Row justify="center" align="center">
-                      <Text b>Confirm</Text>
+                      <Text b>Xác nhận</Text>
                     </Row>
                     <Row
                       css={{
@@ -502,11 +505,11 @@ export default function Create() {
       </Card>
       <div className="mt-10 flex justify-between">
         <MuiButton onClick={handlePrev} disabled={isFirstStep}>
-          Prev
+          Trước
         </MuiButton>
 
         <MuiButton onClick={handleNext} disabled={isLastStep}>
-          Next
+          Sau
         </MuiButton>
       </div>
     </div>

@@ -22,7 +22,7 @@ import TimeLineTable from "../../components/TimeLine";
 const DraftDetail = () => {
   const data = [
     {
-      label: "Description",
+      label: "MÔ TẢ",
       value: "dashboard",
       icon: Square3Stack3DIcon,
       desc: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -31,14 +31,14 @@ const DraftDetail = () => {
       laboriosam fugiat deserunt rerum quos sequi`,
     },
     {
-      label: "Status",
+      label: "TÌNH TRẠNG DỰ THẢO",
       value: "profile",
       icon: UserCircleIcon,
       desc: `Because it's about motivating the doers. Because I'm here
       to follow my dreams and inspire other people to follow their dreams, too.`,
     },
     {
-      label: "Comments",
+      label: "GÓP Ý",
       value: "settings",
       icon: Cog6ToothIcon,
       desc: `We're not always in the position that we want to be at.

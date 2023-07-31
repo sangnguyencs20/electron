@@ -61,17 +61,28 @@ export default function CustomNavbar() {
             >
               <Dropdown.Item key="profiles" css={{ height: "$18" }}>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  Signed in as
+                  Đăng nhập với
                 </Text>
-                <Text b color="inherit" css={{ d: "flex" }}>
+                <Text
+                  b
+                  color="inherit"
+                  css={{
+                    d: "inline-flex",
+                    bgColor: "$background",
+                    paddingBlock: "$2",
+                    paddingInline: "$4",
+                    borderRadius: "$md",
+                  }}
+                  className="bg-blue-gray-400"
+                >
                   {username}
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="profile" withDivider>
-                My Profile
+                Trang cá nhân
               </Dropdown.Item>
               <Dropdown.Item key="help_and_feedback" withDivider>
-                Help & Feedback
+                Hỗ trợ và phản hồi
               </Dropdown.Item>
               <Dropdown.Item
                 key="logout"
@@ -79,7 +90,7 @@ export default function CustomNavbar() {
                 color="error"
                 css={{ width: "100%", textAlign: "start" }}
               >
-                Log Out
+                Đăng xuất
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

@@ -72,11 +72,11 @@ const LinkGroup = ({ children, header }) => {
 
 const NavLink = ({ link, label }) => {
   return (
-    <div>
+    <div className="hover:translate-x-1 ease-out duration-1000">
       <li>
         <a
           href={link}
-          className={`text-[10px] md:text-[14px] leading:[15px] md:leading-[21px]`}
+          className={`text-gray-300 hover:text-white  text-[10px] md:text-[14px] leading:[15px] md:leading-[21px]`}
         >
           {label}
         </a>

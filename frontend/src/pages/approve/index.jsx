@@ -41,20 +41,20 @@ const DetailCell = ({ id, title, createdBy, time }) => {
           {createdBy}
         </p>
         <p className="text-gray-400 text-xs hidden lg:flex flex-col">
-          Created By
+          Người tạo
         </p>
       </div>
       <div className="col-span-1">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
           {title}
         </p>
-        <p className="text-gray-400 text-xs ">Title</p>
+        <p className="text-gray-400 text-xs ">Tiêu đề</p>
       </div>
       <div className="col-span-1 hidden xl:flex flex-col">
         <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
           {formattedDateTime(time)}
         </p>
-        <p className="text-gray-400 text-xs">Time</p>
+        <p className="text-gray-400 text-xs">Ngày tạo</p>
       </div>
     </div>
   );
@@ -66,11 +66,11 @@ export const StateCell = ({ secretState, urgencyState }) => {
       <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl justify-center w-[250px]">
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
           <p className="font-bold text-sm text-gray-800">{secretState}</p>
-          <p className="text-gray-500 text-xs">Secret State</p>
+          <p className="text-gray-500 text-xs">Độ Mật</p>
         </div>
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
           <p className="font-bold text-sm text-gray-800">{urgencyState}</p>
-          <p className="text-gray-500 text-xs">Urgency State</p>
+          <p className="text-gray-500 text-xs">Độ khẩn</p>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@ const StatusCell = ({ status }) => {
   return (
     <div className="col-span-1 flex flex-col items-center bg-deep-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
       <p className="font-bold text-sm text-gray-900">{status}</p>
-      <p className="text-gray-500 text-xs">Current Status</p>
+      <p className="text-gray-500 text-xs">Hiện tại</p>
     </div>
   );
 };
@@ -93,7 +93,7 @@ export const DescriptionCell = ({ description }) => {
           <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
             {description}
           </p>
-          <p className="text-gray-400 text-xs">Description</p>
+          <p className="text-gray-400 text-xs">Mô tả chi tiết</p>
         </div>
       </div>
     </div>
@@ -155,12 +155,12 @@ export default function Approve() {
   }, [needRefresh, page]);
   console.log(needRefresh);
   const columns = [
-    { name: "DOC DETAIL", uid: "detail" },
-    { name: "CURRENT STATUS", uid: "status" },
-    { name: "STATE", uid: "state" },
-    { name: "DESCRIPTION", uid: "description" },
-    { name: "FILE", uid: "file" },
-    { name: "ACTIONS", uid: "actions" },
+    { name: "TỔNG QUÁT", uid: "detail" },
+    { name: "TÌNH TRẠNG", uid: "status" },
+    { name: "ĐỘ KHẨN", uid: "state" },
+    { name: "MÔ TẢ", uid: "description" },
+    { name: "TỆP", uid: "file" },
+    { name: "HÀNH ĐỘNG", uid: "actions" },
   ];
   const renderCell = (doc, columnKey) => {
     // const cellValue = doc.document[columnKey];
@@ -274,19 +274,23 @@ export default function Approve() {
       });
     });
 
-    toast.promise(myPromise, {
-      pending: "Draft is being decided",
-      success: {
-        render({ data }) {
-          return `Decide draft successfully:  ${data}`;
+    toast.promise(
+      myPromise,
+      {
+        pending: "Draft is being decided",
+        success: {
+          render({ data }) {
+            return `Decide draft successfully:  ${data}`;
+          },
+        },
+        error: {
+          render({ data }) {
+            return `Decide draft successfully:  ${data}`;
+          },
         },
       },
-      error: {
-        render({ data }) {
-          return `Decide draft successfully:  ${data}`;
-        },
-      },
-    });
+      { position: toast.POSITION.BOTTOM_RIGHT }
+    );
     // axiosApproveDocument({
     //   documentId: docID,
     //   comment: "",
