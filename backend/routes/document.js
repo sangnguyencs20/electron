@@ -175,8 +175,6 @@ router.post("/", createDocument);
  *         - bearerAuth: []
  */
 
-
-
 router.get("/accepted", getPublishedDocuments);
 
 /**

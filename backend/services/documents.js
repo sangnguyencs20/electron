@@ -73,8 +73,14 @@ const handleGetApprovalOfADocument = async (documentId) => {
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
     .select("documentId history")
-    .populate("documentId").sort({ createdAt: -1 });
-
+    .populate({
+      path: "documentId",
+      populate: {
+        path: "createdBy",
+        select: "fullName", // Assuming the user's name is stored in the 'name' field
+      },
+    })
+    .sort({ createdAt: -1 });
   console.log(documents)
   const filteredDocuments = documents?.filter((doc) =>
     doc?.documentId?.status !== "Draft"
