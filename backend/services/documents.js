@@ -16,9 +16,9 @@ const getAllDocuments = async (page, pageSize) => {
 };
 
 const createOneDocument = async (document) => {
-  console.log(document);
   const newDocument = new Document(document);
   await newDocument.save();
+  console.log(newDocument);
   return newDocument;
 };
 
@@ -73,9 +73,10 @@ const handleGetApprovalOfADocument = async (documentId) => {
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
     .select("documentId history")
-    .populate("documentId");
+    .populate("documentId").sort({ createdAt: -1 });
 
-  const filteredDocuments = documents?.filter((doc) => 
+  console.log(documents)
+  const filteredDocuments = documents?.filter((doc) =>
     doc?.documentId?.status !== "Draft"
   );
 

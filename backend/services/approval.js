@@ -7,7 +7,7 @@ const getAllApprovals = async (documentId) => {
 
 const checkIfDocumentIsAllApproved = async (documentId) => {
     const approvals = await getAllApprovals(documentId);
-    return approvals.every((approval) => approval.isApproved);
+    return approvals.isApproved;
 }
 
 const getAnApprovalByDocumentId = async (documentId) => {
@@ -50,8 +50,6 @@ const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
     if (!approval) {
         return await handlePostAnApprovalOfADocument(documentId, userIdArray);
     }
-
-
 
     for (const userId of userIdArray) {
         if (userId === approval.history[approval.history.length - 1].receiverId) {
