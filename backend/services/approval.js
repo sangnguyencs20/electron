@@ -124,11 +124,10 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
     const flattenedTimeline = [].concat(...timeline);
 
     // Sort the timeline events by time in ascending order
-    const sortedTimeline = flattenedTimeline.sort((a, b) => b.time - a.time);
 
 
     if (document.timeSubmit && document.submitTxHash) {
-        sortedTimeline.unshift({
+        flattenedTimeline.unshift({
             status: 'Submitted',
             time: document.timeSubmit,
             txHash: document.submitTxHash,
@@ -136,7 +135,7 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
     }
 
     if (document.timePublished && document.publishTxHash) {
-        sortedTimeline.push({
+        flattenedTimeline.push({
             status: 'Published',
             time: document.timePublished,
             txHash: document.publishTxHash,
@@ -144,12 +143,14 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
     }
 
     if (document.timeFinished && document.finishTxHash) {
-        sortedTimeline.push({
+        flattenedTimeline.push({
             status: 'Finished',
             time: document.timeFinished,
             txHash: document.finishTxHash,
         });
     }
+
+    const sortedTimeline = flattenedTimeline.sort((a, b) => b.time - a.time);
 
     return sortedTimeline;
 };
