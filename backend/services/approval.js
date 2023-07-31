@@ -39,7 +39,7 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
 
 
 const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
-    
+
     if (userIdArray.length === 0) {
         throw new Error('Please select at least one user');
     }
@@ -98,6 +98,10 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
         select: 'fullName position role', // Specify the desired attributes to populate
     });;
 
+    const document = await getOneDocumentById(approval.documentId);
+
+    console.log(document.timeSubmit, document.timeFinished, document.timePublished)
+
     const timeline = approval.history.map((historyItem) => {
         const receiver = historyItem.receiverId;
         const log = historyItem.log;
@@ -121,6 +125,31 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
 
     // Sort the timeline events by time in ascending order
     const sortedTimeline = flattenedTimeline.sort((a, b) => b.time - a.time);
+
+
+    if (document.timeSubmit && document.submitTxHash) {
+        sortedTimeline.unshift({
+            status: 'Submitted',
+            time: document.timeSubmit,
+            txHash: document.submitTxHash,
+        });
+    }
+
+    if (document.timePublished && document.publishTxHash) {
+        sortedTimeline.push({
+            status: 'Published',
+            time: document.timePublished,
+            txHash: document.publishTxHash,
+        });
+    }
+
+    if (document.timeFinished && document.finishTxHash) {
+        sortedTimeline.push({
+            status: 'Finished',
+            time: document.timeFinished,
+            txHash: document.finishTxHash,
+        });
+    }
 
     return sortedTimeline;
 };

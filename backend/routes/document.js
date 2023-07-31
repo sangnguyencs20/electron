@@ -12,7 +12,8 @@ const {
     getAllDocumentsOfApprover,
     assignDocumentToApprover,
     approveADocument,
-    getApprovalHistoryOfDocument
+    getApprovalHistoryOfDocument,
+    finishDocument
 }
     = require("../controllers/documentController");
 
@@ -490,5 +491,8 @@ router.post("/approve", approveADocument);
  *         description: Internal server error
  */
 router.get("/:documentId/history", getApprovalHistoryOfDocument)
+
+
+router.post("/finish/:documentId", finishDocument)
 
 module.exports = router;
