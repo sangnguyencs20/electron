@@ -78,8 +78,10 @@ export const axiosCreateDoc = (data) =>
 export const axiosGetDoc = () => axiosClient.get("/api/documents");
 export const axiosGetMyDoc = (page) =>
   axiosClient.post(`/api/documents/myDocument?page=${page}&&pageSize=5`);
-export const axiosSubmitMyDoc = (docId, data) =>
-  axiosClient.post(`/api/documents/submit/${docId}`, data);
+export const axiosSubmitMyDoc = (data) =>
+  axiosClient.post(`/api/documents/submit/${data.documentId}`, {
+    deadlineApprove: data.deadlineApprove,
+  });
 
 export const axiosGetReceiveDoc = (receiId) =>
   axiosClient.get(`/api/documents/receiver/${receiId}`);
@@ -114,5 +116,7 @@ export const axiosGetComment = (docId, page) =>
 export const axiosPostComment = (data) =>
   axiosClient.post(`api/opinions/`, data);
 export const axiosPostLog = (data) => axiosClient.post(`api/logs/`, data);
-export const axiosPostPublishDocument = (docId) =>
-  axiosClient.post(`api/documents/publish/${docId}`);
+export const axiosPostPublishDocument = (data) =>
+  axiosClient.post(`api/documents/publish/${data.docId}`);
+export const axiosPostFinishDocument = (data) =>
+  axiosClient.post(`api/documents/finish/${data.docId}`);

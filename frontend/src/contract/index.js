@@ -55,7 +55,7 @@ export const createDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.reason);
+    throw Error(error);
   }
 };
 
@@ -77,7 +77,7 @@ export const submitDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.reason.message);
+    throw Error(error);
   }
 };
 
@@ -87,14 +87,17 @@ export const decideDraft = async (data) => {
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    if (!data?._id) {
+      console.error(data);
+      throw new Error(data);
+    }
     console.log(data);
     console.log("decide id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
-    // const gasLimit = 300000; // Thay đổi giá trị gas limit tùy ý
+
     const tx = await contract.decideDraft(
       hexToBytes20(data._id),
       data.decide,
       data.comment_hashed
-      // { gasLimit } // Thêm thông số gasLimit vào options
     );
 
     const res = await tx.wait(2);
@@ -102,8 +105,8 @@ export const decideDraft = async (data) => {
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm decideDraft:", error.reason, contract);
-    throw Error(error.reason);
+    console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
+    throw Error(error);
   }
 };
 
@@ -125,7 +128,7 @@ export const assignLevel2Approver = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm assignLevel2Approver:", error, contract);
-    throw Error(error.reason.message);
+    throw Error(error);
   }
 };
 
@@ -142,8 +145,25 @@ export const publish = async (data) => {
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.reason.message);
+    console.error("Lỗi khi gọi hàm publish:", error, contract);
+    throw Error(error);
+  }
+};
+export const finish = async (data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    console.log(data);
+    const tx = await contract.finish(hexToBytes20(data._id));
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm finish:", error, contract);
+    throw Error(error);
   }
 };
 
@@ -163,7 +183,7 @@ export const SCcomment = async (data) => {
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error.reason);
+    console.error("Lỗi khi gọi hàm SCcomment:", error, contract);
+    throw Error(error);
   }
 };

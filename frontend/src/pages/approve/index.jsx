@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { decideDraft } from "../../contract";
+import LoginModal from "../../components/LoginModal";
 
 const DetailCell = ({ id, title, createdBy, time }) => {
   return (
@@ -220,6 +221,27 @@ export default function Approve() {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Approve" color="primary">
+                <LoginModal
+                  scFunction={decideDraft}
+                  scData={{
+                    _id: doc.document._id,
+                    decide: true,
+                    comment_hashed: encryptLinkToBytes32("", "123456"),
+                  }}
+                  axiosFunction={axiosApproveDocument}
+                  axiosData={{
+                    documentId: doc.document._id,
+                    comment: "",
+                    status: "Approved",
+                  }}
+                >
+                  <IconButton>
+                    <CheckCircleOutlineIcon className="text-green-500" />
+                  </IconButton>
+                </LoginModal>
+              </Tooltip>
+
+              {/* <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
                     console.log("Edit user", doc.document._id);
@@ -228,7 +250,7 @@ export default function Approve() {
                 >
                   <CheckCircleOutlineIcon className="text-green-500" />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip

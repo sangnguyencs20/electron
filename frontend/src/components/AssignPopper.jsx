@@ -16,6 +16,7 @@ import { ArrowUturnDownIcon } from "@heroicons/react/24/outline";
 import { axiosAssignDocument, axiosDepartmentUser } from "../api";
 import { assignLevel2Approver } from "../contract";
 import { toast } from "react-toastify";
+import LoginModal from "./LoginModal";
 
 export default function AssignPopper({ docId }) {
   const [visible, setVisible] = React.useState(false);
@@ -162,17 +163,25 @@ export default function AssignPopper({ docId }) {
           </Table>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            auto
-            flat
-            color="default"
-            onPress={async () => {
-              await handleSubmit();
-              closeHandler();
+          <LoginModal
+            scFunction={assignLevel2Approver}
+            scData={{
+              _id: docId,
+              level2Approvers: userSelected.map((item) => item.walletAddress),
             }}
+            axiosFunction={axiosAssignDocument}
+            axiosData={{
+              documentId: docId,
+              userIds: userSelected.map((item) => item._id),
+              // txHash: hash,
+            }}
+            closeHandler={closeHandler}
           >
-            Assign
-          </Button>
+            <Button auto flat color="default">
+              Assign
+            </Button>
+          </LoginModal>
+
           <Button auto flat color="error" onPress={closeHandler}>
             Close
           </Button>

@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import {
   axiosGetDoc,
   axiosGetMyDoc,
+  axiosPostFinishDocument,
   axiosPostPublishDocument,
   axiosSubmitMyDoc,
 } from "../../api";
@@ -37,9 +38,10 @@ import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import SubmitModal from "../../components/SubmitModal";
 import { hexToBytes20 } from "../../utils";
-import { publish } from "../../contract";
+import { finish, publish } from "../../contract";
 import { toast } from "react-toastify";
 import CommentModal from "../../components/CommentModal";
+import LoginModal from "../../components/LoginModal";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -99,6 +101,8 @@ const Draft = () => {
     Submitted: myDocuments.filter((item) => item.status == "Submitted"),
     Approved: myDocuments.filter((item) => item.status == "Approved"),
     Rejected: myDocuments.filter((item) => item.status == "Rejected"),
+    Published: myDocuments.filter((item) => item.status == "Rejected"),
+    Finished: myDocuments.filter((item) => item.status == "Rejected"),
   };
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
@@ -226,20 +230,26 @@ const Draft = () => {
                 content="Publish"
                 color="success"
                 placement="bottomEnd"
-                onClick={() => {
-                  handlePublish(doc._id);
-                }}
                 isDisabled={doc.status !== "Approved"}
               >
-                <IconButton
-                  className={`${
-                    doc.status === "Approved"
-                      ? "text-green-500"
-                      : "text-blue-gray-200"
-                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                <LoginModal
+                  scFunction={publish}
+                  scData={{
+                    _id: doc._id,
+                  }}
+                  axiosFunction={axiosPostPublishDocument}
+                  axiosData={{ docId: doc._id }}
                 >
-                  <PublishRoundedIcon />
-                </IconButton>
+                  <IconButton
+                    className={`${
+                      doc.status === "Approved"
+                        ? "text-green-500"
+                        : "text-blue-gray-200"
+                    } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                  >
+                    <PublishRoundedIcon />
+                  </IconButton>
+                </LoginModal>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
@@ -247,21 +257,29 @@ const Draft = () => {
                 content="Finish"
                 color="primary"
                 placement="bottomStart"
-                onClick={() => {
-                  console.log("Finish Draft", doc.id);
-                  handleFinish(doc._id);
-                }}
-                isDisabled={doc.status !== "Approved"}
+                onClick={() => {}}
+                isDisabled={
+                  doc.status !== "Approved" || doc.status !== "Published"
+                }
               >
-                <IconButton
-                  className={` ${
-                    doc.status === "Approved"
-                      ? "text-blue-600"
-                      : "text-blue-gray-200"
-                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                <LoginModal
+                  scFunction={finish}
+                  scData={{
+                    _id: doc._id,
+                  }}
+                  axiosFunction={axiosPostFinishDocument}
+                  axiosData={{ docId: doc._id }}
                 >
-                  <DoneAllRoundedIcon />
-                </IconButton>
+                  <IconButton
+                    className={` ${
+                      doc.status === "Approved"
+                        ? "text-blue-600"
+                        : "text-blue-gray-200"
+                    } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                  >
+                    <DoneAllRoundedIcon />
+                  </IconButton>
+                </LoginModal>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>

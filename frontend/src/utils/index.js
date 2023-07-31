@@ -112,12 +112,13 @@ export function encryptLinkToBytes32(link, key) {
 }
 
 export function hexToBytes20(hexString) {
-  const hexWithoutPrefix = hexString.startsWith("0x")
+  console.log(hexString);
+  const hexWithoutPrefix = hexString?.startsWith("0x")
     ? hexString.slice(2)
     : hexString;
   const bytes20Array = [];
   for (let i = 0; i < 40; i += 2) {
-    const byte = parseInt(hexWithoutPrefix.substr(i, 2), 16);
+    const byte = parseInt(hexWithoutPrefix?.substr(i, 2), 16);
     bytes20Array.push(byte);
   }
   return new Uint8Array(bytes20Array);
