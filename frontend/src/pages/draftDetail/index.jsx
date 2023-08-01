@@ -93,7 +93,7 @@ const DraftDetail = () => {
             <Tab
               key={value}
               value={value}
-              disabled={label === "Comments" && !document.isPublished}
+              disabled={label === "GÓP Ý" && !document.isPublished}
             >
               <h1 className="block font-sans text-xl font-semibold leading-tight tracking-normal text-black antialiased uppercase">
                 {label}

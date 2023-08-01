@@ -96,13 +96,13 @@ const Draft = () => {
   const navigate = useNavigate();
   const [myDocuments, setMyDocuments] = useState([]);
   const dosObj = {
-    All: myDocuments,
-    Draft: myDocuments.filter((item) => item.status == "Draft"),
-    Submitted: myDocuments.filter((item) => item.status == "Submitted"),
-    Approved: myDocuments.filter((item) => item.status == "Approved"),
-    Rejected: myDocuments.filter((item) => item.status == "Rejected"),
-    Published: myDocuments.filter((item) => item.status == "Rejected"),
-    Finished: myDocuments.filter((item) => item.status == "Rejected"),
+    "Mới nhất": myDocuments,
+    "Mới tạo": myDocuments.filter((item) => item.status == "Draft"),
+    "Đã gửi": myDocuments.filter((item) => item.status == "Submitted"),
+    "Được duyệt": myDocuments.filter((item) => item.status == "Approved"),
+    "Bị từ chối": myDocuments.filter((item) => item.status == "Rejected"),
+    "Khảo sát ý kiến": myDocuments.filter((item) => item.status == "Rejected"),
+    "Hoàn thành": myDocuments.filter((item) => item.status == "Rejected"),
   };
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
