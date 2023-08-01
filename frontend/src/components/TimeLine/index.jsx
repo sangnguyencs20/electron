@@ -253,8 +253,8 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
           } else if (item.status === "Rejected") {
             return (
               <VerticalTimelineElement
-                iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-                date={formattedDateTime(item.time) + " - Submit"}
+                iconStyle={{ background: "rgb(244, 67, 54)", color: "#fff" }}
+                date={formattedDateTime(item.time) + " - Rejected"}
                 icon={<ChevronDoubleUpIcon />}
               >
                 <div className=" mb-10 ml-6">

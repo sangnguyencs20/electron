@@ -7,6 +7,13 @@ export default function CustomBreadcrumbs() {
   useEffect(() => {}, [local]);
   const arrayLocal = local.pathname.split("/").filter((item) => item !== "");
   const len = arrayLocal.length;
+  const vietSub = (english) => {
+    if (english == "approve") return "duyệt";
+    if (english == "draft") return "bản thảo";
+    if (english == "home") return "trang chủ";
+    if (english == "create") return "tạo bản thảo";
+    return english;
+  };
   return (
     <Breadcrumbs className="mb-2 md:mb-10 bg-white">
       <Link to="/home" className="opacity-60">
@@ -28,7 +35,7 @@ export default function CustomBreadcrumbs() {
             className={`${idx !== len - 1 && "opacity-60"}`}
             key={link}
           >
-            <span>{arrayLocal[idx].toLocaleUpperCase()}</span>
+            <span>{vietSub(arrayLocal[idx]).toLocaleUpperCase()}</span>
           </Link>
         );
       })}

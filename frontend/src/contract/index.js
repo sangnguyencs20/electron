@@ -54,7 +54,7 @@ export const createDraft = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm createDraft:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 
@@ -77,7 +77,7 @@ export const submitDraft = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 
@@ -107,7 +107,7 @@ export const decideDraft = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 
@@ -130,7 +130,7 @@ export const assignLevel2Approver = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm assignLevel2Approver:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 
@@ -149,7 +149,7 @@ export const publish = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm publish:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 export const finish = async (privatekey, data) => {
@@ -167,7 +167,7 @@ export const finish = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm finish:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };
 
@@ -189,6 +189,6 @@ export const SCcomment = async (privatekey, data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm SCcomment:", error, contract);
-    throw Error(error);
+    throw error;
   }
 };

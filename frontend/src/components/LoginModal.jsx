@@ -58,11 +58,11 @@ const LoginModal = ({
                 });
             })
             .catch((err) => {
-              reject(err);
+              reject(err.reason);
             });
         })
         .catch((err) => {
-          reject(err.message);
+          reject(err.reason.message);
         });
     });
 

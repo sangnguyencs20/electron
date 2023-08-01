@@ -12,9 +12,9 @@ const DisplayDrafts = ({ documents }) => {
   const ref = useRef(null);
   const isInView = useInView(ref);
   const drafts = {
-    Recent: documents,
-    Popular: documents.filter((item) => item.secretState != "High"),
-    Trending: documents.filter((item) => item.urgencyState != "Low"),
+    "Gần đây": documents,
+    "Nổi tiếng": documents.filter((item) => item.secretState != "High"),
+    "Xu Hướng": documents.filter((item) => item.urgencyState != "Low"),
   };
   return (
     <motion.div
@@ -45,7 +45,7 @@ const DisplayDrafts = ({ documents }) => {
                       ? "bg-white shadow text-blue-700 "
                       : "text-slate-700 hover:bg-white/[0.12] hover:text-slate-400 text-white",
                     `${
-                      category !== "Recent" &&
+                      category !== "Gần đây" &&
                       "cursor-not-allowed pointer-events-none"
                     }`
                   )
