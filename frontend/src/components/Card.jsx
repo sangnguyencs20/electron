@@ -58,24 +58,24 @@ export default function App({
         <Card.Body css={{ py: "$0" }}>
           <Collapse.Group>
             <Collapse
-              title="Information"
-              subtitle="More description about information"
+              title="Mô tả"
+              subtitle="Mở rộng thẻ để xem chi tiết"
               onClick={() => {
                 setIsExpand((pre) => !pre);
               }}
             >
               <Text>{description}</Text>
-              <p className="text-gray-400 text-xs">Description</p>
+              <p className="text-gray-400 text-xs">Mô tả</p>
               <div className="mt-10 flex justify-between items-stretch pl-5">
                 <div
                   className={
                     "py-2 bg-blue-gray-50 flex justify-between items-center flex-col gap-2 rounded-lg min-w-[100px]"
                   }
                 >
-                  <p className="font-bold text-sm text-gray-700 w-[80px] overflow-clip">
+                  <p className="font-bold text-sm text-gray-700 w-[80px] overflow-clip break-all">
                     {createdBy}
                   </p>
-                  <p className="text-gray-400 text-xs">Created By</p>
+                  <p className="text-gray-400 text-xs">Người tạo</p>
                 </div>
                 <div
                   className={
@@ -85,7 +85,7 @@ export default function App({
                   <p className="font-bold text-sm text-gray-700 max-w-[105px] pr-1 whitespace-pre-line text-clip mr-1">
                     {formattedDateTime(timeSubmit)}
                   </p>
-                  <p className="text-gray-400 text-xs">To Date</p>
+                  <p className="text-gray-400 text-xs">Ngày tạo</p>
                 </div>
               </div>
             </Collapse>
@@ -101,12 +101,12 @@ export default function App({
                 navigate(`/draft/${_id}`);
               }}
             >
-              Detail
+              Chi tiết
             </Button>
             <Button
               size="sm"
               light
-              className="text-gray-50 hover:text-gray-400"
+              className="text-gray-50 hover:text-gray-400 cursor-not-allowed"
             >
               Mark
             </Button>
