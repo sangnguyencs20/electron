@@ -118,7 +118,7 @@ const handleGetApprovalOfADocument = async (documentId) => {
 
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
-    .select("documentId history")
+    .select("documentId history deadlineApprove")
     .populate({
       path: "documentId",
       populate: {
