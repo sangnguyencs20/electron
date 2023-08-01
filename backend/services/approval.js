@@ -101,7 +101,7 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
 
     const document = await getOneDocumentById(approval.documentId);
 
-    console.log(document.timeSubmit, document.timeFinished, document.timePublished)
+    console.log(approval.deadlineApprove)
 
     const timeline = approval.history.map((historyItem) => {
         const receiver = historyItem.receiverId;
@@ -133,6 +133,21 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
             time: document.timeSubmit,
             txHash: document.submitTxHash,
         });
+    }
+
+    if (approval.deadlineApprove) {
+        if (approval.isApproved === true) {
+            flattenedTimeline.push({
+                status: "Approved",
+                time: approval.deadlineApprove,
+            });
+        }
+        else {
+            flattenedTimeline.push({
+                status: "Rejected",
+                time: approval.deadlineApprove,
+            });
+        }
     }
 
     if (document.timePublished && document.publishTxHash) {
