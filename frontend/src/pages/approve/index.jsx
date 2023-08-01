@@ -28,7 +28,7 @@ import { toast } from "react-toastify";
 import { decideDraft } from "../../contract";
 import LoginModal from "../../components/LoginModal";
 
-const DetailCell = ({ id, title, createdBy, time }) => {
+const DetailCell = ({ id, title, createdBy, time, deadlineApprove }) => {
   return (
     <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end min-w-[100px] sm:min-w-[150px] md:min-w-[200px]">
       <div className="col-span-2 lg:col-span-1">
@@ -47,7 +47,7 @@ const DetailCell = ({ id, title, createdBy, time }) => {
       </div>
       <div className="col-span-1 hidden lg:block">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
-          {title}
+          {deadlineApprove}
         </p>
         <p className="text-gray-400 text-xs whitespace-pre-line">
           Hạn chốt quyết định
@@ -174,6 +174,7 @@ export default function Approve() {
             id={doc.document._id}
             title={doc.document.title}
             createdBy={doc.document.createdBy.fullName}
+            deadlineApprove={doc.document.deadlineApprove}
             time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );

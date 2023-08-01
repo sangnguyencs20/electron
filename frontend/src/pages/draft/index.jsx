@@ -101,8 +101,8 @@ const Draft = () => {
     "Đã gửi": myDocuments.filter((item) => item.status == "Submitted"),
     "Được duyệt": myDocuments.filter((item) => item.status == "Approved"),
     "Bị từ chối": myDocuments.filter((item) => item.status == "Rejected"),
-    "Khảo sát ý kiến": myDocuments.filter((item) => item.status == "Rejected"),
-    "Hoàn thành": myDocuments.filter((item) => item.status == "Rejected"),
+    "Khảo sát ý kiến": myDocuments.filter((item) => item.status == "Published"),
+    "Hoàn thành": myDocuments.filter((item) => item.status == "Finished"),
   };
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
@@ -281,10 +281,14 @@ const Draft = () => {
                 >
                   <IconButton
                     className={` ${
-                      doc.status === "Approved"
+                      doc.status == "Approved" || doc.status == "Published"
                         ? "text-blue-600"
                         : "text-blue-gray-200"
-                    } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                    } ${
+                      doc.status !== "Approved" &&
+                      doc.status !== "Published" &&
+                      "cursor-not-allowed"
+                    }`}
                   >
                     <DoneAllRoundedIcon />
                   </IconButton>
