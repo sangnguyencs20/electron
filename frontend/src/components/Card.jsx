@@ -73,7 +73,7 @@ export default function App({
                   }
                 >
                   <p className="font-bold text-sm text-gray-700 w-[80px] overflow-clip break-all">
-                    {createdBy}
+                    {createdBy.fullName}
                   </p>
                   <p className="text-gray-400 text-xs">Người tạo</p>
                 </div>

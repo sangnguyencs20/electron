@@ -54,7 +54,7 @@ const updateDocumentApprovalStatus = async (id, approval) => {
 const handleGetPublishedDocument = async (page, pageSize) => {
   const documents = await Document.find({ isPublished: true }).sort({
     timeSubmit: -1,
-  });
+  }).populate("createdBy");
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + parseInt(pageSize);
   console.log(
