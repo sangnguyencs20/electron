@@ -118,7 +118,7 @@ const handleGetApprovalOfADocument = async (documentId) => {
 
 const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
   const documents = await Approval.find({ "history.receiverId": approverId })
-    .select("documentId history")
+    .select("documentId history deadlineApprove")
     .populate({
       path: "documentId",
       populate: {
@@ -127,7 +127,7 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
       },
     })
     .sort({ "documentId.createdAt": -1 });
-  
+
 
   const filteredDocuments = documents?.filter((doc) =>
     doc?.documentId?.status !== "Draft"
@@ -143,7 +143,10 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
     }
 
     return {
-      document: doc.documentId,
+      document: {
+        ...doc.documentId._doc, // Use _doc to get the plain object representation of the document
+        deadlineApprove: doc.deadlineApprove, // Add the deadlineApprove field to the document
+      },
       currentStatus,
     };
   });
