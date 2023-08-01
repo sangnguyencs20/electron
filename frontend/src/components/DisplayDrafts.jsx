@@ -43,7 +43,11 @@ const DisplayDrafts = ({ documents }) => {
                     "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none",
                     selected
                       ? "bg-white shadow text-blue-700 "
-                      : "text-slate-700 hover:bg-white/[0.12] hover:text-slate-400 text-white"
+                      : "text-slate-700 hover:bg-white/[0.12] hover:text-slate-400 text-white",
+                    `${
+                      category !== "Recent" &&
+                      "cursor-not-allowed pointer-events-none"
+                    }`
                   )
                 }
               >
