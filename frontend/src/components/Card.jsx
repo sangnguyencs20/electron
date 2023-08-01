@@ -69,7 +69,7 @@ export default function App({
               <div className="mt-10 flex justify-between items-stretch pl-5">
                 <div
                   className={
-                    "py-2 bg-blue-gray-50 flex justify-between items-center flex-col gap-2 rounded-lg min-w-[100px]"
+                    "py-2 bg-blue-gray-50 flex justify-between text-center items-center flex-col gap-2 rounded-lg min-w-[100px]"
                   }
                 >
                   <p className="font-bold text-sm text-gray-700 w-[80px] overflow-clip break-all">
@@ -79,7 +79,7 @@ export default function App({
                 </div>
                 <div
                   className={
-                    "py-2 px-4 bg-blue-gray-50 flex justify-between items-center flex-col gap-3 rounded-lg min-w-[100px]"
+                    "py-2 px-4 bg-blue-gray-50 flex justify-between text-center items-center flex-col gap-3 rounded-lg min-w-[100px]"
                   }
                 >
                   <p className="font-bold text-sm text-gray-700 max-w-[105px] pr-1 whitespace-pre-line text-clip mr-1">
