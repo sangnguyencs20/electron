@@ -190,8 +190,8 @@ const Draft = () => {
               </Tooltip>
             </Col>
 
-            <Col css={{ d: "flex", justifyContent: "center" }}>
-              {/* <Tooltip content="Status" color="invert">
+            {/* <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
                     timeSubmit={doc.timeSubmit}
@@ -200,8 +200,8 @@ const Draft = () => {
                     setNeedRefresh={setNeedRefresh}
                   />
                 </IconButton>
-              </Tooltip> */}
-            </Col>
+              </Tooltip>
+            </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
                 <SubmitModal
