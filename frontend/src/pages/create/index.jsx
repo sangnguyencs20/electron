@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Stepper,
   Step,
@@ -115,13 +115,34 @@ export default function Create() {
   const {
     value: password,
     setValue: setPrivateKey,
-    reset: descPrivateKey,
+    reset: passwordReset,
     bindings: passwordBindings,
   } = useInput("");
   const hashedPassword = useSelector((state) => state.userState.password);
   const hashedPrivateKey = useSelector(
     (state) => state.userState.hashedPrivateKey
   );
+  const closeHandler = useCallback(() => {
+    setSecret("Neutral");
+    setUrgency("Neutral");
+    setNeedFill(false);
+    passwordReset();
+    setApprovals([]);
+    descReset();
+    reset();
+    setConfirm(false);
+    setFile("cant drop");
+    setActiveStep(0);
+  }, [
+    setSecret,
+    setUrgency,
+    setNeedFill,
+    passwordReset,
+    descReset,
+    reset,
+    setFile,
+    setActiveStep,
+  ]);
   const handleSubmit = async () => {
     const myPromise = new Promise((resolve, reject) => {
       axiosCheckPassword({ password })
@@ -152,6 +173,7 @@ export default function Create() {
                   .then((res) => {
                     console.log(res);
                     setIsLoading(false);
+                    closeHandler();
                     resolve(res.data.message + " " + "hash: " + hash);
                   })
                   .catch((err) => {
