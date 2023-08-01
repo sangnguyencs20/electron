@@ -19,7 +19,7 @@ export default function DefaultSpeedDial() {
     variant: "small",
     color: "blue-gray",
     className:
-      "absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal",
+      "absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal hover:font-bold",
   };
 
   return (
@@ -35,18 +35,18 @@ export default function DefaultSpeedDial() {
             <Link to="/draft/create">
               <SpeedDialAction className="relative">
                 <Square3Stack3DIcon className="h-5 w-18" />
-                <Typography {...labelProps}>Create Draft</Typography>
+                <Typography {...labelProps}>Tạo dự thảo</Typography>
               </SpeedDialAction>
             </Link>
             <Link to="/home">
               <SpeedDialAction className="relative">
                 <HomeIcon className="h-5 w-5" />
-                <Typography {...labelProps}>Home</Typography>
+                <Typography {...labelProps}>Về trang chủ</Typography>
               </SpeedDialAction>
             </Link>
             <SpeedDialAction className="relative">
-              <CogIcon className="h-5 w-5" />
-              <Typography {...labelProps}>Settings</Typography>
+              <CogIcon className="h-5 w-5 hover:font-bold" />
+              <Typography {...labelProps}>Cài đặt</Typography>
             </SpeedDialAction>
           </SpeedDialContent>
         </SpeedDial>
