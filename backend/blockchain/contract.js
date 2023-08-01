@@ -11,11 +11,30 @@ const contractABI = abi;
 const privateKey =
   "be3f5b3e2114109b1cd559e7fbeb4639d549a646085f3aff3127840cde481abc"; // Replace with your actual private key
 
-const wallet = new ethers.Wallet(privateKey, provider);
+async function createWallet(privatekey) {
+  try {
+    const wallet = new ethers.Wallet(privatekey, provider);
+    return wallet;
+  } catch (error) {
+    console.error("Lỗi khi tạo wallet:", error);
+    return null;
+  }
+}
 
-const contract = new ethers.Contract(contractAddress, contractABI, wallet);
-
-const documentId = "64c66d93f974da03744ecb56";
+async function createConnectedContract(privateKey) {
+  try {
+    const wallet = await createWallet(privateKey, provider);
+    const connectedContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      wallet
+    );
+    return connectedContract;
+  } catch (error) {
+    console.error("Lỗi khi tạo connected contract:", error);
+    return null;
+  }
+}
 
 function hexToBytes20(hexString) {
   const hexWithoutPrefix = hexString.startsWith("0x")
@@ -30,14 +49,20 @@ function hexToBytes20(hexString) {
 }
 
 async function checkApprove(documentId) {
+  const contract = await createConnectedContract(privateKey);
   try {
     const bytes20Value = hexToBytes20(documentId);
-    const tx = await contract.checkApprove(bytes20Value);
+
+    const tx = await contract.checkApprove(bytes20Value, {
+      gasPrice: 1000000000,
+    });
+
     const res = await tx.wait(2);
-    console.log(res.hash);
+    return (res?.hash)?.toString();
   } catch (error) {
     console.log("Lỗi khi gọi hàm checkApprove:", error, contract);
   }
 }
+
 
 module.exports = { checkApprove };

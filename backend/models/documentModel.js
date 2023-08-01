@@ -15,10 +15,6 @@ const DocumentSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Vui long nhap Noi dung'],
     },
-    timeSubmit: {
-        type: Date,
-        default: null,
-    },
     status: {
         type: String,
         enum: ['Draft', 'Submitted', 'Approved', 'Rejected', 'Published', 'Finished'],
@@ -38,6 +34,18 @@ const DocumentSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Vui long nhap Link file'],
     },
+    approveTxHash: {
+        type: String,
+        default: null,
+    },
+    timeSubmit: {
+        type: Date,
+        default: null,
+    },
+    submitTxHash: {
+        type: String,
+        default: null,
+    },
     isPublished: {
         type: Boolean,
         default: false,
@@ -46,16 +54,12 @@ const DocumentSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
-    timeFinished: {
-        type: Date,
-        default: null,
-    },
-    submitTxHash: {
-        type: String,
-        default: null,
-    },
     publishTxHash: {
         type: String,
+        default: null,
+    },
+    timeFinished: {
+        type: Date,
         default: null,
     },
     finishTxHash: {

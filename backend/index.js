@@ -68,11 +68,11 @@ async function updateApprovalStatus() {
       if (allApproved) {
         approval.isApproved = true;
         document.status = "Approved";
-        checkApprove(approval.documentId.toString());
+        document.approveTxHash = await checkApprove(approval.documentId.toString());
       } else {
         approval.isApproved = false;
         document.status = "Rejected";
-        checkApprove(approval.documentId.toString());
+        document.approveTxHash = await checkApprove(approval.documentId.toString());
       }
       await document.save();
       await approval.save();
@@ -83,7 +83,7 @@ async function updateApprovalStatus() {
   }
 }
 
-const job = schedule.scheduleJob("*/30 * * * *", async () => {
+const job = schedule.scheduleJob("*/30 * * * * *", async () => {
   console.log("Running approval status update...");
   await updateApprovalStatus();
 });

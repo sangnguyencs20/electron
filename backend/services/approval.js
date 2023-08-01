@@ -140,12 +140,14 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
             flattenedTimeline.push({
                 status: "Approved",
                 time: approval.deadlineApprove,
+                txHash: document.approveTxHash
             });
         }
         else {
             flattenedTimeline.push({
                 status: "Rejected",
                 time: approval.deadlineApprove,
+                txHash: document.approveTxHash
             });
         }
     }
