@@ -210,7 +210,7 @@ export default function Approve() {
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <AssignPopper docId={doc.document._id} />
             </Col>
-            <Col css={{ d: "flex", justifyContent: "center" }}>
+            {/* <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Time Line">
                 <MyModal
                   receiver={doc.document._id}
@@ -218,7 +218,7 @@ export default function Approve() {
                   isSubmit={doc.status !== "Draft"}
                 />
               </Tooltip>
-            </Col>
+            </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Approve" color="primary">
                 <LoginModal

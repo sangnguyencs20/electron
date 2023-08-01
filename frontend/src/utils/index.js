@@ -36,8 +36,19 @@ const options = {
   timeZone: "UTC",
 };
 
-export const formattedDateTime = (dateTimeString) =>
-  new Date(dateTimeString).toLocaleString("en-US", options);
+export const formattedDateTime = (dateTimeString) => {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZone: "Asia/Ho_Chi_Minh", // Chọn múi giờ cho Việt Nam (UTC+7)
+  };
+
+  return new Date(dateTimeString).toLocaleString("vi-VN", options);
+};
 
 export async function hashPassword(password) {
   try {

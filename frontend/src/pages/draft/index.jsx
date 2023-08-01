@@ -78,12 +78,12 @@ const StyledBadge = styled("span", {
         color: "$errorLightContrast",
       },
       Published: {
-        bg: "$errorLight",
-        color: "$errorLightContrast",
+        bg: "$successBorderHover",
+        color: "$white",
       },
       Finished: {
-        bg: "$errorLight",
-        color: "$errorLightContrast",
+        bg: "$neutralBorderHover",
+        color: "$white",
       },
     },
   },
@@ -191,7 +191,7 @@ const Draft = () => {
             </Col>
 
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Status" color="invert">
+              {/* <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
                     timeSubmit={doc.timeSubmit}
@@ -200,7 +200,7 @@ const Draft = () => {
                     setNeedRefresh={setNeedRefresh}
                   />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
@@ -266,7 +266,7 @@ const Draft = () => {
                 placement="bottomStart"
                 onClick={() => {}}
                 isDisabled={
-                  doc.status !== "Approved" || doc.status !== "Published"
+                  doc.status !== "Approved" && doc.status !== "Published"
                 }
               >
                 <LoginModal

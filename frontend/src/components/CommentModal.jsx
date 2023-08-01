@@ -21,6 +21,7 @@ import { EditIcon } from "./EditIcon";
 import { DeleteIcon } from "./DeleteIcon";
 import axios from "axios";
 import { axiosGetComment } from "../api";
+import { formattedDateTime } from "../utils";
 const CommentModal = ({ docId, type }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -35,9 +36,13 @@ const CommentModal = ({ docId, type }) => {
       docId !== undefined &&
         axiosGetComment(docId, page)
           .then((res) => {
+            console.log(res);
             setComments(
               res.data.allOpinions.map((item, idx) => {
-                id: idx, { ...item };
+                return {
+                  id: idx,
+                  ...item,
+                };
               })
             );
 
@@ -71,12 +76,13 @@ const CommentModal = ({ docId, type }) => {
             {user.createdBy.fullName}
           </Text>
         );
-      case "content":
+      case "comment":
         return (
           <Col>
             <Row>
-              <Text b size={14} css={{ tt: "capitalize" }}>
+              <Text size={14} css={{ tt: "capitalize" }}>
                 {user.content}
+                131
               </Text>
             </Row>
           </Col>
@@ -84,7 +90,7 @@ const CommentModal = ({ docId, type }) => {
       case "date":
         return (
           <Text b size={14} css={{ tt: "capitalize" }}>
-            {user.createdAt}
+            {formattedDateTime(user.createdAt)}
           </Text>
         );
 
