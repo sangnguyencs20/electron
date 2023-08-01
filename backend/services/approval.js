@@ -135,7 +135,7 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
         });
     }
 
-    if (approval.deadlineApprove) {
+    if (approval.deadlineApprove && approval.deadlineApprove < Date.now()) {
         if (approval.isApproved === true) {
             flattenedTimeline.push({
                 status: "Approved",
