@@ -83,7 +83,7 @@ export const encryptPrivateKey = (privateKey, password) => {
 };
 
 export const decryptPrivateKey = (encryptedPrivateKey, password) => {
-  console.log(encryptedPrivateKey, password);
+  // console.log(encryptedPrivateKey, password);
   const key = SHA256(password).toString();
   const encryptedBytes = AES.utils.hex.toBytes(encryptedPrivateKey);
   const aesCtr = new AES.ModeOfOperation.ctr(AES.utils.hex.toBytes(key));
@@ -123,7 +123,7 @@ export function encryptLinkToBytes32(link, key) {
 }
 
 export function hexToBytes20(hexString) {
-  console.log(hexString);
+  // console.log(hexString);
   const hexWithoutPrefix = hexString?.startsWith("0x")
     ? hexString.slice(2)
     : hexString;

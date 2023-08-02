@@ -30,7 +30,7 @@ const CommentSection = ({ docId }) => {
       })
         .then((hash) => {
           setIsLoading(true);
-          console.log(hash);
+          // console.log(hash);
           resolve(hash);
           setIsLoading(false);
           axiosPostComment({
@@ -40,7 +40,7 @@ const CommentSection = ({ docId }) => {
           })
             .then((res) => {
               setIsLoading(false);
-              console.log(res);
+              // console.log(res);
               setIsNeed((pre) => pre + 1);
               resolve(hash);
             })
@@ -110,7 +110,7 @@ const CommentSection = ({ docId }) => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
     }
   }, [page, docId, isNeed]);

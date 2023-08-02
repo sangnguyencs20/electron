@@ -47,7 +47,7 @@ const DetailCell = ({ id, title, createdBy, time, deadlineApprove }) => {
       </div>
       <div className="col-span-1 hidden lg:block">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
-          {deadlineApprove}
+          {formattedDateTime(deadlineApprove)}
         </p>
         <p className="text-gray-400 text-xs whitespace-pre-line">
           Hạn chốt quyết định
@@ -82,7 +82,7 @@ export const StateCell = ({ secretState, urgencyState }) => {
 
 const StatusCell = ({ status }) => {
   return (
-    <div className="col-span-1 flex flex-col items-center bg-deep-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
+    <div className=" col-span-1 flex flex-col items-center bg-deep-orange-50 p-2 rounded-xl whitespace-pre-line text-center gap-1">
       <p className="font-bold text-sm text-gray-900">{status}</p>
       <p className="text-gray-500 text-xs">Hiện tại</p>
     </div>
