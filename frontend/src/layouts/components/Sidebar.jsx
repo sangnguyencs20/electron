@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logo, sun } from "../../assets";
 import { navlinks } from "../../constants";
 import { motion } from "framer-motion";
+import { Tooltip } from "@nextui-org/react";
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
     className={`lg:w-[48px] lg:h-[48px] w-[30px] h-[30px] md:w-[40px] md:h-[40px] rounded-[10px] ${
@@ -50,17 +51,24 @@ const Sidebar = () => {
           className="flex flex-row lg:flex-col justify-center items-center gap-3"
         >
           {navlinks.map((link) => (
-            <Icon
-              key={link.name}
-              {...link}
-              isActive={isActive}
-              handleClick={() => {
-                if (!link.disabled) {
-                  setIsActive(link.name);
-                  navigate(link.link);
-                }
-              }}
-            />
+            <Tooltip
+              content={link.tooptip}
+              placement="right"
+              color={"invert"}
+              delay={1000}
+            >
+              <Icon
+                key={link.name}
+                {...link}
+                isActive={isActive}
+                handleClick={() => {
+                  if (!link.disabled) {
+                    setIsActive(link.name);
+                    navigate(link.link);
+                  }
+                }}
+              />
+            </Tooltip>
           ))}
         </motion.div>
 
