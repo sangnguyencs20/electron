@@ -24,6 +24,15 @@ async function createWallet(privatekey) {
     return null;
   }
 }
+export async function createRandomWallet() {
+  try {
+    const wallet = new ethers.Wallet.createRandom(provider);
+    return { privateKey: wallet.privatekey, address: wallet.address };
+  } catch (error) {
+    console.error("Lỗi khi tạo wallet:", error);
+    return null;
+  }
+}
 
 export async function createConnectedContract(privateKey) {
   try {

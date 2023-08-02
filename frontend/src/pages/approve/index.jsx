@@ -18,7 +18,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CustomSugar from "../../components/CustomSugar";
 import CustomRotatingSquare from "../../components/CustomRotatingSquare";
 import { Download } from "../../assets";
-import { encryptLinkToBytes32, formattedDateTime } from "../../utils";
+import { encryptLinkToBytes32, formattedDateTime, vietSub } from "../../utils";
 import AssignPopper from "../../components/AssignPopper";
 import CustomDatepicker from "../../components/CustomDatePicker";
 import CustomMenu from "../../components/CustomMenu";
@@ -68,11 +68,15 @@ export const StateCell = ({ secretState, urgencyState }) => {
     <div className="w-full flex justify-center">
       <div className="grid md:grid-cols-2 grid-flow-row gap-1 px-4 py-2 rounded-2xl justify-center w-[250px]">
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
-          <p className="font-bold text-sm text-gray-800">{secretState}</p>
+          <p className="font-bold text-sm text-gray-800">
+            {vietSub(secretState)}
+          </p>
           <p className="text-gray-500 text-xs">Độ Mật</p>
         </div>
         <div className="col-span-1 flex flex-col items-center bg-orange-50 p-1 rounded-xl whitespace-pre-line text-center gap-1">
-          <p className="font-bold text-sm text-gray-800">{urgencyState}</p>
+          <p className="font-bold text-sm text-gray-800">
+            {vietSub(urgencyState)}
+          </p>
           <p className="text-gray-500 text-xs">Độ khẩn</p>
         </div>
       </div>
@@ -82,8 +86,8 @@ export const StateCell = ({ secretState, urgencyState }) => {
 
 const StatusCell = ({ status }) => {
   return (
-    <div className=" col-span-1 flex flex-col items-center bg-deep-orange-50 p-2 rounded-xl whitespace-pre-line text-center gap-1">
-      <p className="font-bold text-sm text-gray-900">{status}</p>
+    <div className="col-span-1 flex flex-col items-center bg-deep-orange-50 p-2 rounded-xl whitespace-pre-line text-center gap-1">
+      <p className="font-bold text-sm text-gray-900">{vietSub(status)}</p>
       <p className="text-gray-500 text-xs">Hiện tại</p>
     </div>
   );
@@ -119,7 +123,7 @@ export const FieldCell = ({ description }) => {
 export const FileCell = ({ link }) => {
   return (
     <div className="flex justify-start w-full">
-      <Tooltip content="Download" color="warning" css={{ color: "white" }}>
+      <Tooltip content="Tệp dự thảo" color="warning" css={{ color: "white" }}>
         <IconButton
           onClick={() => {
             window.open(link, "_blank");
@@ -200,7 +204,7 @@ export default function Approve() {
             className="w-[130px] ml-2 grid grid-cols-4 gap-1"
           >
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Details">
+              <Tooltip content="Chi tiết">
                 <IconButton
                   onClick={() => {
                     navigate(`/draft/${doc.document._id}`);
@@ -211,7 +215,10 @@ export default function Approve() {
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <AssignPopper docId={doc.document._id} />
+              <AssignPopper
+                docId={doc.document._id}
+                owner={doc.document.createdBy._id}
+              />
             </Col>
             {/* <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Time Line">
@@ -223,7 +230,7 @@ export default function Approve() {
               </Tooltip>
             </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Approve" color="primary">
+              <Tooltip content="Duyệt/Chấp nhận" color="primary">
                 <LoginModal
                   scFunction={decideDraft}
                   scData={{
@@ -259,7 +266,7 @@ export default function Approve() {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
-                content="Reject"
+                content="Từ chối"
                 color="error"
                 onClick={() => console.log("Delete user", doc.id)}
               >

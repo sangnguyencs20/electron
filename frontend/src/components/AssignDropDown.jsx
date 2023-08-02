@@ -145,7 +145,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                     : "text-blue-900"
                                 }`}
                               >
-                                Name
+                                Họ và tên
                               </span>
                             </div>
                             <div className="flex flex-col items-start w-32">
@@ -165,27 +165,10 @@ export default function AssignDropDown({ selected, setSelected }) {
                                     : "text-gray-blue-900"
                                 }`}
                               >
-                                Position
+                                Vai trò
                               </span>
                             </div>
-                            <div className="hidden md:flex flex-col items-start w-32">
-                              <span
-                                className={`text-[12px] ${
-                                  active ? "text-white" : "text-light-blue-200"
-                                } p-1 bg-blue-gray-600 rounded-md`}
-                              >
-                                {person.role}
-                              </span>
-                              <span
-                                className={`text-[12px] ${
-                                  active
-                                    ? "text-gray-700"
-                                    : "text-gray-blue-500"
-                                }`}
-                              >
-                                Role
-                              </span>
-                            </div>
+
                             <div className="hidden md:flex flex-col items-start w-32">
                               <span
                                 className={`block truncate ${
@@ -201,7 +184,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                     : "text-light-blue-900"
                                 }`}
                               >
-                                Address
+                                Địa chỉ thường chú
                               </span>
                             </div>
                           </motion.div>
@@ -242,7 +225,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                           >
                             {person.name}
                           </span>
-                          <span className={`text-[12px] `}>Name</span>
+                          <span className={`text-[12px] `}>Họ và tên</span>
                         </div>
                         <div className="flex flex-col items-start w-32">
                           <span
@@ -252,27 +235,14 @@ export default function AssignDropDown({ selected, setSelected }) {
                           </span>
                           <span className={`text-[12px] `}>Vị trí</span>
                         </div>
-                        <div className="hidden md:flex flex-col items-start w-32">
-                          <span
-                            className={`text-[12px] $ p-1 bg-blue-gray-600 rounded-md text-white`}
-                          >
-                            {person.role}
-                          </span>
-                          <span className={`text-[12px] `}>Role</span>
-                        </div>
+
                         <div className="hidden md:flex flex-col items-start w-32">
                           <span className={`block truncate `}>
                             {person.address}
                           </span>
-                          <span className={`text-[12px] `}>Address</span>
-                        </div>
-                        <div className="hidden md:flex flex-col items-start w-32 overflow-x-clip">
-                          <span
-                            className={`text-gray-100 text-[12px]  p-1 bg-blue-gray-600 rounded-md w-full whitespace-pre-line`}
-                          >
-                            {person._id}
+                          <span className={`text-[12px] `}>
+                            Địa chỉ thường trú
                           </span>
-                          <span className={`text-[12px] `}>Id</span>
                         </div>
                       </div>
                       <TrashIcon

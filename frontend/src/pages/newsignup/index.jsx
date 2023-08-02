@@ -240,6 +240,7 @@ export default function NewSignup() {
   const navigate = useNavigate();
   const handleSubmit = async () => {
     setIsLoading(true);
+    const wallet = await createRandomWallet();
     const encodePrivateKey = encryptPrivateKey(
       `${import.meta.env.VITE_REACT_PRIVATE_KEY}`,
       password

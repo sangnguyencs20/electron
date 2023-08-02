@@ -37,7 +37,7 @@ import MyModal from "../../components/MyModal";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import SubmitModal from "../../components/SubmitModal";
-import { hexToBytes20 } from "../../utils";
+import { hexToBytes20, vietSub } from "../../utils";
 import { finish, publish } from "../../contract";
 import { toast } from "react-toastify";
 import CommentModal from "../../components/CommentModal";
@@ -159,7 +159,7 @@ const Draft = () => {
       case "status":
         return (
           <div className="w-full flex justify-center">
-            <StyledBadge type={doc.status}>{cellValue}</StyledBadge>
+            <StyledBadge type={doc.status}>{vietSub(cellValue)}</StyledBadge>
           </div>
         );
       case "state":
@@ -179,7 +179,7 @@ const Draft = () => {
             className="w-[130px] ml-2 grid grid-cols-4 gap-1"
           >
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Details" color={"primary"}>
+              <Tooltip content="Chi tiết" color={"primary"}>
                 <IconButton
                   onClick={() => {
                     navigate(`/draft/${doc._id}`);
@@ -203,7 +203,10 @@ const Draft = () => {
               </Tooltip>
             </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
-              <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
+              <Tooltip
+                content="Gửi kiểm duyệt"
+                isDisabled={doc.status !== "Draft"}
+              >
                 <SubmitModal
                   doc={doc}
                   setNeedRefresh={setNeedRefresh}
@@ -232,7 +235,7 @@ const Draft = () => {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
-                content="Publish"
+                content="Công bố/ Lấy ý kiến"
                 color="success"
                 placement="bottomEnd"
                 isDisabled={doc.status !== "Approved"}
@@ -261,7 +264,7 @@ const Draft = () => {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
-                content="Finish"
+                content="Hoàn thành dự thảo"
                 color="primary"
                 placement="bottomStart"
                 onClick={() => {}}
@@ -297,7 +300,7 @@ const Draft = () => {
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
-                content="Comment"
+                content="Danh sách ý kiến - đóng góp"
                 color="primary"
                 placement="bottomStart"
                 isDisabled={

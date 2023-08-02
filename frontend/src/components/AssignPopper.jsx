@@ -17,14 +17,17 @@ import { axiosAssignDocument, axiosDepartmentUser } from "../api";
 import { assignLevel2Approver } from "../contract";
 import { toast } from "react-toastify";
 import LoginModal from "./LoginModal";
+import { useSelector } from "react-redux";
 
-export default function AssignPopper({ docId }) {
+export default function AssignPopper({ docId, owner }) {
   const [visible, setVisible] = React.useState(false);
   const [users, setUser] = React.useState([]);
   const [tableSelect, setTableSelect] = React.useState([]);
+  const id = useSelector((state) => state.userState.id);
   const userSelected = useMemo(() => {
     return users.filter((item) => tableSelect.includes(item.id));
   }, [tableSelect]);
+  console.log(userSelected);
   const handler = () => setVisible(true);
   const handleSubmit = async () => {
     const myPromise = new Promise((resolve, reject) => {
@@ -44,8 +47,8 @@ export default function AssignPopper({ docId }) {
           .then((res) => {
             setIsLoading(false);
             // console.log(res);
-            resolve(hash);
             setNeedRefresh((pre) => pre + 1);
+            resolve(hash);
           })
           .catch((err) => {
             reject(err);
@@ -79,9 +82,11 @@ export default function AssignPopper({ docId }) {
     axiosDepartmentUser()
       .then((res) => {
         setUser(
-          res.data.map((item, idx) => {
-            return { id: idx, ...item };
-          })
+          res.data
+            .filter((item) => item._id !== id && item._id != owner)
+            .map((item, idx) => {
+              return { id: idx, ...item };
+            })
         );
       })
       .catch();
@@ -99,7 +104,7 @@ export default function AssignPopper({ docId }) {
   };
   return (
     <div>
-      <Tooltip content="Assign">
+      <Tooltip content="Chuyển cấp trên">
         <ArrowUturnDownIcon
           className="text-red-700 h-6 cursor-pointer m-1 rotate-180"
           onClick={handler}
@@ -128,7 +133,7 @@ export default function AssignPopper({ docId }) {
         <Modal.Body>
           <Table
             onSelectionChange={(e) => {
-              // console.log("Selected Rows:", [...e]), setTableSelect([...e]);
+              setTableSelect([...e]);
             }}
             aria-label="Example static collection table"
             css={{

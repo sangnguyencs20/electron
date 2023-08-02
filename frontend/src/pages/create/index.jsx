@@ -104,7 +104,7 @@ export default function Create() {
         color: "success",
       };
     return {
-      text: "Request",
+      text: "Yêu cầu nhập",
       color: "default",
     };
   }, [title, needFill]);
@@ -364,9 +364,9 @@ export default function Create() {
                         handleSecret(value);
                       }}
                     >
-                      <Option value="Low">Low</Option>
-                      <Option value="Neutral">Neutral</Option>
-                      <Option value="High">High</Option>
+                      <Option value="Low">Thấp</Option>
+                      <Option value="Neutral">Bảo mật</Option>
+                      <Option value="High">Tối cao</Option>
                     </Select>
                     <Select
                       variant="standard"
@@ -379,9 +379,9 @@ export default function Create() {
                         setUrgency(value);
                       }}
                     >
-                      <Option value="Low">Low</Option>
-                      <Option value="Neutral">Neutral</Option>
-                      <Option value="High">High</Option>
+                      <Option value="Low">Thấp</Option>
+                      <Option value="Neutral">Bảo Mật</Option>
+                      <Option value="High">Tối cao</Option>
                     </Select>
                   </div>
                 </div>

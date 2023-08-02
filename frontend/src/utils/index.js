@@ -151,3 +151,15 @@ export const uint8ArrayToHexString = (uint8Array) => {
     ("0" + byte.toString(16)).slice(-2)
   ).join("");
 };
+export const vietSub = (english) => {
+  if (english == "Approved") return "Chấp nhận";
+  if (english == "Rejected") return "Từ chối";
+  if (english == "Pending") return "Chờ quyết định";
+  if (english == "Neutral") return "Bảo mật";
+  if (english == "Secret") return "Tối cao";
+  if (english == "Low") return "Thấp";
+  if (english == "Published") return "Công bố";
+  if (english == "Finished") return "Hoàn thành";
+  if (english == "Submitted") return "Gửi kiểm duyệt";
+  if (english == "Draft") return "Chưa gửi";
+};
