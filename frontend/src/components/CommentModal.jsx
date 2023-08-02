@@ -72,7 +72,7 @@ const CommentModal = ({ docId, type }) => {
     switch (columnKey) {
       case "name":
         return (
-          <Text b size={14} css={{ tt: "capitalize" }}>
+          <Text b size={14} css={{ tt: "capitalize", whiteSpace: "pre-line" }}>
             {user.createdBy.fullName}
           </Text>
         );
@@ -80,7 +80,10 @@ const CommentModal = ({ docId, type }) => {
         return (
           <Col>
             <Row>
-              <Text size={14} css={{ tt: "capitalize" }}>
+              <Text
+                size={14}
+                css={{ tt: "capitalize", whiteSpace: "pre-line" }}
+              >
                 {user.content}
                 131
               </Text>
@@ -89,7 +92,7 @@ const CommentModal = ({ docId, type }) => {
         );
       case "date":
         return (
-          <Text b size={14} css={{ tt: "capitalize" }}>
+          <Text b size={14} css={{ tt: "capitalize", whiteSpace: "pre-line" }}>
             {formattedDateTime(user.createdAt)}
           </Text>
         );
@@ -103,6 +106,7 @@ const CommentModal = ({ docId, type }) => {
               tt: "capitalize",
               textDecoration: "underline",
               cursor: "pointer",
+              whiteSpace: "pre-line",
             }}
             className="hover:underline text-md cursor-pointer"
             onClick={() => {
