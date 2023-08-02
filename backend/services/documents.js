@@ -126,12 +126,13 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
         select: "fullName"
       },
     })
-    .sort({ "documentId.createdAt": -1 });
 
 
   const filteredDocuments = documents?.filter((doc) =>
     doc?.documentId?.status !== "Draft"
   );
+
+  filteredDocuments.sort((doc1, doc2) => new Date(doc2.documentId.timeSubmit) - new Date(doc1.documentId.timeSubmit));
 
   const latestLogs = filteredDocuments.map((doc) => {
     const receiverLog = doc.history.find((log) => log.receiverId.toString() === approverId);
@@ -142,10 +143,11 @@ const handleGetAllDocumentsOfApprover = async (approverId, page, pageSize) => {
       currentStatus = receiverLog.log[receiverLog.log.length - 1].status;
     }
 
+
     return {
       document: {
-        ...doc.documentId._doc, // Use _doc to get the plain object representation of the document
-        deadlineApprove: doc.deadlineApprove, // Add the deadlineApprove field to the document
+        ...doc.documentId._doc,
+        deadlineApprove: doc.deadlineApprove,
       },
       currentStatus,
     };
