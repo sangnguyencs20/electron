@@ -249,7 +249,6 @@ const getAllDocumentsOfApprover = async (req, res) => {
     if (!documents) {
       return res.status(404).json({ error: "You have no coming documents!" });
     }
-    documents.allDocuments.sort((a, b) => b.document.timeSubmit - a.document.timeSubmit);
     res.status(200).json(documents);
   }
   catch (error) {
