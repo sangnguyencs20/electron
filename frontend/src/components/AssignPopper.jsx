@@ -28,13 +28,13 @@ export default function AssignPopper({ docId }) {
   const handler = () => setVisible(true);
   const handleSubmit = async () => {
     const myPromise = new Promise((resolve, reject) => {
-      console.log(docId);
+      // console.log(docId);
       assignLevel2Approver({
         _id: docId,
         level2Approvers: userSelected.map((item) => item.walletAddress),
       }).then((hash) => {
         // setIsLoading(true);
-        console.log(hash);
+        // console.log(hash);
         resolve(hash);
         axiosAssignDocument({
           documentId: docId,
@@ -43,7 +43,7 @@ export default function AssignPopper({ docId }) {
         })
           .then((res) => {
             setIsLoading(false);
-            console.log(res);
+            // console.log(res);
             resolve(hash);
             setNeedRefresh((pre) => pre + 1);
           })
@@ -128,7 +128,7 @@ export default function AssignPopper({ docId }) {
         <Modal.Body>
           <Table
             onSelectionChange={(e) => {
-              console.log("Selected Rows:", [...e]), setTableSelect([...e]);
+              // console.log("Selected Rows:", [...e]), setTableSelect([...e]);
             }}
             aria-label="Example static collection table"
             css={{

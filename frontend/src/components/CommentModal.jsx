@@ -29,14 +29,14 @@ const CommentModal = ({ docId, type }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isNeed, setIsNeed] = useState(0);
-  console.log(comments);
+  // console.log(comments);
   useEffect(() => {
     {
       setIsLoading(true);
       docId !== undefined &&
         axiosGetComment(docId, page)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             setComments(
               res.data.allOpinions.map((item, idx) => {
                 return {
@@ -51,14 +51,14 @@ const CommentModal = ({ docId, type }) => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
     }
   }, [page, docId, isNeed]);
   const handler = () => setVisible(true);
   const closeHandler = () => {
     setVisible(false);
-    console.log("closed");
+    // console.log("closed");
   };
 
   const columns = [

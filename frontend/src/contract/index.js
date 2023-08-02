@@ -8,7 +8,7 @@ const provider = new ethers.JsonRpcProvider(
   `${import.meta.env.VITE_REACT_SEPOLIA_ENDPOINT}`
   // "https://ethereum-sepolia.blockpi.network/v1/rpc/public"
 );
-console.log(provider);
+// console.log(provider);
 // Sử dụng import.meta.VITE_REACT_CONTRACT_ADDRESS để lấy contract address
 const contractAddress = `${import.meta.env.VITE_REACT_CONTRACT_ADDRESS}`;
 

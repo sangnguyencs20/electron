@@ -40,15 +40,15 @@ const LoginModal = ({
       axiosCheckPassword({ password })
         .then((res) => {
           // console.log();
-          toast.success(res.data.message);
+          toast.success(res?.data?.message);
           scFunction(decryptPrivateKey(hashedPrivateKey, password), scData)
             .then((hash) => {
               setIsLoading(true);
-              console.log(hash);
+              // console.log(hash);
               axiosFunction({ ...axiosData, txHash: hash })
                 .then((res) => {
                   setIsLoading(false);
-                  console.log(res);
+                  // console.log(res);
                   setNeedRefresh((pre) => pre + 1);
                   resolve(hash);
                 })
@@ -58,26 +58,26 @@ const LoginModal = ({
                 });
             })
             .catch((err) => {
-              reject(err.reason);
+              reject(err?.reason);
             });
         })
         .catch((err) => {
-          reject(err.reason.message);
+          reject(err?.reason?.message);
         });
     });
 
     toast.promise(
       myPromise,
       {
-        pending: "Draft is being processed",
+        pending: "Dự thảo đang được xử lý",
         success: {
           render({ data }) {
-            return `Process draft successfully:  ${data}`;
+            return `"Xử lý dự thảo thành công`;
           },
         },
         error: {
           render({ data }) {
-            return `Process draft fail:  ${data}`;
+            return `Xử lý dự thảo thất bại:  ${data}`;
           },
         },
       },
