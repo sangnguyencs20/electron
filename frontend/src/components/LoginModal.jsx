@@ -118,7 +118,7 @@ const LoginModal = ({
               fullWidth
               color="primary"
               size="lg"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               // contentLeft={<Password fill="currentColor" />}
             />
           </Row>
@@ -139,7 +139,7 @@ const LoginModal = ({
                 setIsOpen(false);
               }}
             >
-              Confirm
+              Xác nhận
             </Button>
           </Grid.Container>
         </Grid.Container>

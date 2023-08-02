@@ -124,9 +124,9 @@ export default function AssignPopper({ docId, owner }) {
         {" "}
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            Select{" "}
+            Nộp cho{" "}
             <Text b size={18}>
-              Employee
+              Cấp trên
             </Text>
           </Text>
         </Modal.Header>
@@ -143,9 +143,9 @@ export default function AssignPopper({ docId, owner }) {
             selectionMode="multiple"
           >
             <Table.Header>
-              <Table.Column key="name">NAME</Table.Column>
-              <Table.Column key="role">ROLE</Table.Column>
-              <Table.Column key="address">ADDRESS</Table.Column>
+              <Table.Column key="name">HỌ VÀ TÊN</Table.Column>
+              <Table.Column key="role">VỊ TRÍ</Table.Column>
+              <Table.Column key="address">CƠ QUAN</Table.Column>
             </Table.Header>
             <Table.Body items={users} css={{ gap: "12px" }}>
               {(item) => (
@@ -183,12 +183,12 @@ export default function AssignPopper({ docId, owner }) {
             closeHandler={closeHandler}
           >
             <Button auto flat color="default">
-              Assign
+              Chuyển
             </Button>
           </LoginModal>
 
           <Button auto flat color="error" onPress={closeHandler}>
-            Close
+            Đóng
           </Button>
         </Modal.Footer>
       </Modal>
