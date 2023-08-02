@@ -35,6 +35,7 @@ import { axiosCreateDoc, axiosGetAllDepartment, axiosSignUp } from "../../api";
 import { useSelector } from "react-redux";
 import { decryptPrivateKey, encryptPrivateKey } from "../../utils";
 import { useNavigate } from "react-router-dom";
+import { createRandomWallet } from "../../contract";
 
 export default function NewSignup() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -239,10 +240,11 @@ export default function NewSignup() {
   //----page3-----------------handle submit
   const navigate = useNavigate();
   const handleSubmit = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const wallet = await createRandomWallet();
+    console.log(wallet);
     const encodePrivateKey = encryptPrivateKey(
-      `${import.meta.env.VITE_REACT_PRIVATE_KEY}`,
+      `${wallet.privateKey}`,
       password
     );
     await axiosSignUp({
@@ -257,6 +259,7 @@ export default function NewSignup() {
       position: role,
       role: "User",
       department: "649958aedb17c980ea563b7a",
+      walletAddress: wallet.address,
       hashedPrivateKey: encodePrivateKey,
     })
       .then((res) => {
@@ -410,7 +413,7 @@ export default function NewSignup() {
                     color={cccdHelper.color}
                     helperColor={cccdHelper.color}
                     helperText={cccdHelper.text}
-                    type="email"
+                    type="number"
                     css={{
                       width: "100%",
                       display: "block",
@@ -451,13 +454,13 @@ export default function NewSignup() {
                   <Input
                     {...phoneBindings}
                     clearable
+                    type="number"
                     shadow={false}
                     onClearClick={reset}
                     status={phoneHelper.color}
                     color={phoneHelper.color}
                     helperColor={phoneHelper.color}
                     helperText={phoneHelper.text}
-                    type="email"
                     css={{
                       width: "95%",
                       display: "block",
@@ -554,9 +557,9 @@ export default function NewSignup() {
                       error={role === "" && needFill == true}
                       success={role !== ""}
                     >
-                      <Option value={"1"}>A</Option>
-                      <Option value={"2"}>B</Option>
-                      <Option value={"3"}>C</Option>
+                      <Option value={"Nhân viên"}>Nhân viên</Option>
+                      <Option value={"Trưởng Phòng"}>Trưởng Phòng</Option>
+                      <Option value={"Giám đốc"}>Giám đốc</Option>
                     </Select>
                   </div>
                 </div>
