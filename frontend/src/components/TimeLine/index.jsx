@@ -11,7 +11,7 @@ import {
 import styles from "./styles.module.css";
 import { useEffect, useState } from "react";
 import { axiosHistoryDocument } from "../../api";
-import { formattedDateTime } from "../../utils";
+import { formattedDateTime, vietSub } from "../../utils";
 const TimeLineTable = ({ receiver, timeSubmit }) => {
   const [history, setHistory] = useState([]);
   useEffect(() => {
@@ -57,7 +57,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-blue-500  bg-blue-400 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={
@@ -116,7 +116,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-pink-500  bg-pink-400 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div className="mt-10 mb-5">
                           <span className="my-1 text-md capitalize font-bold block">
@@ -173,7 +173,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-orange-500  bg-orange-300 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={
@@ -222,7 +222,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-green-500  bg-green-300 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={
@@ -271,7 +271,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-red-500  bg-red-300 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={
@@ -320,7 +320,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-teal-500  bg-teal-300 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={
@@ -369,7 +369,7 @@ const TimeLineTable = ({ receiver, timeSubmit }) => {
                           target="_blank"
                           className="block w-fit rounded-lg mt-10 p-4 text-lg text-white group-hover:text-gray-500  bg-gray-800 group-hover:bg-white  font-semibold  dark:text-white hover:underline duration-500 group-hover:-translate-y-2 hover:shadow-2xl"
                         >
-                          {item.status}
+                          {vietSub(item.status)}
                         </a>
                         <div
                           className={

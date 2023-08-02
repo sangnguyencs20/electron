@@ -35,7 +35,7 @@ const CommentBox = ({ item }) => {
               {item.createdBy.fullName}
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              <time pubdate datetime="2022-02-08" title="February 8th, 2022">
+              <time datetime="2022-02-08" title="February 8th, 2022">
                 {formattedDateTime(item.createdAt)}
               </time>
             </p>
@@ -127,8 +127,7 @@ const CommentBox = ({ item }) => {
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               ></path>
             </svg> */}
-            Transaction code
-            (0xbb2c813fb9b30fc8906ed4cec8bac1a4cbab46af57a75150e671b9286a4fc3d3)
+            Mã bình luận: ({item.txHash})
           </button>
         </div>
       </Card>

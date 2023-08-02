@@ -128,7 +128,7 @@ const CommentSection = ({ docId }) => {
       <div className="max-w-5xl mx-auto px-10 ">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg lg:text-2xl font-bold text-light-blue-600 dark:text-white">
-            Discussion
+            Thảo luận dự thảo
           </h2>
         </div>
         <div className="mb-6 flex flex-col items-center w-full min-w-[800px]">
@@ -167,7 +167,7 @@ const CommentSection = ({ docId }) => {
               // onClick={() => handleSubmit()}
             >
               <Text b color="white">
-                Post Comment
+                Đăng ý kiến
               </Text>
               <CheckCircleIcon
                 className={`ml-1 h-5 w-6 text-white ${
@@ -200,7 +200,6 @@ const CommentSection = ({ docId }) => {
             setPage(page);
           }}
         />
-        ;
       </div>
     </section>
   );

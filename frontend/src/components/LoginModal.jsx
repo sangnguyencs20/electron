@@ -72,7 +72,7 @@ const LoginModal = ({
         pending: "Dự thảo đang được xử lý",
         success: {
           render({ data }) {
-            return `"Xử lý dự thảo thành công`;
+            return `Xử lý dự thảo thành công`;
           },
         },
         error: {
