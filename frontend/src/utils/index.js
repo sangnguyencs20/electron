@@ -47,7 +47,9 @@ export const formattedDateTime = (dateTimeString) => {
     timeZone: "Asia/Ho_Chi_Minh", // Chọn múi giờ cho Việt Nam (UTC+7)
   };
 
-  return new Date(dateTimeString).toLocaleString("vi-VN", options);
+  return new Date(dateTimeString)
+    .toLocaleString("vi-VN", options)
+    .replace("lúc", "Vào");
 };
 
 export async function hashPassword(password) {

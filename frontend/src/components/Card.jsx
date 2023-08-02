@@ -25,6 +25,7 @@ export default function App({
   }, []);
   return (
     <div
+      key={_id + "1"}
       ref={ref}
       className={`relative ease-in duration-1000 ${
         isInView ? "opacity-100" : "opacity-50"
@@ -92,7 +93,7 @@ export default function App({
           </Collapse.Group>
         </Card.Body>
         <Card.Footer className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
-          <Row justify="flex-end">
+          <Row justify="center">
             <Button
               size="sm"
               light
@@ -106,7 +107,7 @@ export default function App({
             <Button
               size="sm"
               light
-              className="text-gray-50 hover:text-gray-400 cursor-not-allowed"
+              className="text-gray-50 hover:text-gray-400 cursor-not-allowed hidden"
             >
               Mark
             </Button>
