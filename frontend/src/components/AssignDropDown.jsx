@@ -184,7 +184,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                                     : "text-light-blue-900"
                                 }`}
                               >
-                                Địa chỉ thường chú
+                                Cơ quan
                               </span>
                             </div>
                           </motion.div>
@@ -240,9 +240,7 @@ export default function AssignDropDown({ selected, setSelected }) {
                           <span className={`block truncate `}>
                             {person.address}
                           </span>
-                          <span className={`text-[12px] `}>
-                            Địa chỉ thường trú
-                          </span>
+                          <span className={`text-[12px] `}>Cơ quan</span>
                         </div>
                       </div>
                       <TrashIcon
