@@ -91,7 +91,7 @@ export default function NewSignup() {
     reset: departmentReset,
     bindings: departmentBindings,
   } = useInput("Viet Nam Blockchain Corporation");
-  console.log(department, departmentList);
+  // console.log(department, departmentList);
   const {
     value: role,
     reset: roleReset,
@@ -240,6 +240,7 @@ export default function NewSignup() {
   const navigate = useNavigate();
   const handleSubmit = async () => {
     setIsLoading(true);
+    const wallet = await createRandomWallet();
     const encodePrivateKey = encryptPrivateKey(
       `${import.meta.env.VITE_REACT_PRIVATE_KEY}`,
       password

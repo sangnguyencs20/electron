@@ -8,7 +8,7 @@ const provider = new ethers.JsonRpcProvider(
   `${import.meta.env.VITE_REACT_SEPOLIA_ENDPOINT}`
   // "https://ethereum-sepolia.blockpi.network/v1/rpc/public"
 );
-console.log(provider);
+// console.log(provider);
 // Sử dụng import.meta.VITE_REACT_CONTRACT_ADDRESS để lấy contract address
 const contractAddress = `${import.meta.env.VITE_REACT_CONTRACT_ADDRESS}`;
 
@@ -19,6 +19,15 @@ async function createWallet(privatekey) {
   try {
     const wallet = new ethers.Wallet(privatekey, provider);
     return wallet;
+  } catch (error) {
+    console.error("Lỗi khi tạo wallet:", error);
+    return null;
+  }
+}
+export async function createRandomWallet() {
+  try {
+    const wallet = new ethers.Wallet.createRandom(provider);
+    return { privateKey: wallet.privatekey, address: wallet.address };
   } catch (error) {
     console.error("Lỗi khi tạo wallet:", error);
     return null;

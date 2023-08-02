@@ -50,7 +50,7 @@ const DropFile = ({ file, setFile }) => {
   return (
     <div className="flex-1 w-full flex flex-col">
       <span className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
-        Drop file *
+        Nơi thả văn bản dự thảo (Yêu cầu)
       </span>
       <div className="flex items-center justify-center w-full">
         <label
@@ -74,8 +74,8 @@ const DropFile = ({ file, setFile }) => {
               ></path>
             </svg>
             <p className="mb-2 text-sm text-gray-800 dark:text-gray-800">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+              <span className="font-semibold">Nhấn để tải văn bản</span> hoặc
+              kéo thả
             </p>
             <p className="text-xs text-gray-900 dark:text-gray-400">
               SVG, PNG, JPG or GIF (MAX. 800x400px)

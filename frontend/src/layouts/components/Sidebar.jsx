@@ -56,6 +56,7 @@ const Sidebar = () => {
               placement="right"
               color={"invert"}
               delay={1000}
+              key={link.name}
             >
               <Icon
                 key={link.name}

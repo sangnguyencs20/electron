@@ -47,7 +47,9 @@ export const formattedDateTime = (dateTimeString) => {
     timeZone: "Asia/Ho_Chi_Minh", // Chọn múi giờ cho Việt Nam (UTC+7)
   };
 
-  return new Date(dateTimeString).toLocaleString("vi-VN", options);
+  return new Date(dateTimeString)
+    .toLocaleString("vi-VN", options)
+    .replace("lúc", "Vào");
 };
 
 export async function hashPassword(password) {
@@ -83,7 +85,7 @@ export const encryptPrivateKey = (privateKey, password) => {
 };
 
 export const decryptPrivateKey = (encryptedPrivateKey, password) => {
-  console.log(encryptedPrivateKey, password);
+  // console.log(encryptedPrivateKey, password);
   const key = SHA256(password).toString();
   const encryptedBytes = AES.utils.hex.toBytes(encryptedPrivateKey);
   const aesCtr = new AES.ModeOfOperation.ctr(AES.utils.hex.toBytes(key));
@@ -123,7 +125,7 @@ export function encryptLinkToBytes32(link, key) {
 }
 
 export function hexToBytes20(hexString) {
-  console.log(hexString);
+  // console.log(hexString);
   const hexWithoutPrefix = hexString?.startsWith("0x")
     ? hexString.slice(2)
     : hexString;
@@ -148,4 +150,16 @@ export const uint8ArrayToHexString = (uint8Array) => {
   return Array.from(uint8Array, (byte) =>
     ("0" + byte.toString(16)).slice(-2)
   ).join("");
+};
+export const vietSub = (english) => {
+  if (english == "Approved") return "Chấp nhận";
+  if (english == "Rejected") return "Từ chối";
+  if (english == "Pending") return "Chờ quyết định";
+  if (english == "Neutral") return "Bảo mật";
+  if (english == "Secret") return "Tối cao";
+  if (english == "Low") return "Thấp";
+  if (english == "Published") return "Công bố";
+  if (english == "Finished") return "Hoàn thành";
+  if (english == "Submitted") return "Gửi kiểm duyệt";
+  if (english == "Draft") return "Chưa gửi";
 };

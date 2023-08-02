@@ -104,7 +104,7 @@ export default function Create() {
         color: "success",
       };
     return {
-      text: "Request",
+      text: "Yêu cầu nhập",
       color: "default",
     };
   }, [title, needFill]);
@@ -199,13 +199,13 @@ export default function Create() {
     toast.promise(
       myPromise,
       {
-        pending: "Draft is being created",
+        pending: "Dự thảo đang được tạo",
         success: {
           render({ data }) {
-            return `Create draft successfully:  ${data}`;
+            return `Dự thảo được tạo thành công`;
           },
         },
-        error: "error",
+        error: "Tạo dự thảo thất bại",
       },
       { position: toast.POSITION.BOTTOM_RIGHT }
     );
@@ -364,9 +364,9 @@ export default function Create() {
                         handleSecret(value);
                       }}
                     >
-                      <Option value="Low">Low</Option>
-                      <Option value="Neutral">Neutral</Option>
-                      <Option value="High">High</Option>
+                      <Option value="Low">Thấp</Option>
+                      <Option value="Neutral">Bảo mật</Option>
+                      <Option value="High">Tối cao</Option>
                     </Select>
                     <Select
                       variant="standard"
@@ -379,9 +379,9 @@ export default function Create() {
                         setUrgency(value);
                       }}
                     >
-                      <Option value="Low">Low</Option>
-                      <Option value="Neutral">Neutral</Option>
-                      <Option value="High">High</Option>
+                      <Option value="Low">Thấp</Option>
+                      <Option value="Neutral">Bảo Mật</Option>
+                      <Option value="High">Tối cao</Option>
                     </Select>
                   </div>
                 </div>
@@ -457,11 +457,11 @@ export default function Create() {
                   }}
                 />
                 <p className="text-sm text-gray-700 max-w-xs md:max-w-sm pr-2">
-                  I confirm that I have read and understood{" "}
+                  Tôi xác nhận rằng tôi đã đọc và hiểu{" "}
                   <span className="underline text-blue-600 cursor-pointer">
-                    the terms and conditions of the application
+                    các điều khoản và điều kiện của ứng dụng
                   </span>{" "}
-                  and I am certain that I want to submit it{" "}
+                  và tôi chắc chắn rằng tôi muốn gửi nó đi.{" "}
                 </p>
               </div>
 
@@ -537,7 +537,7 @@ export default function Create() {
                           setIsOpen(false);
                         }}
                       >
-                        Confirm
+                        Xác nhận
                       </Button>
                     </Grid.Container>
                   </Grid.Container>
