@@ -47,7 +47,7 @@ const createOpinion = async (req, res) => {
 
     await newOpinion.save();
 
-    res.status(201).json({message: "Create opinion successfully"});
+    res.status(201).json({message: "Đóng góp ý kiến thành công!"});
   } catch (error) {
     res.status(409).json({ message: error.message });
   }

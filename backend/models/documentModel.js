@@ -22,13 +22,13 @@ const DocumentSchema = new mongoose.Schema({
     },
     secretState: {
         type: String,
-        enum: ['Low', 'Neutral', 'High'],
-        default: 'Neutral',
+        enum: ['Thấp', 'Trung bình', 'Cao'],
+        default: 'Trung bình',
     },
     urgencyState: {
         type: String,
-        enum: ['Low', 'Neutral', 'High'],
-        default: 'Neutral',
+        enum: ['Thấp', 'Trung bình', 'Cao'],
+        default: 'Trung bình',
     },
     fileLink: {
         type: String,

@@ -7,13 +7,13 @@ const login = async (req, res) => {
 
     try {
         if (!await isUserExist(username)) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Sai tài khoản, vui lòng thử lại!' });
         }
 
         const user = await getUserByName(username);
 
         if (!isPasswordMatched(password, user.password)) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Sai mật khẩu, vui lòng thử lại!' });
         }
 
         const tokens = generateTokens(user);
@@ -55,7 +55,7 @@ const signup = async (req, res) => {
     const user = req.body;
     try {
         if (await isUserExist(user.username)) {
-            return res.status(401).json({ message: 'This username is not available' });
+            return res.status(401).json({ message: 'Tên tài khoản đã tồn tại, vui lòng chọn tên khác!' });
         }
 
         const hashedPassword = hashPassword(user.password);
@@ -79,17 +79,16 @@ const confirmPassword = async (req, res) => {
 
     try {
         const user = await getOneUserById(id);
-        console.log(user)
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         if (!isPasswordMatched(password, user.password)) {
-            return res.status(401).json({ message: 'Invalid password' });
+            return res.status(401).json({ message: 'Sai mật khẩu, vui lòng thử lại!' });
         }
 
-        return res.status(200).json({ message: 'Password is correct' });
+        return res.status(200).json({ message: 'Xác nhận  mật khẩu thành công!' });
     }
     catch (error) {
         console.error(error);
