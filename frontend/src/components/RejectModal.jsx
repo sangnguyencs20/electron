@@ -21,6 +21,7 @@ import { axiosApproveDocument, axiosSubmitFeedback } from "../api";
 import { encryptLinkToBytes32 } from "../utils";
 import { decideDraft } from "../contract";
 import { toast } from "react-toastify";
+import LoginModal from "./LoginModal";
 
 export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
   const [visible, setVisible] = React.useState(false);
@@ -120,16 +121,35 @@ export default function RejectModal({ docId, setIsLoading, setNeedRefresh }) {
           <Button auto flat color="error" onPress={closeHandler}>
             Close
           </Button>
-          <Button
-            auto
-            flat
-            onPress={() => {
-              handleSubmit();
-              closeHandler();
+          <LoginModal
+            scFunction={decideDraft}
+            scData={{
+              _id: docId,
+              decide: true,
+              comment_hashed: encryptLinkToBytes32(controlledValue, "123456"),
             }}
+            axiosFunction={axiosApproveDocument}
+            axiosData={{
+              documentId: docId,
+              comment: controlledValue,
+              status: "Rejected",
+              // txHash: hash,
+            }}
+            closeHandler={closeHandler}
+            setIsLoading={setIsLoading}
+            setNeedRefresh={setNeedRefresh}
           >
-            Submit
-          </Button>
+            <Button
+              auto
+              flat
+              // onPress={() => {
+              //   // handleSubmit();
+              //   closeHandler();
+              // }}
+            >
+              Submit
+            </Button>
+          </LoginModal>
         </Modal.Footer>
       </Modal>
     </div>

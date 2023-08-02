@@ -16,36 +16,47 @@ import { AnimatePresence } from "framer-motion";
 import CustomRotatingSquare from "./CustomRotatingSquare";
 import CustomSugar from "./CustomSugar";
 import { toast } from "react-toastify";
+import { encryptLinkToBytes32 } from "../utils";
+import { SCcomment } from "../contract";
+import LoginModal from "./LoginModal";
 const CommentSection = ({ docId }) => {
   const [loading, setLoading] = useState(false);
+  const [isNeed, setNeedRefresh] = useState(0);
   const handleSubmit = () => {
     const myPromise = new Promise((resolve, reject) => {
-      comment({
+      SCcomment({
         _id: docId,
         _contentHashed: encryptLinkToBytes32(comment, "123456"),
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        axiosPostComment({
-          documentId: docId,
-          content: comment,
-          txHash: hash,
-        })
-          .then((res) => {
-            setIsLoading(false);
-            console.log(res);
-            setIsNeed((pre) => pre + 1);
-            resolve(hash);
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          axiosPostComment({
+            documentId: docId,
+            content: comment,
+            txHash: hash,
           })
-          .catch((err) => {
-            console.error(err),
-              setTimeout(() => {
-                setLoading(false);
-              }, 3000);
-          });
-      });
+            .then((res) => {
+              setIsLoading(false);
+              console.log(res);
+              setIsNeed((pre) => pre + 1);
+              resolve(hash);
+            })
+            .catch((err) => {
+              console.error(err),
+                setTimeout(() => {
+                  setLoading(false);
+                }, 3000);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
     });
     toast.promise(
       myPromise,
@@ -87,7 +98,6 @@ const CommentSection = ({ docId }) => {
   const [comments, setComments] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isNeed, setIsNeed] = useState(0);
   useEffect(() => {
     {
       setIsLoading(true);
@@ -121,7 +131,7 @@ const CommentSection = ({ docId }) => {
             Discussion
           </h2>
         </div>
-        <div className="mb-6 flex flex-col items-center w-full ">
+        <div className="mb-6 flex flex-col items-center w-full min-w-[800px]">
           <Textarea
             {...bindings}
             rows="10"
@@ -136,27 +146,43 @@ const CommentSection = ({ docId }) => {
             className="bg-gradient-to-br from-cyan-500 to-blue-500 p-[2px] hover:shadow-lg hover:shadow-cyan-500/50"
           ></Textarea>
 
-          <Button
-            auto
-            className="my-4 py-7 bg-gradient-to-br from-cyan-500 to-blue-500 w-fit text-white rounded-2xl hover:shadow-lg hover:shadow-cyan-500/50"
-            onClick={() => handleSubmit()}
+          <LoginModal
+            scFunction={SCcomment}
+            scData={{
+              _id: docId,
+              _contentHashed: encryptLinkToBytes32(comment, "123456"),
+            }}
+            axiosFunction={axiosPostComment}
+            axiosData={{
+              documentId: docId,
+              content: comment,
+              // txHash: hash,
+            }}
+            setIsLoading={setIsLoading}
+            setNeedRefresh={setNeedRefresh}
           >
-            <Text b color="white">
-              Post Comment
-            </Text>
-            <CheckCircleIcon
-              className={`ml-1 h-5 w-6 text-white ${
-                loading ? "hidden" : "block"
-              }`}
-            />
-            <Loading
-              type="spinner"
-              color="currentColor"
-              size="sm"
-              // css={{ mx: "$1" }}
-              className={` ml-1   h-5 w-6 ${!loading ? "hidden" : "block"}`}
-            />
-          </Button>
+            <Button
+              auto
+              className="my-4 py-7 bg-gradient-to-br from-cyan-500 to-blue-500 w-fit text-white rounded-2xl hover:shadow-lg hover:shadow-cyan-500/50"
+              // onClick={() => handleSubmit()}
+            >
+              <Text b color="white">
+                Post Comment
+              </Text>
+              <CheckCircleIcon
+                className={`ml-1 h-5 w-6 text-white ${
+                  loading ? "hidden" : "block"
+                }`}
+              />
+              <Loading
+                type="spinner"
+                color="currentColor"
+                size="sm"
+                // css={{ mx: "$1" }}
+                className={` ml-1   h-5 w-6 ${!loading ? "hidden" : "block"}`}
+              />
+            </Button>
+          </LoginModal>
         </div>
         <AnimatePresence mode="popLayout">
           {comments.map((item) => {

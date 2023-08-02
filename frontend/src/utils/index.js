@@ -36,8 +36,19 @@ const options = {
   timeZone: "UTC",
 };
 
-export const formattedDateTime = (dateTimeString) =>
-  new Date(dateTimeString).toLocaleString("en-US", options);
+export const formattedDateTime = (dateTimeString) => {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZone: "Asia/Ho_Chi_Minh", // Chọn múi giờ cho Việt Nam (UTC+7)
+  };
+
+  return new Date(dateTimeString).toLocaleString("vi-VN", options);
+};
 
 export async function hashPassword(password) {
   try {
@@ -112,12 +123,13 @@ export function encryptLinkToBytes32(link, key) {
 }
 
 export function hexToBytes20(hexString) {
-  const hexWithoutPrefix = hexString.startsWith("0x")
+  console.log(hexString);
+  const hexWithoutPrefix = hexString?.startsWith("0x")
     ? hexString.slice(2)
     : hexString;
   const bytes20Array = [];
   for (let i = 0; i < 40; i += 2) {
-    const byte = parseInt(hexWithoutPrefix.substr(i, 2), 16);
+    const byte = parseInt(hexWithoutPrefix?.substr(i, 2), 16);
     bytes20Array.push(byte);
   }
   return new Uint8Array(bytes20Array);

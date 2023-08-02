@@ -42,6 +42,9 @@ const DraftCreate = () => {
       handleSubmit(values);
     },
   });
+
+  const closeHandler = () => {};
+
   const handleSubmit = async (values) => {
     const receiver = selected;
     const secretState = secret.name;

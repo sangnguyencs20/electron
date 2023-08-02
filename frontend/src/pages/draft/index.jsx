@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import {
   axiosGetDoc,
   axiosGetMyDoc,
+  axiosPostFinishDocument,
   axiosPostPublishDocument,
   axiosSubmitMyDoc,
 } from "../../api";
@@ -37,8 +38,10 @@ import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import SubmitModal from "../../components/SubmitModal";
 import { hexToBytes20 } from "../../utils";
-import { publish } from "../../contract";
+import { finish, publish } from "../../contract";
 import { toast } from "react-toastify";
+import CommentModal from "../../components/CommentModal";
+import LoginModal from "../../components/LoginModal";
 const StyledBadge = styled("span", {
   display: "inline-block",
   textTransform: "uppercase",
@@ -74,6 +77,14 @@ const StyledBadge = styled("span", {
         bg: "$errorLight",
         color: "$errorLightContrast",
       },
+      Published: {
+        bg: "$successBorderHover",
+        color: "$white",
+      },
+      Finished: {
+        bg: "$neutralBorderHover",
+        color: "$white",
+      },
     },
   },
   defaultVariants: {
@@ -85,11 +96,13 @@ const Draft = () => {
   const navigate = useNavigate();
   const [myDocuments, setMyDocuments] = useState([]);
   const dosObj = {
-    All: myDocuments,
-    Draft: myDocuments.filter((item) => item.status == "Draft"),
-    Submitted: myDocuments.filter((item) => item.status == "Submitted"),
-    Approved: myDocuments.filter((item) => item.status == "Approved"),
-    Rejected: myDocuments.filter((item) => item.status == "Rejected"),
+    "Mới nhất": myDocuments,
+    "Mới tạo": myDocuments.filter((item) => item.status == "Draft"),
+    "Đã gửi": myDocuments.filter((item) => item.status == "Submitted"),
+    "Được duyệt": myDocuments.filter((item) => item.status == "Approved"),
+    "Bị từ chối": myDocuments.filter((item) => item.status == "Rejected"),
+    "Khảo sát ý kiến": myDocuments.filter((item) => item.status == "Published"),
+    "Hoàn thành": myDocuments.filter((item) => item.status == "Finished"),
   };
   const [isLoading, setIsLoading] = useState(false);
   const [needRefresh, setNeedRefresh] = useState(0);
@@ -177,37 +190,25 @@ const Draft = () => {
               </Tooltip>
             </Col>
 
-            <Col css={{ d: "flex", justifyContent: "center" }}>
+            {/* <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Status" color="invert">
                 <IconButton onClick={() => {}}>
                   <MyModal
                     timeSubmit={doc.timeSubmit}
                     receiver={doc._id}
                     isSubmit={doc.status !== "Draft"}
+                    setNeedRefresh={setNeedRefresh}
                   />
                 </IconButton>
               </Tooltip>
-            </Col>
+            </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Submit" isDisabled={doc.status !== "Draft"}>
-                {/* <IconButton
-                  className={`${
-                    doc.status !== "Draft" && "cursor-not-allowed"
-                  }`}
-                  onClick={() => {
-                    handleSubmit(doc._id);
-                  }}
-                >
-                  <ForwardToInboxOutlinedIcon
-                    color="#ff9900"
-                    className={
-                      doc.status === "Draft"
-                        ? "text-[#ff9900]"
-                        : "text-blue-gray-200"
-                    }
-                  />
-                </IconButton> */}
-                <SubmitModal doc={doc} setNeedRefresh={setNeedRefresh} />
+                <SubmitModal
+                  doc={doc}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
+                />
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
@@ -234,20 +235,28 @@ const Draft = () => {
                 content="Publish"
                 color="success"
                 placement="bottomEnd"
-                onClick={() => {
-                  handlePublish(doc._id);
-                }}
                 isDisabled={doc.status !== "Approved"}
               >
-                <IconButton
-                  className={`${
-                    doc.status === "Approved"
-                      ? "text-green-500"
-                      : "text-blue-gray-200"
-                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                <LoginModal
+                  scFunction={publish}
+                  scData={{
+                    _id: doc._id,
+                  }}
+                  axiosFunction={axiosPostPublishDocument}
+                  axiosData={{ docId: doc._id }}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
                 >
-                  <PublishRoundedIcon />
-                </IconButton>
+                  <IconButton
+                    className={`${
+                      doc.status === "Approved"
+                        ? "text-green-500"
+                        : "text-blue-gray-200"
+                    } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                  >
+                    <PublishRoundedIcon />
+                  </IconButton>
+                </LoginModal>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
@@ -255,21 +264,47 @@ const Draft = () => {
                 content="Finish"
                 color="primary"
                 placement="bottomStart"
-                onClick={() => {
-                  console.log("Finish Draft", doc.id);
-                  handleFinish(doc.id);
-                }}
-                isDisabled={doc.status !== "Approved"}
+                onClick={() => {}}
+                isDisabled={
+                  doc.status !== "Approved" && doc.status !== "Published"
+                }
               >
-                <IconButton
-                  className={` ${
-                    doc.status === "Approved"
-                      ? "text-blue-600"
-                      : "text-blue-gray-200"
-                  } ${doc.status !== "Approved" && "cursor-not-allowed"}`}
+                <LoginModal
+                  scFunction={finish}
+                  scData={{
+                    _id: doc._id,
+                  }}
+                  axiosFunction={axiosPostFinishDocument}
+                  axiosData={{ docId: doc._id }}
+                  setNeedRefresh={setNeedRefresh}
+                  setIsLoading={setIsLoading}
                 >
-                  <DoneAllRoundedIcon />
-                </IconButton>
+                  <IconButton
+                    className={` ${
+                      doc.status == "Approved" || doc.status == "Published"
+                        ? "text-blue-600"
+                        : "text-blue-gray-200"
+                    } ${
+                      doc.status !== "Approved" &&
+                      doc.status !== "Published" &&
+                      "cursor-not-allowed"
+                    }`}
+                  >
+                    <DoneAllRoundedIcon />
+                  </IconButton>
+                </LoginModal>
+              </Tooltip>
+            </Col>
+            <Col css={{ d: "flex", justifyContent: "center" }}>
+              <Tooltip
+                content="Comment"
+                color="primary"
+                placement="bottomStart"
+                isDisabled={
+                  doc.status !== "Published" && doc.status !== "Finished"
+                }
+              >
+                <CommentModal docId={doc._id} type={doc.status} />
               </Tooltip>
             </Col>
           </Row>
@@ -283,20 +318,24 @@ const Draft = () => {
     const myPromise = new Promise((resolve, reject) => {
       publish({
         _id: docId,
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        axiosPostPublishDocument(docId)
-          .then((res) => {
-            setIsLoading(false);
-            console.log(res);
-            resolve(hash);
-            setNeedRefresh((pre) => pre + 1);
-          })
-          .catch((err) => console.error(err));
-      });
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          axiosPostPublishDocument(docId)
+            .then((res) => {
+              setIsLoading(false);
+              console.log(res);
+              resolve(hash);
+              setNeedRefresh((pre) => pre + 1);
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
 
     toast.promise(
@@ -321,23 +360,27 @@ const Draft = () => {
     const myPromise = new Promise((resolve, reject) => {
       finish({
         _id: docId,
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        setIsLoading(false);
-        // axiosApproveDocument({
-        //   documentId: docID,
-        //   comment: "",
-        //   status: "Approved",
-        //   txHash: hash,
-        // }).then((res) => {
-        //   setIsLoading(false);
-        //   console.log(res);
-        //   resolve(hash);
-        //   setNeedRefresh((pre) => pre + 1);
-        // });
-      });
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
+          resolve(hash);
+          setIsLoading(false);
+          // axiosApproveDocument({
+          //   documentId: docID,
+          //   comment: "",
+          //   status: "Approved",
+          //   txHash: hash,
+          // }).then((res) => {
+          //   setIsLoading(false);
+          //   console.log(res);
+          //   resolve(hash);
+          //   setNeedRefresh((pre) => pre + 1);
+          // });
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
 
     toast.promise(
@@ -358,6 +401,7 @@ const Draft = () => {
       { position: toast.POSITION.BOTTOM_RIGHT }
     );
   };
+
   return (
     <div className="w-full px-2 sm:px-0">
       {isLoading && <CustomRotatingSquare />}
@@ -474,15 +518,6 @@ const Draft = () => {
                       </Table.Row>
                     )}
                   </Table.Body>
-                  {/* <Table.Pagination
-                    shadow
-                    noMargin
-                    align="center"
-                    rowsPerPage={10}
-                    onPageChange={(page) => {
-                      setPage(page);
-                    }}
-                  /> */}
                 </Table>
               </Tab.Panel>
             ))}

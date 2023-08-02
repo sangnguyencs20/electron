@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Stepper,
   Step,
@@ -47,6 +47,7 @@ import {
 } from "../../utils";
 
 export default function Create() {
+  const [isOpen, setIsOpen] = useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
@@ -114,49 +115,76 @@ export default function Create() {
   const {
     value: password,
     setValue: setPrivateKey,
-    reset: descPrivateKey,
+    reset: passwordReset,
     bindings: passwordBindings,
   } = useInput("");
   const hashedPassword = useSelector((state) => state.userState.password);
   const hashedPrivateKey = useSelector(
     (state) => state.userState.hashedPrivateKey
   );
+  const closeHandler = useCallback(() => {
+    setSecret("Neutral");
+    setUrgency("Neutral");
+    setNeedFill(false);
+    passwordReset();
+    setApprovals([]);
+    descReset();
+    reset();
+    setConfirm(false);
+    setFile("cant drop");
+    setActiveStep(0);
+  }, [
+    setSecret,
+    setUrgency,
+    setNeedFill,
+    passwordReset,
+    descReset,
+    reset,
+    setFile,
+    setActiveStep,
+  ]);
   const handleSubmit = async () => {
     const myPromise = new Promise((resolve, reject) => {
       axiosCheckPassword({ password })
         .then(async (res) => {
           try {
-            setIsLoading(true);
             const createDocumentResponse = await axiosCreateDocument({
               title: form.title,
               receiver: form.approvals,
               fileLink: form.fileLink,
               description: form.description,
             });
-
-            console.log(
-              createDocumentResponse.data,
-              encryptLinkToBytes32(form.fileLink, password)
-            );
             setIsLoading(false);
-            createDraft({
+            createDraft(decryptPrivateKey(hashedPrivateKey, password), {
               _id: createDocumentResponse.data.documentId,
               _content_hashed: encryptLinkToBytes32(form.fileLink, password),
               _level1Approvers: form.approvals.map(
                 (item) => item.walletAddress
               ),
-            }).then((hash) => {
-              console.log(hash);
-              axiosPostLog({
-                documentId: createDocumentResponse.data.documentId,
-                action: "CREATE",
-                txHash: hash,
-              }).then((res) => {
-                console.log(res);
-                resolve(res.data.message + " " + "hash: " + hash);
+            })
+              .then((hash) => {
+                console.log(hash);
+                setIsLoading(true);
+                axiosPostLog({
+                  documentId: createDocumentResponse.data.documentId,
+                  action: "CREATE",
+                  txHash: hash,
+                })
+                  .then((res) => {
+                    console.log(res);
+                    setIsLoading(false);
+                    closeHandler();
+                    resolve(res.data.message + " " + "hash: " + hash);
+                  })
+                  .catch((err) => {
+                    setIsLoading(false);
+                    reject(err.message);
+                  });
+                // resolve(hash); // You can choose to resolve with some data here if needed.
+              })
+              .catch((err) => {
+                reject(err.message);
               });
-              // resolve(hash); // You can choose to resolve with some data here if needed.
-            });
           } catch (error) {
             console.error(error);
             setIsLoading(false);
@@ -437,7 +465,12 @@ export default function Create() {
                 </p>
               </div>
 
-              <Popover shouldCloseOnBlur={true} triggerType="grid">
+              <Popover
+                shouldCloseOnBlur={true}
+                triggerType="grid"
+                isOpen={isOpen}
+                onOpenChange={setIsOpen}
+              >
                 <Popover.Trigger>
                   <MuiButton
                     className="text-white bg-blue-500 w-40 h-16 text-md md:text-lg rounded-xl block m-auto"
@@ -501,6 +534,7 @@ export default function Create() {
                         }}
                         onClick={(e) => {
                           handleSubmit();
+                          setIsOpen(false);
                         }}
                       >
                         Confirm

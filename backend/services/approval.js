@@ -7,6 +7,7 @@ const getAllApprovals = async (documentId) => {
 
 const checkIfDocumentIsAllApproved = async (documentId) => {
     const approvals = await getAllApprovals(documentId);
+    console.log(approvals.isApproved)
     return approvals.isApproved;
 }
 
@@ -39,7 +40,7 @@ const handlePostAnApprovalOfADocument = async (documentId, userIdArray) => {
 
 
 const handleAssignAnUserToADocument = async (documentId, userIdArray) => {
-    
+
     if (userIdArray.length === 0) {
         throw new Error('Please select at least one user');
     }
@@ -98,6 +99,10 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
         select: 'fullName position role', // Specify the desired attributes to populate
     });;
 
+    const document = await getOneDocumentById(approval.documentId);
+
+    console.log(approval.deadlineApprove)
+
     const timeline = approval.history.map((historyItem) => {
         const receiver = historyItem.receiverId;
         const log = historyItem.log;
@@ -120,6 +125,49 @@ const getApprovalHistoryAsTimeline = async (approvalId) => {
     const flattenedTimeline = [].concat(...timeline);
 
     // Sort the timeline events by time in ascending order
+
+
+    if (document.timeSubmit && document.submitTxHash) {
+        flattenedTimeline.unshift({
+            status: 'Submitted',
+            time: document.timeSubmit,
+            txHash: document.submitTxHash,
+        });
+    }
+
+    if (approval.deadlineApprove && approval.deadlineApprove < Date.now()) {
+        if (approval.isApproved === true) {
+            flattenedTimeline.push({
+                status: "Approved",
+                time: approval.deadlineApprove,
+                txHash: document.approveTxHash
+            });
+        }
+        else {
+            flattenedTimeline.push({
+                status: "Rejected",
+                time: approval.deadlineApprove,
+                txHash: document.approveTxHash
+            });
+        }
+    }
+
+    if (document.timePublished && document.publishTxHash) {
+        flattenedTimeline.push({
+            status: 'Published',
+            time: document.timePublished,
+            txHash: document.publishTxHash,
+        });
+    }
+
+    if (document.timeFinished && document.finishTxHash) {
+        flattenedTimeline.push({
+            status: 'Finished',
+            time: document.timeFinished,
+            txHash: document.finishTxHash,
+        });
+    }
+
     const sortedTimeline = flattenedTimeline.sort((a, b) => b.time - a.time);
 
     return sortedTimeline;

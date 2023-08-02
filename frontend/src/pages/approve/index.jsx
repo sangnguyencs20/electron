@@ -26,15 +26,16 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { decideDraft } from "../../contract";
+import LoginModal from "../../components/LoginModal";
 
-const DetailCell = ({ id, title, createdBy, time }) => {
+const DetailCell = ({ id, title, createdBy, time, deadlineApprove }) => {
   return (
-    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end">
-      <div className="col-span-1 justify-end hidden xl:flex flex-col">
-        <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line  break-all w-full overflow-hidden">
-          {id}
+    <div className="grid grid-cols-2 grid-flow-row gap-4 w-full px-3 py-2 rounded-xl items-end min-w-[100px] sm:min-w-[150px] md:min-w-[200px]">
+      <div className="col-span-2 lg:col-span-1">
+        <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
+          {title}
         </p>
-        <p className="text-gray-400 text-xs">Id</p>
+        <p className="text-gray-400 text-xs ">Tiêu đề</p>
       </div>
       <div className="col-span-1  hidden xl:flex flex-col">
         <p className="font-bold text-sm text-gray-800 whitespace-pre-line break-all">
@@ -44,11 +45,13 @@ const DetailCell = ({ id, title, createdBy, time }) => {
           Người tạo
         </p>
       </div>
-      <div className="col-span-1">
+      <div className="col-span-1 hidden lg:block">
         <p className="font-bold text-sm text-gray-800 flex whitespace-pre-line max-w-[300px]">
-          {title}
+          {deadlineApprove}
         </p>
-        <p className="text-gray-400 text-xs ">Tiêu đề</p>
+        <p className="text-gray-400 text-xs whitespace-pre-line">
+          Hạn chốt quyết định
+        </p>
       </div>
       <div className="col-span-1 hidden xl:flex flex-col">
         <p className="font-bold text-sm text-gray-800 line-clamp-4 whitespace-pre-line">
@@ -171,6 +174,7 @@ export default function Approve() {
             id={doc.document._id}
             title={doc.document.title}
             createdBy={doc.document.createdBy.fullName}
+            deadlineApprove={doc.document.deadlineApprove}
             time={doc.document.timeSubmit ? doc.document.timeSubmit : "time"}
           />
         );
@@ -209,7 +213,7 @@ export default function Approve() {
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <AssignPopper docId={doc.document._id} />
             </Col>
-            <Col css={{ d: "flex", justifyContent: "center" }}>
+            {/* <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Time Line">
                 <MyModal
                   receiver={doc.document._id}
@@ -217,9 +221,32 @@ export default function Approve() {
                   isSubmit={doc.status !== "Draft"}
                 />
               </Tooltip>
-            </Col>
+            </Col> */}
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip content="Approve" color="primary">
+                <LoginModal
+                  scFunction={decideDraft}
+                  scData={{
+                    _id: doc.document._id,
+                    decide: true,
+                    comment_hashed: encryptLinkToBytes32("", "123456"),
+                  }}
+                  axiosFunction={axiosApproveDocument}
+                  axiosData={{
+                    documentId: doc.document._id,
+                    comment: "",
+                    status: "Approved",
+                  }}
+                  setIsLoading={setIsLoading}
+                  setNeedRefresh={setNeedRefresh}
+                >
+                  <IconButton>
+                    <CheckCircleOutlineIcon className="text-green-500" />
+                  </IconButton>
+                </LoginModal>
+              </Tooltip>
+
+              {/* <Tooltip content="Approve" color="primary">
                 <IconButton
                   onClick={() => {
                     console.log("Edit user", doc.document._id);
@@ -228,7 +255,7 @@ export default function Approve() {
                 >
                   <CheckCircleOutlineIcon className="text-green-500" />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </Col>
             <Col css={{ d: "flex", justifyContent: "center" }}>
               <Tooltip
@@ -256,22 +283,26 @@ export default function Approve() {
         _id: docID,
         decide: true,
         comment_hashed: encryptLinkToBytes32("", "123456"),
-      }).then((hash) => {
-        setIsLoading(true);
-        console.log(hash);
-        resolve(hash);
-        axiosApproveDocument({
-          documentId: docID,
-          comment: "",
-          status: "Approved",
-          txHash: hash,
-        }).then((res) => {
-          setIsLoading(false);
-          console.log(res);
+      })
+        .then((hash) => {
+          setIsLoading(true);
+          console.log(hash);
           resolve(hash);
-          setNeedRefresh((pre) => pre + 1);
+          axiosApproveDocument({
+            documentId: docID,
+            comment: "",
+            status: "Approved",
+            txHash: hash,
+          }).then((res) => {
+            setIsLoading(false);
+            console.log(res);
+            resolve(hash);
+            setNeedRefresh((pre) => pre + 1);
+          });
+        })
+        .catch((err) => {
+          reject(err);
         });
-      });
     });
 
     toast.promise(
@@ -280,12 +311,12 @@ export default function Approve() {
         pending: "Draft is being decided",
         success: {
           render({ data }) {
-            return `Decide draft successfully:  ${data}`;
+            return `Decide draft:  ${data}`;
           },
         },
         error: {
           render({ data }) {
-            return `Decide draft successfully:  ${data}`;
+            return `Decide draft:  ${data}`;
           },
         },
       },

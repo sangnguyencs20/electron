@@ -12,7 +12,8 @@ const {
     getAllDocumentsOfApprover,
     assignDocumentToApprover,
     approveADocument,
-    getApprovalHistoryOfDocument
+    getApprovalHistoryOfDocument,
+    finishDocument
 }
     = require("../controllers/documentController");
 
@@ -332,23 +333,71 @@ router.post("/submit/:documentId", submitDocument);
 * @swagger
 * /api/documents/publish/{documentId}:
 *   post:
-*     summary: Publish a document
-*     tags: [Document]
-*     parameters:
-*       - name: documentId
-*         in: path
-*         description: ID of the document to publish
-*         required: true
-*         schema:
-*           type: string
-*     responses:
-*       '200':
-*         description: Document updated successfully
-*       '404':
-*         description: Document not found
-*       '500':
-*         description: Server error
-*/
+ *     summary: Publish a document
+ *     tags: [Document]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the document to be published.
+ *     requestBody:
+ *       description: Data required for document publication.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               txHash:
+ *                 type: string
+ *                 required: true
+ *                 description: The transaction hash for publishing the document.
+ *             example:
+ *               txHash: "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+ *     responses:
+ *       200:
+ *         description: Document published successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *       401:
+ *         description: Unauthorized or invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: An error message indicating the reason for the failure.
+ *       404:
+ *         description: Document not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: An error message indicating the document was not found.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: An error message indicating an internal server error occurred.
+ */
 
 // it will publish the document to home
 router.post("/publish/:id", publishDocument);
@@ -413,7 +462,7 @@ router.post("/assign", assignDocumentToApprover);
  *     summary: Approve a document
  *     tags: [Document]
  *     requestBody:
- *       description: Feedback data
+ *       description: Data required for document approval.
  *       required: true
  *       content:
  *         application/json:
@@ -423,26 +472,63 @@ router.post("/assign", assignDocumentToApprover);
  *               documentId:
  *                 type: string
  *                 required: true
+ *                 description: The ID of the document to be approved.
  *               comment:
  *                 type: string
  *                 required: true
+ *                 description: Your feedback/comment on the document.
  *               status:
  *                 type: string
  *                 enum: [Approved, Rejected]
+ *                 required: true
+ *                 description: The approval status of the document (either "Approved" or "Rejected").
  *             example:
  *               documentId: "64b76498dd6d5ecad41c04cd"
  *               comment: "This document looks good."
  *               status: "Approved"
  *     responses:
  *       200:
- *         description: Success message
+ *         description: Document approved and commented successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
  *       400:
- *         description: Invalid request data
+ *         description: Invalid request data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating invalid request data.
  *       404:
- *         description: Document not found
+ *         description: Document not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating the document was not found.
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating an internal server error occurred.
  */
+
 
 router.post("/approve", approveADocument);
 
@@ -490,5 +576,78 @@ router.post("/approve", approveADocument);
  *         description: Internal server error
  */
 router.get("/:documentId/history", getApprovalHistoryOfDocument)
+
+
+/**
+ * Finish a document.
+ *
+ * @swagger
+ * api/documents/finish/{documentId}:
+ *   post:
+ *     tags: [Document]
+ *     summary: Finish a document
+ *     description: Finish a document with the specified documentId.
+ *     parameters:
+ *       - in: path
+ *         name: documentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the document to finish.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               txHash:
+ *                 type: string
+ *             required:
+ *               - txHash
+ *     responses:
+ *       200:
+ *         description: Document finished successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *       401:
+ *         description: Unauthorized or invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating the reason for the failure.
+ *       404:
+ *         description: Document not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message indicating the document was not found.
+ *       500:
+ *         description: Server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: An error message indicating a server error occurred.
+ */
+
+router.post("/finish/:documentId", finishDocument)
 
 module.exports = router;

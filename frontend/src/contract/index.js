@@ -33,8 +33,6 @@ export async function createConnectedContract(privateKey) {
       contractABI,
       wallet
     );
-    contract = connectedContract;
-
     return connectedContract;
   } catch (error) {
     console.error("Lỗi khi tạo connected contract:", error);
@@ -42,10 +40,11 @@ export async function createConnectedContract(privateKey) {
   }
 }
 
-export const createDraft = async (data) => {
+export const createDraft = async (privatekey, data) => {
   try {
+    const electron = await createConnectedContract(privatekey);
     console.log("create id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
-    const tx = await contract.createDraft(
+    const tx = await electron.createDraft(
       hexToBytes20(data._id),
       data._content_hashed,
       data._level1Approvers
@@ -54,19 +53,21 @@ export const createDraft = async (data) => {
     console.log(res);
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    console.error("Lỗi khi gọi hàm createDraft:", error, contract);
+    throw error;
   }
 };
 
-export const submitDraft = async (data) => {
+export const submitDraft = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
     console.log(data);
     console.log("submit id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
-    const tx = await contract.submitDraft(
+    const tx = await electron.submitDraft(
       hexToBytes20(data._id),
       data._deadlineApprove
     );
@@ -76,23 +77,28 @@ export const submitDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    throw error;
   }
 };
 
-export const decideDraft = async (data) => {
+export const decideDraft = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
+    if (!data?._id) {
+      console.error(data);
+      throw new Error(data);
+    }
     console.log(data);
     console.log("decide id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
-    // const gasLimit = 300000; // Thay đổi giá trị gas limit tùy ý
-    const tx = await contract.decideDraft(
+
+    const tx = await electron.decideDraft(
       hexToBytes20(data._id),
       data.decide,
       data.comment_hashed
-      // { gasLimit } // Thêm thông số gasLimit vào options
     );
 
     const res = await tx.wait(2);
@@ -101,18 +107,20 @@ export const decideDraft = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm decideDraft:", error, contract);
+    throw error;
   }
 };
 
-export const assignLevel2Approver = async (data) => {
+export const assignLevel2Approver = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
     console.log(data);
     console.log("assign id: ", uint8ArrayToHexString(hexToBytes20(data._id)));
-    const tx = await contract.assignLevel2Approver(
+    const tx = await electron.assignLevel2Approver(
       hexToBytes20(data._id),
       data.level2Approvers
     );
@@ -122,34 +130,56 @@ export const assignLevel2Approver = async (data) => {
     return res.hash;
   } catch (error) {
     console.error("Lỗi khi gọi hàm assignLevel2Approver:", error, contract);
+    throw error;
   }
 };
 
-export const publish = async (data) => {
+export const publish = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
     console.log(data);
-    const tx = await contract.publish(hexToBytes20(data._id));
+    const tx = await electron.publish(hexToBytes20(data._id));
     const res = await tx.wait(2);
     console.log(res);
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    console.error("Lỗi khi gọi hàm publish:", error, contract);
+    throw error;
   }
 };
-
-export const comment = async (data) => {
+export const finish = async (privatekey, data) => {
   try {
     // if (!contract)
     //   contract = await createConnectedContract(
     //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
     //   );
+    const electron = await createConnectedContract(privatekey);
     console.log(data);
-    const tx = await contract.comment(
+    const tx = await electron.finish(hexToBytes20(data._id));
+    const res = await tx.wait(2);
+    console.log(res);
+
+    return res.hash;
+  } catch (error) {
+    console.error("Lỗi khi gọi hàm finish:", error, contract);
+    throw error;
+  }
+};
+
+export const SCcomment = async (privatekey, data) => {
+  try {
+    // if (!contract)
+    //   contract = await createConnectedContract(
+    //     `${import.meta.env.VITE_REACT_PRIVATE_KEY}`
+    //   );
+    const electron = await createConnectedContract(privatekey);
+    console.log(data);
+    const tx = await electron.comment(
       hexToBytes20(data._id),
       data._contentHashed
     );
@@ -158,6 +188,7 @@ export const comment = async (data) => {
 
     return res.hash;
   } catch (error) {
-    console.error("Lỗi khi gọi hàm addDraft:", error, contract);
+    console.error("Lỗi khi gọi hàm SCcomment:", error, contract);
+    throw error;
   }
 };
