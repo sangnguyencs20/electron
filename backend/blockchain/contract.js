@@ -8,8 +8,7 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const contractABI = abi;
 
-const privateKey =
-  "be3f5b3e2114109b1cd559e7fbeb4639d549a646085f3aff3127840cde481abc"; // Replace with your actual private key
+const privateKey = process.env.PRIVATE_KEY // Replace with your actual private key
 
 async function createWallet(privatekey) {
   try {
