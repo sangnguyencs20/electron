@@ -9,7 +9,7 @@ const DefaultLayout = ({ children }) => {
       <Navbar />
       <div className="relative p-4 flex flex-col gap-10 md:gap-2 lg:gap-1 lg:flex-row">
         <Sidebar />
-        <div className="flex-1 sm:w-full lg:max-w-screen-2xl mx-auto sm:pr-5 max-h-screen overflow-x-scroll scrollbar-hide">
+        <div className="flex-1 sm:w-full lg:max-w-screen-2xl mx-auto sm:pr-5 max-h-screen overflow-x-scroll scrollbar-hide z-10 lg:mb-52">
           <CustomBreadcrumbs />
           {children}
         </div>

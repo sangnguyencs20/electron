@@ -23,7 +23,7 @@ export default function DefaultSpeedDial() {
   };
 
   return (
-    <div className="fixed w-full right-20 bottom-20">
+    <div className="fixed w-full right-20 bottom-20 z-50 bg-blue-gray-200">
       <div className="absolute bottom-0 right-0">
         <SpeedDial>
           <SpeedDialHandler>

@@ -15,7 +15,7 @@ export default function CustomBreadcrumbs() {
     return english;
   };
   return (
-    <Breadcrumbs className="mb-2 md:mb-10 bg-white">
+    <Breadcrumbs className="mb-2 md:mb-10 bg-white z-[500]">
       <Link to="/home" className="opacity-60">
         <svg
           xmlns="http://www.w3.org/2000/svg"

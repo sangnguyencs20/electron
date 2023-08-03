@@ -3,7 +3,7 @@ import { VBC } from "../../assets/index";
 import Wave from "react-wavify";
 const Footer = () => {
   return (
-    <div className="mt-52">
+    <div className="">
       <Wave
         fill="#3B71CA"
         paused={false}
